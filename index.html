@@ -240,7 +240,7 @@ const data = {
       roman: "I",
       year: 2025,
       courseId: "winchester",
-      date: "2025-08-XX",
+      date: "2025-09-01",
       scores: {
         deluca: [5,5,4,4,2,6,7,7,3,5,5,4,6,7,7,7,4,8],
         franco: [7,6,6,5,5,5,6,6,5,5,6,4,7,9,7,7,4,8],
@@ -258,7 +258,7 @@ const data = {
     courseId: "kedron",
     date: "2026-06-13",
     teeTime: null,
-    confirmed: ["franco","e","morsillo","traikos","angel","wells","sean","deluca","dennis","danny"],
+    confirmed: ["franco","e","morsillo","traikos","angel","wells","sean","deluca","dennis","danny","adam"],
     out: ["greg","gibbs"],
   },
 };
@@ -421,6 +421,13 @@ function formatHandicap(n) {
 function formatRank(p) {
   if (!p) return "—";
   return (p.tied ? "T" : "") + p.rank;
+}
+
+function formatTournamentDate(iso) {
+  if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return "";
+  const [y, m, day] = iso.split("-").map(Number);
+  const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  return `${months[m-1]} ${day}, ${y}`;
 }
 
 function svgFlagstick() {
@@ -694,8 +701,9 @@ function renderArchiveCard(t, d, isFirst) {
         <summary class="flex items-center justify-between gap-4 px-5 py-5 lg:px-7" style="color: var(--ink);">
           <div class="flex flex-col gap-2 min-w-0">
             <h3 class="font-display font-medium text-[22px] leading-[1.2] tracking-[-0.01em]">
-              Tournament ${esc(t.roman)} &middot; ${esc(course.name)}, ${esc(course.location)} &middot; ${t.year}
+              Tournament ${esc(t.roman)} &middot; ${esc(course.name)}, ${esc(course.location)}
             </h3>
+            <div class="text-[13px] tracking-[0.02em]" style="color: var(--ink-muted);">${esc(formatTournamentDate(t.date))}</div>
             <div class="flex flex-wrap gap-2">${chips}</div>
           </div>
           <span style="color: var(--fairway-deep);">${svgChevron()}</span>
