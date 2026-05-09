@@ -4,6 +4,27 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>The Whitby Invitational</title>
+<meta name="description" content="The Whitby Invitational — an annual gentlemen's golf tournament in Whitby, Ontario. Reigning champion: Gibbs. Next tee: June 13, 2026 at Kedron Dells." />
+<meta name="theme-color" content="#FBF8F1" />
+
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="180x180" href="img/favicon-180.png" />
+<link rel="apple-touch-icon" href="img/favicon-180.png" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="The Whitby Invitational" />
+<meta property="og:description" content="An annual gentlemen's golf tournament in Whitby, Ontario. Reigning champion: Gibbs." />
+<meta property="og:image" content="https://whitby-invitational.vercel.app/img/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://whitby-invitational.vercel.app/" />
+<meta property="og:site_name" content="The Whitby Invitational" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="The Whitby Invitational" />
+<meta name="twitter:description" content="An annual gentlemen's golf tournament in Whitby, Ontario. Reigning champion: Gibbs." />
+<meta name="twitter:image" content="https://whitby-invitational.vercel.app/img/og-image.png" />
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -84,6 +105,21 @@
     backdrop-filter: saturate(140%) blur(8px);
     -webkit-backdrop-filter: saturate(140%) blur(8px);
   }
+  .brand-lockup {
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  .brand-mark {
+    width: 38px;
+    height: 38px;
+    display: block;
+    transition: transform 220ms ease-out;
+  }
+  .brand-lockup:hover .brand-mark { transform: rotate(-4deg) scale(1.04); }
+  @media (max-width: 639px) {
+    .brand-mark { width: 32px; height: 32px; }
+  }
+
   .topnav {
     display: flex;
     align-items: center;
@@ -515,6 +551,54 @@
   .lb-table td.fin-1 { color: var(--fairway-deep); font-weight: 700; }
   .lb-table tr.is-champion .player-cell { color: var(--fairway-deep); }
 
+  /* scoring legend (under scorecard) */
+  .scoring-legend {
+    margin-top: 22px;
+    padding: 16px 20px;
+    background: var(--surface-elev);
+    border-left: 2px solid var(--gold);
+    border-radius: 0 6px 6px 0;
+  }
+  .scoring-legend .eyebrow { margin-bottom: 10px; }
+  .legend-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 28px;
+  }
+  .legend-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .legend-swatch {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .swatch-gold {
+    background: var(--gold-soft);
+    border: 1px solid var(--gold);
+  }
+  .swatch-silver {
+    background: var(--silver-soft);
+    border: 1px solid var(--silver);
+  }
+  .swatch-tiebreak {
+    background: transparent;
+    border: 1px dashed var(--ink-muted);
+  }
+  .legend-points {
+    font-weight: 600;
+    color: var(--fairway-deep);
+    margin-right: 2px;
+  }
+
   /* scorecard (refined) */
   .scorecard {
     width: 100%;
@@ -653,6 +737,80 @@
     text-transform: uppercase;
   }
 
+  /* hero grid: wordmark left, tour panel right */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    align-items: end;
+  }
+  @media (min-width: 1024px) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr);
+      gap: 56px;
+      align-items: end;
+    }
+  }
+
+  /* tour panel */
+  .tour-panel {
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: 18px 0 4px;
+  }
+  .tour-eyebrow {
+    color: var(--ink-muted);
+    margin-bottom: 14px;
+  }
+  .tour-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .tour-entry {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 16px;
+    padding: 14px 0;
+    border-top: 1px solid rgba(31,42,36,0.18);
+    align-items: baseline;
+  }
+  .tour-entry:first-child { border-top: 0; }
+  .tour-roman {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--fairway-deep);
+    text-align: left;
+  }
+  .tour-entry-next .tour-roman { color: var(--gold); }
+  .tour-body { display: flex; flex-direction: column; gap: 4px; }
+  .tour-course {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .tour-meta {
+    font-size: 12px;
+    color: var(--ink-muted);
+    letter-spacing: 0.02em;
+  }
+  .tour-status {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    margin-top: 2px;
+    color: var(--ink-muted);
+  }
+  .tour-status.next { color: var(--ink); font-weight: 600; }
+
   /* responsive grid: stat strip — 2 cols mobile, 5 cols once it fits */
   .stat-strip {
     display: grid;
@@ -729,9 +887,10 @@
 <header class="site-header">
   <div class="max-w-[1280px] mx-auto px-6 lg:px-12 pt-4 pb-2">
     <div class="flex items-center justify-between gap-6 flex-wrap">
-      <div class="flex items-center gap-3">
+      <a href="#hero" class="flex items-center gap-3 brand-lockup" aria-label="The Whitby Invitational — back to top">
+        <img src="img/logo.png" alt="" class="brand-mark" />
         <span class="eyebrow" style="color: var(--ink);">The Whitby Invitational</span>
-      </div>
+      </a>
       <nav class="topnav eyebrow" aria-label="Sections" style="color: var(--ink-muted);">
         <a href="#champion">Champion</a>
         <a href="#hardware">Awards</a>
@@ -1213,6 +1372,37 @@ function renderHero(d) {
   const champ = reigningStandings.players[0];
   const champName = d.players[champ.playerId].name;
 
+  const tourEntries = d.tournaments.map(t => {
+    const course = d.courses[t.courseId];
+    const standings = computeTournamentStandings(t, course);
+    const winner = standings.players[0];
+    const winnerName = d.players[winner.playerId].name;
+    return `
+      <li class="tour-entry">
+        <div class="tour-roman">${esc(t.roman)}</div>
+        <div class="tour-body">
+          <div class="tour-course">${esc(course.name)}</div>
+          <div class="tour-meta">${esc(formatTournamentDate(t.date))} · ${esc(course.location)}</div>
+          <div class="tour-status played">Played &middot; <span style="color: var(--gold);">Champion ${esc(winnerName)}</span></div>
+        </div>
+      </li>
+    `;
+  }).join("");
+
+  const upcomingCourse = d.courses[d.upcoming.courseId];
+  const upcomingDate = formatTournamentDate(d.upcoming.date);
+  const upcomingRoman = toRoman(d.tournaments.length + 1);
+  const tourUpcoming = `
+    <li class="tour-entry tour-entry-next">
+      <div class="tour-roman">${esc(upcomingRoman)}</div>
+      <div class="tour-body">
+        <div class="tour-course">${esc(upcomingCourse.name)}</div>
+        <div class="tour-meta">${esc(upcomingDate)} · ${esc(upcomingCourse.location)}</div>
+        <div class="tour-status next">Next &middot; <span style="color: var(--ink);">${stats.daysToNextTee} days</span></div>
+      </div>
+    </li>
+  `;
+
   return `
     <div class="paper-grain rounded-md" style="background: var(--bg);">
       <!-- micro lockup -->
@@ -1221,10 +1411,19 @@ function renderHero(d) {
         <span class="eyebrow" style="color: var(--ink-muted);">Est. 2025</span>
       </div>
 
-      <!-- BIG WORDMARK -->
-      <h1 class="wordmark fade-up">
-        The Whitby<br/>Invitational
-      </h1>
+      <!-- BIG WORDMARK + TOUR PANEL -->
+      <div class="hero-grid">
+        <h1 class="wordmark fade-up">
+          The Whitby<br/>Invitational
+        </h1>
+        <aside class="tour-panel fade-up" aria-label="The Tour">
+          <div class="eyebrow tour-eyebrow">The Tour</div>
+          <ol class="tour-list">
+            ${tourEntries}
+            ${tourUpcoming}
+          </ol>
+        </aside>
+      </div>
 
       <div class="gold-rule-thick mt-8 lg:mt-10 fade-up"></div>
 
@@ -1475,6 +1674,37 @@ function ordinal(n) {
   return n + (s[(v-20)%10] || s[v] || s[0]);
 }
 
+function renderScoringLegend() {
+  return `
+    <div class="scoring-legend" aria-label="How scoring works">
+      <div class="eyebrow" style="color: var(--ink-muted);">How it's scored</div>
+      <ul class="legend-list">
+        <li>
+          <span class="legend-swatch swatch-gold" aria-hidden="true"></span>
+          <span class="legend-label"><span class="legend-points">2 pts</span> — outright low score on the hole</span>
+        </li>
+        <li>
+          <span class="legend-swatch swatch-silver" aria-hidden="true"></span>
+          <span class="legend-label"><span class="legend-points">1 pt</span> — tied low score on the hole</span>
+        </li>
+        <li>
+          <span class="legend-swatch swatch-tiebreak" aria-hidden="true"></span>
+          <span class="legend-label"><span class="legend-points">Tiebreaker</span> — lowest total strokes wins the trophy</span>
+        </li>
+      </ul>
+    </div>
+  `;
+}
+
+function toRoman(n) {
+  const map = [["M",1000],["CM",900],["D",500],["CD",400],["C",100],["XC",90],["L",50],["XL",40],["X",10],["IX",9],["V",5],["IV",4],["I",1]];
+  let out = "";
+  for (const [sym, val] of map) {
+    while (n >= val) { out += sym; n -= val; }
+  }
+  return out;
+}
+
 function renderAvatar(playerId, allRosterIds, players, isOut, handicaps) {
   const name = players[playerId].name;
   const initials = initialsFor(playerId, allRosterIds, players);
@@ -1560,6 +1790,10 @@ function renderNextTournament(d) {
             ${outAvatars}
           </div>
         </div>
+      </div>
+
+      <div class="px-6 lg:px-9 pb-6 lg:pb-9 pt-2 border-t" style="border-color: var(--divider);">
+        ${renderScoringLegend()}
       </div>
     </div>
   `;
@@ -1783,6 +2017,7 @@ function renderArchiveCard(t, d, isFirst) {
               </tbody>
             </table>
           </div>
+          ${renderScoringLegend()}
         </div>
       </details>
     </article>
