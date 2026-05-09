@@ -851,7 +851,7 @@ const data = {
 
   // Champion portraits — fill in as you collect them. Falls back to a stock walk-up shot.
   championPortraits: {
-    // gibbs: "img/champions/gibbs.jpg",
+    gibbs: "img/champions/gibbs.jpg",
   },
 
 };
@@ -1301,7 +1301,7 @@ function renderChampionSpotlight(d) {
                onerror="this.onerror=null;this.src='${fallbackSrc}';"
                alt="${esc(champName)} and the group at ${esc(course.name)}"
                class="block w-full h-auto rounded-md"
-               style="aspect-ratio: 4 / 5; object-fit: cover; background: var(--surface-elev);" />
+               style="aspect-ratio: 4 / 5; object-fit: cover; object-position: center 25%; background: var(--surface-elev);" />
         </picture>
         <blockquote class="champ-quote mt-6">
           &ldquo;${esc(d.championQuote)}&rdquo;
