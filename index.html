@@ -191,46 +191,6 @@
     font-size: 12px;
   }
 
-  /* moments feed */
-  .moments-track {
-    display: flex;
-    gap: 20px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    padding: 6px 24px 28px;
-    margin: 0 -24px;
-    scrollbar-width: thin;
-  }
-  @media (min-width: 1024px) {
-    .moments-track { padding-left: 0; padding-right: 0; margin: 0; }
-  }
-  .moments-track::-webkit-scrollbar { height: 6px; }
-  .moments-track::-webkit-scrollbar-track { background: transparent; }
-  .moments-track::-webkit-scrollbar-thumb { background: var(--divider); border-radius: 3px; }
-  .moment-card {
-    flex: 0 0 86%;
-    max-width: 380px;
-    scroll-snap-align: start;
-    background: var(--surface);
-    border: 1px solid var(--divider);
-    border-radius: 6px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-  @media (min-width: 640px) { .moment-card { flex-basis: 60%; } }
-  @media (min-width: 1024px) { .moment-card { flex-basis: 320px; } }
-  .moment-card .moment-img {
-    aspect-ratio: 4 / 5;
-    object-fit: cover;
-    width: 100%;
-    height: auto;
-    display: block;
-    background: var(--surface-elev);
-  }
-  .moment-body { padding: 18px 20px 22px; }
-
   /* course header photo */
   .course-photo {
     position: relative;
@@ -319,6 +279,138 @@
   .avatar.is-out {
     background: var(--ink-muted);
     opacity: 0.65;
+  }
+
+  /* avatar tooltip — shows player's overall handicap on hover */
+  .avatar-wrap {
+    position: relative;
+    display: inline-flex;
+    isolation: isolate;
+  }
+  .avatar-tip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translate(-50%, 4px);
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 140ms ease-out, transform 140ms ease-out;
+    z-index: 20;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  }
+  .avatar-tip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--ink);
+  }
+  .avatar-wrap:hover .avatar-tip,
+  .avatar-wrap:focus-within .avatar-tip {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  /* group photo banner above the field */
+  .group-banner {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    background: var(--fairway-deep);
+    aspect-ratio: 16 / 7;
+    box-shadow: 0 18px 36px rgba(31,77,44,0.12);
+  }
+  .group-banner img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: saturate(1.02) contrast(1.02);
+  }
+  .group-banner figcaption {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 22px 24px;
+    background: linear-gradient(180deg, rgba(31,42,36,0) 0%, rgba(31,42,36,0.62) 100%);
+    color: var(--cream);
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+  }
+  @media (max-width: 640px) {
+    .group-banner { aspect-ratio: 4 / 3; }
+    .group-banner figcaption { padding: 16px 18px; gap: 8px; flex-direction: column; align-items: flex-start; }
+  }
+
+  /* player gallery */
+  .player-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  @media (min-width: 640px) { .player-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; } }
+  @media (min-width: 1024px) { .player-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; } }
+  .player-card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--divider);
+    transition: transform 220ms ease-out, box-shadow 220ms ease-out;
+  }
+  .player-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px rgba(31,77,44,0.12);
+  }
+  .player-card .player-img {
+    aspect-ratio: 4 / 5;
+    width: 100%;
+    object-fit: cover;
+    display: block;
+    background: var(--surface-elev);
+  }
+  .player-card .player-meta {
+    padding: 14px 16px 16px;
+  }
+  .player-card .player-name {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .player-card .player-finish {
+    margin-top: 4px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .player-card .player-finish .finish-num {
+    color: var(--fairway-deep);
+    font-weight: 700;
+  }
+  .player-card.is-champion::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--gold);
+    z-index: 2;
   }
 
   /* details / chevrons (kept from original) */
@@ -573,7 +665,7 @@
     <nav class="topnav hidden sm:flex items-center gap-6 eyebrow" style="color: var(--ink-muted);">
       <a href="#champion">Champion</a>
       <a href="#hardware">Awards</a>
-      <a href="#moments">Moments</a>
+      <a href="#players">The Field</a>
       <a href="#next">Next Tee</a>
       <a href="#leaderboard">Leaderboard</a>
       <a href="#archive">Archive</a>
@@ -596,7 +688,7 @@
   <section id="hardware" class="px-6 lg:px-12 py-14 lg:py-20"></section>
 
   <!-- ============ 4. MOMENTS FEED ============ -->
-  <section id="moments" class="px-6 lg:px-12 py-14 lg:py-20"></section>
+  <section id="players" class="px-6 lg:px-12 py-14 lg:py-20"></section>
 
   <!-- ============ 5. NEXT TOURNAMENT ============ -->
   <section id="next" class="px-6 lg:px-12 py-14 lg:py-20"></section>
@@ -622,18 +714,18 @@
 
 <script>
 /* =========================================================================
-   DATA — edit this block to record new tournaments and moments.
+   DATA — edit this block to record new tournaments.
    ========================================================================= */
 const data = {
   players: {
-    deluca:   { name: "Deluca",   active: true },
-    franco:   { name: "Franco",   active: true },
-    dennis:   { name: "Dennis",   active: true },
-    danny:    { name: "Danny",    active: true },
-    gibbs:    { name: "Gibbs",    active: true },
-    angel:    { name: "Angel",    active: true },
-    e:        { name: "E",        active: true },
-    adam:     { name: "Adam",     active: true },
+    deluca:   { name: "Deluca",   active: true, photo: "img/players/deluca.jpg" },
+    franco:   { name: "Franco",   active: true, photo: "img/players/franco.jpg" },
+    dennis:   { name: "Dennis",   active: true, photo: "img/players/dennis.jpg" },
+    danny:    { name: "Danny",    active: true, photo: "img/players/danny.jpg" },
+    gibbs:    { name: "Gibbs",    active: true, photo: "img/players/gibbs.jpg" },
+    angel:    { name: "Angel",    active: true, photo: "img/players/angel.jpg" },
+    e:        { name: "E",        active: true, photo: "img/players/e.jpg" },
+    adam:     { name: "Adam",     active: true, photo: "img/players/adam.jpg" },
     morsillo: { name: "Morsillo", active: true },
     traikos:  { name: "Traikos",  active: true },
     wells:    { name: "Wells",    active: true },
@@ -691,25 +783,6 @@ const data = {
     // gibbs: "img/champions/gibbs.jpg",
   },
 
-  /* ---------------------------------------------------------------------
-     MOMENTS — edit this list to add your own. Drop a JPG into img/moments/
-     and add a row. tournamentId points to the tournament in `tournaments`.
-     --------------------------------------------------------------------- */
-  moments: [
-    { tournamentId: 1, hole: 17, caption: "Gibbs cans a 25-footer for the lead",
-      sub: "Tournament I · Hole 17",
-      img: "img/moments/m1-putt.jpg" },
-    { tournamentId: 1, hole: 13, caption: "Flag stays in. Sun goes down.",
-      sub: "Tournament I · Hole 13",
-      img: "img/moments/m2-flag.jpg" },
-    { tournamentId: 1, hole: 16, caption: "Approach to 16 — light gone, hands cold",
-      sub: "Tournament I · Hole 16",
-      img: "img/moments/m3-fairway.jpg" },
-    { tournamentId: 1, hole: 18, caption: "Walking it in. Eight friends, one trophy.",
-      sub: "Tournament I · After 18",
-      img: "img/moments/m4-walking.jpg" },
-    // Add your own moments here.
-  ],
 };
 
 /* =========================================================================
@@ -1126,7 +1199,8 @@ function renderChampionSpotlight(d) {
   const overParStr = overPar > 0 ? "+" + overPar : overPar < 0 ? String(overPar) : "E";
   const dateStr = formatTournamentDate(reigning.date);
   const portraitOverride = d.championPortraits[champ.playerId];
-  const photoSrc = portraitOverride || "img/group-photo.jpg";
+  const champPhoto = d.players[champ.playerId] && d.players[champ.playerId].photo;
+  const photoSrc = portraitOverride || champPhoto || "img/group-photo.jpg";
   const fallbackSrc = "img/stock/champion-fallback.jpg";
 
   return `
@@ -1181,7 +1255,10 @@ function renderHardware(d) {
     const hcp = formatHandicap(handicaps[playerId]);
     return `
       <span class="award-foot">
-        <span class="avatar" style="width:32px; height:32px; font-size:13px;">${esc(initials)}</span>
+        <span class="avatar-wrap" tabindex="0" aria-label="${esc(d.players[playerId].name)}, handicap ${esc(hcp)}">
+          <span class="avatar" style="width:32px; height:32px; font-size:13px;">${esc(initials)}</span>
+          <span class="avatar-tip">HCP ${esc(hcp)}</span>
+        </span>
         <span style="color: var(--ink); font-weight:500;">${esc(d.players[playerId].name)}</span>
         <span style="color: var(--ink-muted);">· HCP ${esc(hcp)}</span>
       </span>
@@ -1189,12 +1266,17 @@ function renderHardware(d) {
   }
 
   function blowFoot() {
-    // Up to 2 player chips for the blow-up (avoid clutter).
     const players = [...new Set(blow.entries.map(e => e.player))].slice(0, 2);
     const chips = players.map(pid => {
       const ids = Object.keys(d.players);
       const initials = initialsFor(pid, ids, d.players);
-      return `<span class="avatar" style="width:32px; height:32px; font-size:13px; background: var(--ink-muted);">${esc(initials)}</span>`;
+      const hcp = formatHandicap(handicaps[pid]);
+      return `
+        <span class="avatar-wrap" tabindex="0" aria-label="${esc(d.players[pid].name)}, handicap ${esc(hcp)}">
+          <span class="avatar" style="width:32px; height:32px; font-size:13px; background: var(--ink-muted);">${esc(initials)}</span>
+          <span class="avatar-tip">HCP ${esc(hcp)}</span>
+        </span>
+      `;
     }).join('<span style="margin-left:-8px;"></span>');
     return `
       <span class="award-foot">
@@ -1260,44 +1342,66 @@ function renderHardware(d) {
   `;
 }
 
-function renderMoments(d) {
-  if (!d.moments || d.moments.length === 0) {
-    return `<div class="eyebrow" style="color: var(--ink-muted);">Moments — coming soon.</div>`;
-  }
+function renderPlayers(d) {
+  const t1 = d.tournaments.find(t => t.id === 1);
+  if (!t1) return "";
+  const standings = computeTournamentStandings(t1, d.courses[t1.courseId]);
+  const finishById = {};
+  standings.players.forEach(p => { finishById[p.playerId] = p; });
 
-  const cards = d.moments.map(m => {
-    const t = d.tournaments.find(x => x.id === m.tournamentId);
-    const sub = m.sub || (t ? `Tournament ${t.roman} · Hole ${m.hole}` : "");
-    return `
-      <article class="moment-card">
-        <img src="${esc(m.img)}" alt="${esc(m.caption)}" class="moment-img" loading="lazy" />
-        <div class="moment-body">
-          <div class="eyebrow mb-2" style="color: var(--gold);">Moment</div>
-          <h3 class="font-display font-semibold leading-[1.18] tracking-[-0.01em]" style="font-size: 22px; color: var(--ink);">
-            ${esc(m.caption)}
-          </h3>
-          <p class="text-[12px] mt-3" style="color: var(--ink-muted); letter-spacing: 0.04em;">${esc(sub)}</p>
-        </div>
-      </article>
-    `;
-  }).join("");
+  const t1Ids = Object.keys(t1.scores);
+  const cards = t1Ids
+    .map(pid => ({ pid, finish: finishById[pid] }))
+    .sort((a, b) => a.finish.rank - b.finish.rank)
+    .map(({ pid, finish }) => {
+      const player = d.players[pid];
+      const photo = player.photo || "";
+      const isChamp = finish.rank === 1;
+      const cardCls = "player-card fade-up" + (isChamp ? " is-champion" : "");
+      const finishLabel = isChamp ? "Champion" : ordinal(finish.rank);
+      return `
+        <article class="${cardCls}">
+          <img src="${esc(photo)}" alt="${esc(player.name)} at Tournament I" class="player-img" loading="lazy" />
+          <div class="player-meta">
+            <div class="player-name">${esc(player.name)}</div>
+            <div class="player-finish">
+              <span class="finish-num">${esc(finishLabel)}</span>
+              <span style="color: var(--ink-muted);">· ${finish.totalPoints} pts · ${finish.totalStrokes}</span>
+            </div>
+          </div>
+        </article>
+      `;
+    }).join("");
 
   return `
     <div class="flex items-end justify-between flex-wrap gap-3 mb-6 px-0">
       <div>
         <div class="eyebrow" style="color: var(--ink-muted);">Section III</div>
-        <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">Moments</h2>
+        <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">The Field</h2>
       </div>
-      <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">The shots people will still talk about over a beer in March.</p>
+      <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">The eight men who teed it up at Winchester. Ranked by where they finished.</p>
     </div>
-    <div class="gold-rule mb-6"></div>
-    <div class="moments-track fade-up" role="region" aria-label="Tournament moments">
+    <div class="gold-rule mb-8"></div>
+    <figure class="group-banner fade-up mb-10">
+      <img src="img/group-photo.jpg" alt="The Whitby Invitational — Tournament I, Winchester GC, September 1, 2025" loading="lazy" />
+      <figcaption>
+        <span class="eyebrow" style="color: var(--gold);">Tournament I</span>
+        <span style="color: var(--cream);">Winchester GC &middot; September 1, 2025</span>
+      </figcaption>
+    </figure>
+    <div class="player-grid">
       ${cards}
     </div>
   `;
 }
 
-function renderAvatar(playerId, allRosterIds, players, isOut) {
+function ordinal(n) {
+  const s = ["th","st","nd","rd"];
+  const v = n % 100;
+  return n + (s[(v-20)%10] || s[v] || s[0]);
+}
+
+function renderAvatar(playerId, allRosterIds, players, isOut, handicaps) {
   const name = players[playerId].name;
   const initials = initialsFor(playerId, allRosterIds, players);
   const cls = isOut ? "avatar is-out" : "avatar";
@@ -1307,10 +1411,15 @@ function renderAvatar(playerId, allRosterIds, players, isOut) {
   const outPill = isOut
     ? `<span class="out-pill mt-1">Out</span>`
     : "";
+  const hcp = handicaps ? formatHandicap(handicaps[playerId]) : null;
+  const tip = hcp ? `<span class="avatar-tip">HCP ${esc(hcp)}</span>` : "";
 
   return `
     <div class="flex flex-col items-center gap-2">
-      <span class="${cls}">${esc(initials)}</span>
+      <span class="avatar-wrap" tabindex="0" aria-label="${esc(name)}, handicap ${esc(hcp || '—')}">
+        <span class="${cls}">${esc(initials)}</span>
+        ${tip}
+      </span>
       <div class="text-[12px] font-medium text-center max-w-[80px] truncate" style="${nameStyle}">${esc(name)}</div>
       ${outPill}
     </div>
@@ -1326,8 +1435,9 @@ function renderNextTournament(d) {
   });
   const teeTime = u.teeTime ? esc(u.teeTime) : "Tee TBD";
   const allRoster = [...u.confirmed, ...u.out];
-  const confirmedAvatars = u.confirmed.map(id => renderAvatar(id, allRoster, d.players, false)).join("");
-  const outAvatars = u.out.map(id => renderAvatar(id, allRoster, d.players, true)).join("");
+  const handicaps = computeHandicaps(d);
+  const confirmedAvatars = u.confirmed.map(id => renderAvatar(id, allRoster, d.players, false, handicaps)).join("");
+  const outAvatars = u.out.map(id => renderAvatar(id, allRoster, d.players, true, handicaps)).join("");
   const total = u.confirmed.length + u.out.length;
 
   return `
@@ -1677,7 +1787,7 @@ function renderChampionsWall(d) {
 document.getElementById("hero").innerHTML = renderHero(data);
 document.getElementById("champion").innerHTML = renderChampionSpotlight(data);
 document.getElementById("hardware").innerHTML = renderHardware(data);
-document.getElementById("moments").innerHTML = renderMoments(data);
+document.getElementById("players").innerHTML = renderPlayers(data);
 document.getElementById("next").innerHTML = renderNextTournament(data);
 document.getElementById("leaderboard").innerHTML = renderLeaderboard(data);
 document.getElementById("archive").innerHTML = renderArchive(data);
