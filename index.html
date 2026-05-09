@@ -70,6 +70,39 @@
   .paper-grain > * { position: relative; z-index: 1; }
 
   /* ============ MASTHEAD ============ */
+  html { scroll-padding-top: 96px; }
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--bg);
+    transition: box-shadow 220ms ease-out, background 220ms ease-out;
+  }
+  .site-header.is-scrolled {
+    box-shadow: 0 6px 20px rgba(31,42,36,0.08);
+    background: rgba(251, 248, 241, 0.92);
+    backdrop-filter: saturate(140%) blur(8px);
+    -webkit-backdrop-filter: saturate(140%) blur(8px);
+  }
+  .topnav a {
+    text-decoration: none;
+    color: var(--ink-muted);
+    transition: color 140ms ease-out;
+    position: relative;
+  }
+  .topnav a:hover { color: var(--ink); }
+  .topnav a::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: -4px;
+    height: 1px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 160ms ease-out;
+  }
+  .topnav a:hover::after { transform: scaleX(1); }
+
   .masthead-rule {
     height: 1px;
     background: var(--ink);
@@ -598,7 +631,7 @@
     text-transform: uppercase;
   }
 
-  /* responsive grid: stat strip */
+  /* responsive grid: stat strip — 2 cols mobile, 5 cols desktop */
   .stat-strip {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -612,12 +645,20 @@
     border-bottom: 1px solid rgba(31,42,36,0.18);
   }
   .stat-strip .stat-cell:nth-child(2n) { border-right: 0; }
-  .stat-strip .stat-cell:nth-last-child(-n+2) { border-bottom: 0; }
-  @media (min-width: 768px) {
-    .stat-strip { grid-template-columns: repeat(4, 1fr); }
-    .stat-strip .stat-cell { border-right: 1px solid rgba(31,42,36,0.18); border-bottom: 0; }
+  .stat-strip .stat-cell:last-child {
+    grid-column: 1 / -1;
+    border-right: 0;
+    border-bottom: 0;
+  }
+  .stat-strip .stat-cell:nth-last-child(2):nth-child(odd) { border-bottom: 0; }
+  @media (min-width: 1024px) {
+    .stat-strip { grid-template-columns: repeat(5, 1fr); }
+    .stat-strip .stat-cell {
+      border-right: 1px solid rgba(31,42,36,0.18);
+      border-bottom: 0;
+      grid-column: auto;
+    }
     .stat-strip .stat-cell:last-child { border-right: 0; }
-    .stat-strip .stat-cell:nth-child(2n) { border-right: 1px solid rgba(31,42,36,0.18); }
   }
 
   /* round story bullets */
@@ -657,23 +698,25 @@
 <body>
 <div id="error-banner" role="alert"></div>
 
-<header class="max-w-[1280px] mx-auto px-6 lg:px-12 pt-6">
-  <div class="flex items-center justify-between gap-6 flex-wrap">
-    <div class="flex items-center gap-3">
-      <span class="eyebrow" style="color: var(--ink);">The Whitby Invitational</span>
+<header class="site-header">
+  <div class="max-w-[1280px] mx-auto px-6 lg:px-12 pt-4 pb-2">
+    <div class="flex items-center justify-between gap-6 flex-wrap">
+      <div class="flex items-center gap-3">
+        <span class="eyebrow" style="color: var(--ink);">The Whitby Invitational</span>
+      </div>
+      <nav class="topnav hidden sm:flex items-center gap-6 eyebrow" style="color: var(--ink-muted);">
+        <a href="#champion">Champion</a>
+        <a href="#hardware">Awards</a>
+        <a href="#players">The Field</a>
+        <a href="#next">Next Tee</a>
+        <a href="#leaderboard">Leaderboard</a>
+        <a href="#archive">Archive</a>
+      </nav>
+      <span class="eyebrow" style="color: var(--ink-muted);">Vol. <span class="tabular">I</span> · Est. 2025</span>
     </div>
-    <nav class="topnav hidden sm:flex items-center gap-6 eyebrow" style="color: var(--ink-muted);">
-      <a href="#champion">Champion</a>
-      <a href="#hardware">Awards</a>
-      <a href="#players">The Field</a>
-      <a href="#next">Next Tee</a>
-      <a href="#leaderboard">Leaderboard</a>
-      <a href="#archive">Archive</a>
-    </nav>
-    <span class="eyebrow" style="color: var(--ink-muted);">Vol. <span class="tabular">I</span> · Est. 2025</span>
+    <div class="masthead-rule mt-3"></div>
+    <div class="masthead-rule-thick mt-1"></div>
   </div>
-  <div class="masthead-rule mt-5"></div>
-  <div class="masthead-rule-thick mt-1"></div>
 </header>
 
 <main class="max-w-[1280px] mx-auto">
@@ -1025,20 +1068,18 @@ function computeRoundStory(tournament, course) {
 function computeHeroStats(d) {
   const tournamentsCount = d.tournaments.length;
 
-  // Players ever-played: union of score keys across all tournaments.
   const everPlayed = new Set();
+  let totalShots = 0;
+  let totalHoles = 0;
   d.tournaments.forEach(t => {
-    Object.keys(t.scores).forEach(pid => everPlayed.add(pid));
+    Object.keys(t.scores).forEach(pid => {
+      everPlayed.add(pid);
+      const arr = t.scores[pid];
+      totalHoles += arr.length;
+      for (let i = 0; i < arr.length; i++) totalShots += arr[i];
+    });
   });
 
-  // Champions: rank-1 finishers across all tournaments (unique).
-  const champions = new Set();
-  d.tournaments.forEach(t => {
-    const standings = computeTournamentStandings(t, d.courses[t.courseId]);
-    if (standings.players[0]) champions.add(standings.players[0].playerId);
-  });
-
-  // Days to next tee — same calc as countdown but rounded.
   const target = new Date(d.upcoming.date + "T08:00:00-04:00");
   const now = new Date();
   const diffMs = target.getTime() - now.getTime();
@@ -1047,7 +1088,8 @@ function computeHeroStats(d) {
   return {
     tournaments: tournamentsCount,
     players: everPlayed.size,
-    champions: champions.size,
+    totalShots,
+    totalHoles,
     daysToNextTee: days,
   };
 }
@@ -1169,8 +1211,12 @@ function renderHero(d) {
           <div class="stat-num mt-2">${stats.players}</div>
         </div>
         <div class="stat-cell">
-          <div class="eyebrow" style="color: var(--ink-muted);">Champion</div>
-          <div class="stat-num mt-2" style="font-size: clamp(36px, 5.5vw, 64px);">${esc(champName)}</div>
+          <div class="eyebrow" style="color: var(--ink-muted);">Total Shots</div>
+          <div class="stat-num mt-2 tabular">${stats.totalShots.toLocaleString()}</div>
+        </div>
+        <div class="stat-cell">
+          <div class="eyebrow" style="color: var(--ink-muted);">Total Holes</div>
+          <div class="stat-num mt-2 tabular">${stats.totalHoles.toLocaleString()}</div>
         </div>
         <div class="stat-cell">
           <div class="eyebrow" style="color: var(--ink-muted);">Days to Next Tee</div>
@@ -1817,6 +1863,17 @@ startCountdown(target, "countdown");
   els.forEach(el => io.observe(el));
 })();
 
+(function setupStickyHeader() {
+  const header = document.querySelector(".site-header");
+  if (!header) return;
+  const onScroll = () => {
+    if (window.scrollY > 8) header.classList.add("is-scrolled");
+    else header.classList.remove("is-scrolled");
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+})();
+
 /* =========================================================================
    SELF-TESTS — must pass before considering the page shipped.
    ========================================================================= */
@@ -1874,11 +1931,11 @@ startCountdown(target, "countdown");
   check(blowPlayers.has("dennis"), `Blow-up should include Dennis, got ${[...blowPlayers].join(",")}`);
   check(blowPlayers.has("danny"), `Blow-up should include Danny, got ${[...blowPlayers].join(",")}`);
 
-  // Hero stats sanity
   const hs = computeHeroStats(data);
   check(hs.tournaments === 1, `Hero stats: tournaments expected 1, got ${hs.tournaments}`);
   check(hs.players === 8, `Hero stats: players expected 8 (T-I roster), got ${hs.players}`);
-  check(hs.champions === 1, `Hero stats: champions expected 1, got ${hs.champions}`);
+  check(hs.totalHoles === 144, `Hero stats: totalHoles expected 144 (8x18), got ${hs.totalHoles}`);
+  check(hs.totalShots === 847, `Hero stats: totalShots expected 847 (T-I sum), got ${hs.totalShots}`);
 
   // Round story bullets must produce 3 strings
   const story = computeRoundStory(t1, data.courses.winchester);
