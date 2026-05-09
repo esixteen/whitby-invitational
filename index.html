@@ -1621,25 +1621,29 @@ function renderPlayers(d) {
   const standings = computeTournamentStandings(t1, d.courses[t1.courseId]);
   const finishById = {};
   standings.players.forEach(p => { finishById[p.playerId] = p; });
+  const handicaps = computeHandicaps(d);
 
   const t1Ids = Object.keys(t1.scores);
   const cards = t1Ids
-    .map(pid => ({ pid, finish: finishById[pid] }))
-    .sort((a, b) => a.finish.rank - b.finish.rank)
-    .map(({ pid, finish }) => {
+    .map(pid => ({ pid, finish: finishById[pid], hcp: handicaps[pid] }))
+    .sort((a, b) => {
+      if (a.hcp !== b.hcp) return a.hcp - b.hcp;
+      return d.players[a.pid].name.localeCompare(d.players[b.pid].name);
+    })
+    .map(({ pid, finish, hcp }, i) => {
       const player = d.players[pid];
       const photo = player.photo || "";
-      const isChamp = finish.rank === 1;
-      const cardCls = "player-card fade-up" + (isChamp ? " is-champion" : "");
-      const finishLabel = isChamp ? "Champion" : ordinal(finish.rank);
+      const isLowest = i === 0;
+      const cardCls = "player-card fade-up" + (isLowest ? " is-champion" : "");
+      const hcpStr = formatHandicap(hcp);
       return `
         <article class="${cardCls}">
           <img src="${esc(photo)}" alt="${esc(player.name)} at Tournament I" class="player-img" loading="lazy" />
           <div class="player-meta">
             <div class="player-name">${esc(player.name)}</div>
             <div class="player-finish">
-              <span class="finish-num">${esc(finishLabel)}</span>
-              <span style="color: var(--ink-muted);">· ${finish.totalPoints} pts · ${finish.totalStrokes}</span>
+              <span class="finish-num">HCP ${esc(hcpStr)}</span>
+              <span style="color: var(--ink-muted);">· T-I ${esc(ordinal(finish.rank))}</span>
             </div>
           </div>
         </article>
@@ -1652,7 +1656,7 @@ function renderPlayers(d) {
         <div class="eyebrow" style="color: var(--ink-muted);">Section III</div>
         <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">The Field</h2>
       </div>
-      <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">The eight men who teed it up at Winchester. Ranked by where they finished.</p>
+      <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">The eight men who teed it up at Winchester. Ranked by overall handicap — lower is better.</p>
     </div>
     <div class="gold-rule mb-8"></div>
     <figure class="group-banner fade-up mb-10">
