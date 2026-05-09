@@ -84,13 +84,27 @@
     backdrop-filter: saturate(140%) blur(8px);
     -webkit-backdrop-filter: saturate(140%) blur(8px);
   }
+  .topnav {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 4px 0;
+  }
+  .topnav::-webkit-scrollbar { display: none; }
   .topnav a {
     text-decoration: none;
     color: var(--ink-muted);
     transition: color 140ms ease-out;
     position: relative;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
-  .topnav a:hover { color: var(--ink); }
+  .topnav a:hover, .topnav a:active { color: var(--ink); }
   .topnav a::after {
     content: "";
     position: absolute;
@@ -102,6 +116,11 @@
     transition: transform 160ms ease-out;
   }
   .topnav a:hover::after { transform: scaleX(1); }
+  @media (max-width: 639px) {
+    .topnav { gap: 16px; font-size: 11px; flex-basis: 100%; order: 3; padding-top: 8px; }
+    .vol-lockup { display: none; }
+    html { scroll-padding-top: 110px; }
+  }
 
   .masthead-rule {
     height: 1px;
@@ -326,7 +345,7 @@
     left: 50%;
     transform: translate(-50%, 4px);
     background: var(--ink);
-    color: var(--cream);
+    color: var(--bg);
     font-family: 'Inter', sans-serif;
     font-size: 11px;
     font-weight: 600;
@@ -351,7 +370,8 @@
     border-top-color: var(--ink);
   }
   .avatar-wrap:hover .avatar-tip,
-  .avatar-wrap:focus-within .avatar-tip {
+  .avatar-wrap:focus-within .avatar-tip,
+  .avatar-wrap:active .avatar-tip {
     opacity: 1;
     transform: translate(-50%, 0);
   }
@@ -376,7 +396,7 @@
     left: 0; right: 0; bottom: 0;
     padding: 22px 24px;
     background: linear-gradient(180deg, rgba(31,42,36,0) 0%, rgba(31,42,36,0.62) 100%);
-    color: var(--cream);
+    color: var(--bg);
     display: flex;
     align-items: baseline;
     gap: 14px;
@@ -412,6 +432,7 @@
     aspect-ratio: 4 / 5;
     width: 100%;
     object-fit: cover;
+    object-position: center 30%;
     display: block;
     background: var(--surface-elev);
   }
@@ -566,6 +587,7 @@
   }
   .champ-portrait img {
     width: 100%; height: 100%; object-fit: cover; display: block;
+    object-position: center 28%;
   }
   .champ-portrait .gold-band {
     position: absolute; top: 0; left: 0; right: 0;
@@ -631,7 +653,7 @@
     text-transform: uppercase;
   }
 
-  /* responsive grid: stat strip — 2 cols mobile, 5 cols desktop */
+  /* responsive grid: stat strip — 2 cols mobile, 5 cols once it fits */
   .stat-strip {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -644,21 +666,27 @@
     border-right: 1px solid rgba(31,42,36,0.18);
     border-bottom: 1px solid rgba(31,42,36,0.18);
   }
-  .stat-strip .stat-cell:nth-child(2n) { border-right: 0; }
-  .stat-strip .stat-cell:last-child {
-    grid-column: 1 / -1;
-    border-right: 0;
-    border-bottom: 0;
+  @media (max-width: 759px) {
+    .stat-strip .stat-cell:nth-child(2n) { border-right: 0; }
+    .stat-strip .stat-cell:last-child {
+      grid-column: 1 / -1;
+      border-right: 0;
+      border-bottom: 0;
+    }
+    .stat-strip .stat-cell:nth-last-child(2):nth-child(odd) { border-bottom: 0; }
   }
-  .stat-strip .stat-cell:nth-last-child(2):nth-child(odd) { border-bottom: 0; }
-  @media (min-width: 1024px) {
-    .stat-strip { grid-template-columns: repeat(5, 1fr); }
+  @media (min-width: 760px) {
+    .stat-strip { grid-template-columns: repeat(5, minmax(0, 1fr)); }
     .stat-strip .stat-cell {
+      padding: 20px 14px;
       border-right: 1px solid rgba(31,42,36,0.18);
       border-bottom: 0;
-      grid-column: auto;
     }
     .stat-strip .stat-cell:last-child { border-right: 0; }
+    .stat-strip .stat-cell .eyebrow {
+      font-size: 10px;
+      white-space: nowrap;
+    }
   }
 
   /* round story bullets */
@@ -704,7 +732,7 @@
       <div class="flex items-center gap-3">
         <span class="eyebrow" style="color: var(--ink);">The Whitby Invitational</span>
       </div>
-      <nav class="topnav hidden sm:flex items-center gap-6 eyebrow" style="color: var(--ink-muted);">
+      <nav class="topnav eyebrow" aria-label="Sections" style="color: var(--ink-muted);">
         <a href="#champion">Champion</a>
         <a href="#hardware">Awards</a>
         <a href="#players">The Field</a>
@@ -712,7 +740,7 @@
         <a href="#leaderboard">Leaderboard</a>
         <a href="#archive">Archive</a>
       </nav>
-      <span class="eyebrow" style="color: var(--ink-muted);">Vol. <span class="tabular">I</span> · Est. 2025</span>
+      <span class="eyebrow vol-lockup" style="color: var(--ink-muted);">Vol. <span class="tabular">I</span> · Est. 2025</span>
     </div>
     <div class="masthead-rule mt-3"></div>
     <div class="masthead-rule-thick mt-1"></div>
@@ -1432,7 +1460,7 @@ function renderPlayers(d) {
       <img src="img/group-photo.jpg" alt="The Whitby Invitational — Tournament I, Winchester GC, September 1, 2025" loading="lazy" />
       <figcaption>
         <span class="eyebrow" style="color: var(--gold);">Tournament I</span>
-        <span style="color: var(--cream);">Winchester GC &middot; September 1, 2025</span>
+        <span style="color: var(--bg);">Winchester GC &middot; September 1, 2025</span>
       </figcaption>
     </figure>
     <div class="player-grid">
@@ -1786,7 +1814,8 @@ function renderChampionsWall(d) {
     const champName = d.players[champ.playerId].name;
     const ruName = ru ? d.players[ru.playerId].name : "—";
     const portraitOverride = d.championPortraits[champ.playerId];
-    const portrait = portraitOverride || "img/stock/champion-fallback.jpg";
+    const champPhoto = d.players[champ.playerId] && d.players[champ.playerId].photo;
+    const portrait = portraitOverride || champPhoto || "img/stock/champion-fallback.jpg";
 
     return `
       <article class="champ-card">
