@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>The Whitby Invitational</title>
-<meta name="description" content="The Whitby Invitational — an annual gentlemen's golf tournament in Whitby, Ontario. Reigning champion: Gibbs. Next tee: June 13, 2026 at Kedron Dells." />
+<meta name="description" content="The Whitby Invitational — an annual gentlemen's golf tournament in Whitby, Ontario. Reigning champion: Traikos. Next tee: TBD, September 2026." />
 <meta name="theme-color" content="#FBF8F1" />
 
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png" />
@@ -13,7 +13,7 @@
 
 <meta property="og:type" content="website" />
 <meta property="og:title" content="The Whitby Invitational" />
-<meta property="og:description" content="An annual gentlemen's golf tournament in Whitby, Ontario. Reigning champion: Gibbs." />
+<meta property="og:description" content="An annual gentlemen's golf tournament in Whitby, Ontario. Reigning champion: Traikos." />
 <meta property="og:image" content="https://whitby-invitational.vercel.app/img/og-image.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
@@ -22,7 +22,7 @@
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="The Whitby Invitational" />
-<meta name="twitter:description" content="An annual gentlemen's golf tournament in Whitby, Ontario. Reigning champion: Gibbs." />
+<meta name="twitter:description" content="An annual gentlemen's golf tournament in Whitby, Ontario. Reigning champion: Traikos." />
 <meta name="twitter:image" content="https://whitby-invitational.vercel.app/img/og-image.png" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -369,7 +369,7 @@
     opacity: 0.65;
   }
 
-  /* avatar tooltip — shows player's overall handicap on hover */
+  /* avatar tooltip — shows player's overall combined score on hover */
   .avatar-wrap {
     position: relative;
     display: inline-flex;
@@ -443,6 +443,37 @@
     .group-banner { aspect-ratio: 4 / 3; }
     .group-banner figcaption { padding: 16px 18px; gap: 8px; flex-direction: column; align-items: flex-start; }
   }
+
+  /* group-photo slideshow (crossfade across tournaments) */
+  .group-slideshow .gs-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 900ms ease;
+    pointer-events: none;
+  }
+  .group-slideshow .gs-slide.is-active { opacity: 1; pointer-events: auto; }
+  .group-slideshow .gs-dots {
+    position: absolute;
+    right: 16px;
+    bottom: 14px;
+    z-index: 3;
+    display: flex;
+    gap: 8px;
+  }
+  .group-slideshow .gs-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.45);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+    transition: background 160ms ease, transform 160ms ease;
+  }
+  .group-slideshow .gs-dot:hover { background: rgba(255,255,255,0.8); }
+  .group-slideshow .gs-dot.is-active { background: var(--gold); transform: scale(1.15); }
 
   /* player gallery */
   .player-grid {
@@ -769,15 +800,45 @@
     display: flex;
     flex-direction: column;
   }
+  .tour-list li { display: block; }
+  .tour-list li + li .tour-entry { border-top: 1px solid rgba(31,42,36,0.18); }
+  /* show ~2 entries, scroll for the rest */
+  .tour-list--scroll {
+    max-height: 196px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold) transparent;
+    scroll-snap-type: y proximity;
+  }
+  .tour-list--scroll li { scroll-snap-align: start; }
+  .tour-list--scroll::-webkit-scrollbar { width: 5px; }
+  .tour-list--scroll::-webkit-scrollbar-track { background: transparent; }
+  .tour-list--scroll::-webkit-scrollbar-thumb { background: var(--divider); border-radius: 999px; }
+  .tour-list--scroll::-webkit-scrollbar-thumb:hover { background: var(--gold); }
   .tour-entry {
     display: grid;
     grid-template-columns: 56px 1fr;
     gap: 16px;
     padding: 14px 0;
-    border-top: 1px solid rgba(31,42,36,0.18);
     align-items: baseline;
+    color: inherit;
+    text-decoration: none;
+    transition: background 0.18s ease, padding-left 0.18s ease;
+    border-left: 2px solid transparent;
+    padding-left: 8px;
+    margin-left: -8px;
   }
-  .tour-entry:first-child { border-top: 0; }
+  .tour-entry:hover {
+    background: rgba(200,162,74,0.06);
+    border-left-color: var(--gold);
+  }
+  .tour-entry:hover .tour-course { color: var(--fairway-deep); }
+  .tour-entry:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
   .tour-roman {
     font-family: 'Fraunces', serif;
     font-weight: 600;
@@ -893,11 +954,11 @@
       </a>
       <nav class="topnav eyebrow" aria-label="Sections" style="color: var(--ink-muted);">
         <a href="#champion">Champion</a>
+        <a href="#archive">Archive</a>
+        <a href="#champions-wall">Champions</a>
         <a href="#hardware">Awards</a>
-        <a href="#players">The Field</a>
         <a href="#next">Next Tee</a>
         <a href="#leaderboard">Leaderboard</a>
-        <a href="#archive">Archive</a>
       </nav>
       <span class="eyebrow vol-lockup" style="color: var(--ink-muted);">Vol. <span class="tabular">I</span> · Est. 2025</span>
     </div>
@@ -914,23 +975,20 @@
   <!-- ============ 2. CHAMPION SPOTLIGHT ============ -->
   <section id="champion" class="px-6 lg:px-12 py-14 lg:py-24"></section>
 
-  <!-- ============ 3. HARDWARE CABINET ============ -->
-  <section id="hardware" class="px-6 lg:px-12 py-14 lg:py-20"></section>
-
-  <!-- ============ 4. MOMENTS FEED ============ -->
-  <section id="players" class="px-6 lg:px-12 py-14 lg:py-20"></section>
-
-  <!-- ============ 5. NEXT TOURNAMENT ============ -->
-  <section id="next" class="px-6 lg:px-12 py-14 lg:py-20"></section>
-
-  <!-- ============ 6. LEADERBOARD ============ -->
-  <section id="leaderboard" class="px-6 lg:px-12 py-14 lg:py-20"></section>
-
-  <!-- ============ 7. TOURNAMENT ARCHIVE ============ -->
+  <!-- ============ 3. TOURNAMENT ARCHIVE (with group-photo slider) ============ -->
   <section id="archive" class="px-6 lg:px-12 py-14 lg:py-20"></section>
 
-  <!-- ============ 8. CHAMPIONS WALL ============ -->
+  <!-- ============ 4. CHAMPIONS WALL ============ -->
   <section id="champions-wall" class="px-6 lg:px-12 py-14 lg:py-20"></section>
+
+  <!-- ============ 5. HARDWARE CABINET ============ -->
+  <section id="hardware" class="px-6 lg:px-12 py-14 lg:py-20"></section>
+
+  <!-- ============ 6. NEXT TOURNAMENT ============ -->
+  <section id="next" class="px-6 lg:px-12 py-14 lg:py-20"></section>
+
+  <!-- ============ 7. LEADERBOARD ============ -->
+  <section id="leaderboard" class="px-6 lg:px-12 py-14 lg:py-20"></section>
 
 </main>
 
@@ -961,6 +1019,10 @@ const data = {
     wells:    { name: "Wells",    active: true },
     sean:     { name: "Sean",     active: true },
     greg:     { name: "Greg",     active: true },
+    patsy:          { name: "Patsy",           active: true },
+    biggs:          { name: "Biggs",           active: true },
+    mike:           { name: "Mike",            active: true },
+    trevor:         { name: "Trevor",          active: true },
   },
 
   courses: {
@@ -975,6 +1037,13 @@ const data = {
       location: "Oshawa, ON",
       img: "img/stock/kedron.jpg",
     },
+    royalAshburn: {
+      name: "Royal Ashburn Golf Club",
+      location: "Ashburn, ON",
+      website: "https://royalashburngolfclub.com/",
+      pars: [5,4,5,3,4,4,3,4,4,4,4,4,3,5,4,3,5,4],
+      img: "img/stock/royal-ashburn.jpg",
+    },
   },
 
   tournaments: [
@@ -984,6 +1053,7 @@ const data = {
       year: 2025,
       courseId: "winchester",
       date: "2025-09-01",
+      groupPhoto: "img/group-photo.jpg",
       scores: {
         deluca: [5,5,4,4,2,6,7,7,3,5,5,4,6,7,7,7,4,8],
         franco: [7,6,6,5,5,5,6,6,5,5,6,4,7,9,7,7,4,8],
@@ -995,14 +1065,49 @@ const data = {
         adam:   [7,5,7,4,5,5,9,5,5,5,6,8,4,7,7,9,5,7],
       },
     },
+    {
+      id: 2,
+      roman: "II",
+      year: 2026,
+      courseId: "royalAshburn",
+      date: "2026-06-13",
+      groupPhoto: "img/group-royal-ashburn.jpg",
+      quote: "Trophy is coming to Aurora.",
+      scores: {
+        traikos:  [7,6,9,5,7,6,4,6,5,4,6,4,5,7,6,3,5,5],
+        morsillo: [6,6,6,4,7,7,4,4,6,6,6,7,5,6,5,5,6,4],
+        e:        [6,7,9,4,6,6,4,6,6,7,7,6,4,6,6,6,7,5],
+        deluca:   [9,8,7,7,12,6,5,6,7,5,4,4,4,5,7,5,6,4],
+        franco:   [9,9,8,5,7,4,8,5,8,6,5,6,5,7,5,4,6,7],
+        angel:    [7,5,7,4,6,6,4,5,6,6,7,6,3,6,5,3,6,7],
+        danny:    [8,8,6,4,6,6,4,7,6,5,7,6,8,7,6,5,7,6],
+        mike:     [8,5,7,4,5,6,6,7,6,6,8,6,4,6,4,7,6,5],
+        trevor:   [5,7,7,5,5,5,4,5,6,6,6,6,6,6,5,5,6,6],
+        wells:    [8,8,9,6,8,6,6,7,8,6,7,6,6,7,5,6,7,6],
+        biggs:    [6,6,5,5,7,4,4,5,5,5,5,5,5,6,5,3,6,5],
+        patsy:    [6,5,9,7,7,7,6,8,5,4,6,6,4,6,5,5,8,7],
+      },
+      // Hand-picked awards for Tournament II. tone: "good" (gold) | "bad" (we don't talk about it).
+      awards: [
+        { name: "The Honest Golfer Award", winner: "wells", tone: "good", stat: "122", statLabel: "total strokes", note: "Highest overall score of the round." },
+        { name: "The Trifecta / Consistency Award", winner: "biggs", tone: "good", stat: "6", statLabel: "straight 5s (holes 8-13)", note: "Most consecutive holes at the exact same score." },
+        { name: "The Blow-Up Award", winner: "deluca", tone: "bad", stat: "12", statLabel: "on hole 5", note: "Highest score on any single hole." },
+        { name: "The Blackjack Award", winner: "wells", tone: "good", stat: "21", statLabel: "over holes 7-9", note: "Exactly 21 strokes across a 3-hole stretch." },
+        { name: "The Birdie Hunter Award", winner: "biggs", tone: "good", note: "Most birdies on the day." },
+        { name: "The Back Nine Collapse Award", winner: "trevor", tone: "bad", stat: "+3", statLabel: "front 49 to back 52", note: "Biggest stroke increase from the front nine to the back." },
+        { name: "The Closer Award", winner: "morsillo", tone: "good", stat: "4", statLabel: "on the 18th", note: "Best score on the final hole." },
+      ],
+    },
   ],
 
   upcoming: {
-    courseId: "kedron",
-    date: "2026-06-13",
-    teeTime: null,
-    confirmed: ["franco","e","morsillo","traikos","angel","wells","sean","deluca","dennis","danny","adam"],
-    out: ["greg","gibbs"],
+    tbd: true,
+    courseName: "Course To Be Determined",
+    location: "Ontario",
+    window: "September 2026",
+    img: "img/stock/hero-fairway.jpg",
+    // Potential field for the next outing — keeps the regulars on the radar.
+    roster: ["traikos","morsillo","e","deluca","franco","angel","danny","mike","trevor","wells","biggs","patsy","gibbs","adam","dennis","greg","sean"],
   },
 
   // Editable copy
@@ -1090,22 +1195,32 @@ function computeTournamentStandings(tournament, course) {
   return { pointsByHole, players, coursePar };
 }
 
-function computeHandicaps(d) {
-  const overParByPlayer = {};
+function computePlayerAggregates(d) {
+  // Per player: sum of (gross − course par) and number of rounds played, across every tournament.
+  const agg = {};
   d.tournaments.forEach(t => {
     const course = d.courses[t.courseId];
     const standings = computeTournamentStandings(t, course);
     standings.players.forEach(p => {
-      if (!overParByPlayer[p.playerId]) overParByPlayer[p.playerId] = [];
-      overParByPlayer[p.playerId].push(p.overPar);
+      if (!agg[p.playerId]) agg[p.playerId] = { sum: 0, rounds: 0 };
+      agg[p.playerId].sum += p.overPar;
+      agg[p.playerId].rounds += 1;
     });
   });
   const out = {};
-  Object.keys(overParByPlayer).forEach(id => {
-    const arr = overParByPlayer[id];
-    const avg = arr.reduce((a,b)=>a+b,0) / arr.length;
-    out[id] = Math.round(avg);
+  Object.keys(agg).forEach(id => {
+    out[id] = { sum: agg[id].sum, rounds: agg[id].rounds, avg: agg[id].sum / agg[id].rounds };
   });
+  return out;
+}
+
+function computeCombinedScores(d) {
+  // Scoring AVERAGE = mean of (gross − course par) per round played.
+  // Displayed in over/under-par style (e.g. +18, +32.5, E). A single-round player's
+  // average equals that round's score.
+  const agg = computePlayerAggregates(d);
+  const out = {};
+  Object.keys(agg).forEach(id => { out[id] = agg[id].avg; });
   return out;
 }
 
@@ -1127,19 +1242,20 @@ function computeLeaderboard(d) {
     });
   });
 
-  const handicaps = computeHandicaps(d);
+  const aggregates = computePlayerAggregates(d);
 
   const rows = [...playedIds].map(id => ({
     playerId: id,
     name: d.players[id].name,
     championships: championships[id] || 0,
-    handicap: handicaps[id],
+    average: aggregates[id] ? aggregates[id].avg : undefined,
+    rounds: aggregates[id] ? aggregates[id].rounds : 0,
     finishes: finishes[id] || {},
   }));
 
   rows.sort((a,b) => {
     if (b.championships !== a.championships) return b.championships - a.championships;
-    if (a.handicap !== b.handicap) return a.handicap - b.handicap;
+    if (a.average !== b.average) return a.average - b.average;
     return a.name.localeCompare(b.name);
   });
 
@@ -1267,10 +1383,13 @@ function computeHeroStats(d) {
     });
   });
 
-  const target = new Date(d.upcoming.date + "T08:00:00-04:00");
-  const now = new Date();
-  const diffMs = target.getTime() - now.getTime();
-  const days = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+  let days = null;
+  if (!d.upcoming.tbd && d.upcoming.date) {
+    const target = new Date(d.upcoming.date + "T08:00:00-04:00");
+    const now = new Date();
+    const diffMs = target.getTime() - now.getTime();
+    days = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+  }
 
   return {
     tournaments: tournamentsCount,
@@ -1306,10 +1425,12 @@ function initialsFor(playerId, allPlayerIds, players) {
   return name.slice(0, 2);
 }
 
-function formatHandicap(n) {
+function formatCombinedScore(n) {
   if (n === undefined || n === null || Number.isNaN(n)) return "—";
-  if (n > 0) return "+" + n;
-  if (n < 0) return String(n);
+  const r = Math.round(n * 10) / 10;
+  const s = Number.isInteger(r) ? String(r) : r.toFixed(1);
+  if (r > 0) return "+" + s;
+  if (r < 0) return s;
   return "E";
 }
 
@@ -1372,34 +1493,44 @@ function renderHero(d) {
   const champ = reigningStandings.players[0];
   const champName = d.players[champ.playerId].name;
 
-  const tourEntries = d.tournaments.map(t => {
+  const tourEntries = [...d.tournaments].reverse().map(t => {
     const course = d.courses[t.courseId];
     const standings = computeTournamentStandings(t, course);
     const winner = standings.players[0];
     const winnerName = d.players[winner.playerId].name;
     return `
-      <li class="tour-entry">
-        <div class="tour-roman">${esc(t.roman)}</div>
-        <div class="tour-body">
-          <div class="tour-course">${esc(course.name)}</div>
-          <div class="tour-meta">${esc(formatTournamentDate(t.date))} · ${esc(course.location)}</div>
-          <div class="tour-status played">Played &middot; <span style="color: var(--gold);">Champion ${esc(winnerName)}</span></div>
-        </div>
+      <li>
+        <a class="tour-entry" href="#tour-${esc(t.id)}" aria-label="Jump to ${esc(course.name)} round results">
+          <div class="tour-roman">${esc(t.roman)}</div>
+          <div class="tour-body">
+            <div class="tour-course">${esc(course.name)}</div>
+            <div class="tour-meta">${esc(formatTournamentDate(t.date))} · ${esc(course.location)}</div>
+            <div class="tour-status played">Played &middot; <span style="color: var(--gold);">Champion ${esc(winnerName)}</span></div>
+          </div>
+        </a>
       </li>
     `;
   }).join("");
 
-  const upcomingCourse = d.courses[d.upcoming.courseId];
-  const upcomingDate = formatTournamentDate(d.upcoming.date);
+  const u = d.upcoming;
+  const upcomingCourse = u.courseId ? d.courses[u.courseId] : null;
+  const upcomingName = upcomingCourse ? upcomingCourse.name : (u.courseName || "Course TBD");
+  const upcomingLoc = upcomingCourse ? upcomingCourse.location : (u.location || "Ontario");
+  const upcomingWhen = u.tbd ? (u.window || "TBD") : formatTournamentDate(u.date);
   const upcomingRoman = toRoman(d.tournaments.length + 1);
+  const upcomingStatus = u.tbd
+    ? `Next &middot; <span style="color: var(--ink);">${esc(u.window || "TBD")}</span>`
+    : `Next &middot; <span style="color: var(--ink);">${stats.daysToNextTee} days</span>`;
   const tourUpcoming = `
-    <li class="tour-entry tour-entry-next">
-      <div class="tour-roman">${esc(upcomingRoman)}</div>
-      <div class="tour-body">
-        <div class="tour-course">${esc(upcomingCourse.name)}</div>
-        <div class="tour-meta">${esc(upcomingDate)} · ${esc(upcomingCourse.location)}</div>
-        <div class="tour-status next">Next &middot; <span style="color: var(--ink);">${stats.daysToNextTee} days</span></div>
-      </div>
+    <li>
+      <a class="tour-entry tour-entry-next" href="#next" aria-label="Jump to next tournament details">
+        <div class="tour-roman">${esc(upcomingRoman)}</div>
+        <div class="tour-body">
+          <div class="tour-course">${esc(upcomingName)}</div>
+          <div class="tour-meta">${esc(upcomingWhen)} · ${esc(upcomingLoc)}</div>
+          <div class="tour-status next">${upcomingStatus}</div>
+        </div>
+      </a>
     </li>
   `;
 
@@ -1418,9 +1549,9 @@ function renderHero(d) {
         </h1>
         <aside class="tour-panel fade-up" aria-label="The Tour">
           <div class="eyebrow tour-eyebrow">The Tour</div>
-          <ol class="tour-list">
-            ${tourEntries}
+          <ol class="tour-list tour-list--scroll">
             ${tourUpcoming}
+            ${tourEntries}
           </ol>
         </aside>
       </div>
@@ -1447,7 +1578,7 @@ function renderHero(d) {
         </div>
         <div class="stat-cell">
           <div class="eyebrow" style="color: var(--ink-muted);">Days to Next Tee</div>
-          <div class="stat-num mt-2">${stats.daysToNextTee}</div>
+          <div class="stat-num mt-2">${stats.daysToNextTee === null ? "TBD" : stats.daysToNextTee}</div>
         </div>
       </div>
 
@@ -1473,8 +1604,9 @@ function renderChampionSpotlight(d) {
   const dateStr = formatTournamentDate(reigning.date);
   const portraitOverride = d.championPortraits[champ.playerId];
   const champPhoto = d.players[champ.playerId] && d.players[champ.playerId].photo;
-  const photoSrc = portraitOverride || champPhoto || "img/group-photo.jpg";
+  const photoSrc = portraitOverride || champPhoto || reigning.groupPhoto || "img/group-photo.jpg";
   const fallbackSrc = "img/stock/champion-fallback.jpg";
+  const quote = reigning.quote || d.championQuote;
 
   return `
     <div class="grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-14 items-center">
@@ -1503,7 +1635,7 @@ function renderChampionSpotlight(d) {
                style="aspect-ratio: 4 / 5; object-fit: cover; object-position: center 25%; background: var(--surface-elev);" />
         </picture>
         <blockquote class="champ-quote mt-6">
-          &ldquo;${esc(d.championQuote)}&rdquo;
+          &ldquo;${esc(quote)}&rdquo;
           <footer class="eyebrow mt-3 not-italic" style="color: var(--ink-muted); font-style: normal;">
             — ${esc(champName)}, post-round
           </footer>
@@ -1515,39 +1647,84 @@ function renderChampionSpotlight(d) {
 
 function renderHardware(d) {
   const reigning = d.tournaments[d.tournaments.length - 1];
+  const combinedScores = computeCombinedScores(d);
+
+  function avatarChip(playerId, bad) {
+    const ids = Object.keys(d.players);
+    const initials = initialsFor(playerId, ids, d.players);
+    const hcp = formatCombinedScore(combinedScores[playerId]);
+    const bg = bad ? "background: var(--ink-muted);" : "";
+    return `
+      <span class="award-foot">
+        <span class="avatar-wrap" tabindex="0" aria-label="${esc(d.players[playerId].name)}, scoring average ${esc(hcp)}">
+          <span class="avatar" style="width:32px; height:32px; font-size:13px; ${bg}">${esc(initials)}</span>
+          <span class="avatar-tip">Avg ${esc(hcp)}</span>
+        </span>
+        <span style="color: var(--ink); font-weight:500;">${esc(d.players[playerId].name)}</span>
+        <span style="color: var(--ink-muted);">· Avg ${esc(hcp)}</span>
+      </span>
+    `;
+  }
+
+  // Awards-driven cabinet (Tournament II onward). Each award names its winner explicitly.
+  if (reigning.awards && reigning.awards.length) {
+    const cards = reigning.awards.map(a => {
+      const bad = a.tone === "bad";
+      const accent = bad ? "var(--danger)" : "var(--gold)";
+      const icon = bad ? svgBlowup() : svgTrophy("var(--gold)");
+      const stat = a.stat
+        ? `<div class="award-stat" style="color: ${accent};">${esc(a.stat)} <span class="text-[14px] tracking-normal font-medium" style="color: var(--ink-muted);">${esc(a.statLabel || "")}</span></div>`
+        : "";
+      const note = a.note
+        ? `<p class="text-[12px] -mt-1" style="color: var(--ink-muted); font-style: italic;">${esc(a.note)}</p>`
+        : "";
+      return `
+        <article class="award-card" style="border-top-color: ${accent};">
+          <div class="flex items-center justify-between">
+            <div class="eyebrow award-eyebrow">${esc(a.name)}</div>
+            <span style="color: ${accent};">${icon}</span>
+          </div>
+          <h3 class="award-name">${esc(d.players[a.winner].name)}</h3>
+          ${stat}
+          ${note}
+          ${avatarChip(a.winner, bad)}
+        </article>
+      `;
+    }).join("");
+
+    return `
+      <div class="flex items-end justify-between flex-wrap gap-3 mb-6">
+        <div>
+          <div class="eyebrow" style="color: var(--ink-muted);">Section IV</div>
+          <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">The Hardware Cabinet</h2>
+        </div>
+        <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">${reigning.awards.length} awards from Tournament ${esc(reigning.roman)}. Some you frame. Some you bury.</p>
+      </div>
+      <div class="gold-rule mb-8"></div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 fade-up">
+        ${cards}
+      </div>
+    `;
+  }
+
+  // Legacy computed cabinet (Tournament I).
   const standings = computeTournamentStandings(reigning, d.courses[reigning.courseId]);
   const champ = standings.players[0];
   const ru = standings.players[1];
   const last = standings.players[standings.players.length - 1];
   const blow = computeBlowUp(reigning);
-  const handicaps = computeHandicaps(d);
-
-  function avatarChip(playerId) {
-    const ids = Object.keys(d.players);
-    const initials = initialsFor(playerId, ids, d.players);
-    const hcp = formatHandicap(handicaps[playerId]);
-    return `
-      <span class="award-foot">
-        <span class="avatar-wrap" tabindex="0" aria-label="${esc(d.players[playerId].name)}, handicap ${esc(hcp)}">
-          <span class="avatar" style="width:32px; height:32px; font-size:13px;">${esc(initials)}</span>
-          <span class="avatar-tip">HCP ${esc(hcp)}</span>
-        </span>
-        <span style="color: var(--ink); font-weight:500;">${esc(d.players[playerId].name)}</span>
-        <span style="color: var(--ink-muted);">· HCP ${esc(hcp)}</span>
-      </span>
-    `;
-  }
 
   function blowFoot() {
     const players = [...new Set(blow.entries.map(e => e.player))].slice(0, 2);
     const chips = players.map(pid => {
       const ids = Object.keys(d.players);
       const initials = initialsFor(pid, ids, d.players);
-      const hcp = formatHandicap(handicaps[pid]);
+      const hcp = formatCombinedScore(combinedScores[pid]);
       return `
-        <span class="avatar-wrap" tabindex="0" aria-label="${esc(d.players[pid].name)}, handicap ${esc(hcp)}">
+        <span class="avatar-wrap" tabindex="0" aria-label="${esc(d.players[pid].name)}, scoring average ${esc(hcp)}">
           <span class="avatar" style="width:32px; height:32px; font-size:13px; background: var(--ink-muted);">${esc(initials)}</span>
-          <span class="avatar-tip">HCP ${esc(hcp)}</span>
+          <span class="avatar-tip">Avg ${esc(hcp)}</span>
         </span>
       `;
     }).join('<span style="margin-left:-8px;"></span>');
@@ -1562,7 +1739,7 @@ function renderHardware(d) {
   return `
     <div class="flex items-end justify-between flex-wrap gap-3 mb-6">
       <div>
-        <div class="eyebrow" style="color: var(--ink-muted);">Section II</div>
+        <div class="eyebrow" style="color: var(--ink-muted);">Section IV</div>
         <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">The Hardware Cabinet</h2>
       </div>
       <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">Four awards from Tournament ${esc(reigning.roman)}. Three trophies and one we don't talk about.</p>
@@ -1615,60 +1792,32 @@ function renderHardware(d) {
   `;
 }
 
-function renderPlayers(d) {
-  const t1 = d.tournaments.find(t => t.id === 1);
-  if (!t1) return "";
-  const standings = computeTournamentStandings(t1, d.courses[t1.courseId]);
-  const finishById = {};
-  standings.players.forEach(p => { finishById[p.playerId] = p; });
-  const handicaps = computeHandicaps(d);
+function renderFieldSlideshow(d) {
+  const slidesData = d.tournaments.filter(t => t.groupPhoto);
+  const slides = slidesData.map((t, i) => {
+    const course = d.courses[t.courseId];
+    return `
+      <div class="gs-slide${i === 0 ? " is-active" : ""}">
+        <img src="${esc(t.groupPhoto)}" alt="The Whitby Invitational — Tournament ${esc(t.roman)}, ${esc(course.name)}" loading="lazy" />
+        <figcaption>
+          <span class="eyebrow" style="color: var(--gold);">Tournament ${esc(t.roman)}</span>
+          <span style="color: var(--bg);">${esc(course.name)} &middot; ${esc(formatTournamentDate(t.date))}</span>
+        </figcaption>
+      </div>
+    `;
+  }).join("");
 
-  const t1Ids = Object.keys(t1.scores);
-  const cards = t1Ids
-    .map(pid => ({ pid, finish: finishById[pid], hcp: handicaps[pid] }))
-    .sort((a, b) => {
-      if (a.hcp !== b.hcp) return a.hcp - b.hcp;
-      return d.players[a.pid].name.localeCompare(d.players[b.pid].name);
-    })
-    .map(({ pid, finish, hcp }, i) => {
-      const player = d.players[pid];
-      const photo = player.photo || "";
-      const isLowest = i === 0;
-      const cardCls = "player-card fade-up" + (isLowest ? " is-champion" : "");
-      const hcpStr = formatHandicap(hcp);
-      return `
-        <article class="${cardCls}">
-          <img src="${esc(photo)}" alt="${esc(player.name)} at Tournament I" class="player-img" loading="lazy" />
-          <div class="player-meta">
-            <div class="player-name">${esc(player.name)}</div>
-            <div class="player-finish">
-              <span class="finish-num">HCP ${esc(hcpStr)}</span>
-              <span style="color: var(--ink-muted);">· T-I ${esc(ordinal(finish.rank))}</span>
-            </div>
-          </div>
-        </article>
-      `;
-    }).join("");
+  const dots = slidesData.length > 1
+    ? `<div class="gs-dots">${slidesData.map((t, i) =>
+        `<button class="gs-dot${i === 0 ? " is-active" : ""}" type="button" aria-label="Show Tournament ${esc(t.roman)} photo"></button>`
+      ).join("")}</div>`
+    : "";
 
   return `
-    <div class="flex items-end justify-between flex-wrap gap-3 mb-6 px-0">
-      <div>
-        <div class="eyebrow" style="color: var(--ink-muted);">Section III</div>
-        <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">The Field</h2>
-      </div>
-      <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">The eight men who teed it up at Winchester. Ranked by overall handicap — lower is better.</p>
-    </div>
-    <div class="gold-rule mb-8"></div>
-    <figure class="group-banner fade-up mb-10">
-      <img src="img/group-photo.jpg" alt="The Whitby Invitational — Tournament I, Winchester GC, September 1, 2025" loading="lazy" />
-      <figcaption>
-        <span class="eyebrow" style="color: var(--gold);">Tournament I</span>
-        <span style="color: var(--bg);">Winchester GC &middot; September 1, 2025</span>
-      </figcaption>
+    <figure class="group-banner group-slideshow fade-up mb-10" id="field-slideshow">
+      ${slides}
+      ${dots}
     </figure>
-    <div class="player-grid">
-      ${cards}
-    </div>
   `;
 }
 
@@ -1709,7 +1858,7 @@ function toRoman(n) {
   return out;
 }
 
-function renderAvatar(playerId, allRosterIds, players, isOut, handicaps) {
+function renderAvatar(playerId, allRosterIds, players, isOut, combinedScores) {
   const name = players[playerId].name;
   const initials = initialsFor(playerId, allRosterIds, players);
   const cls = isOut ? "avatar is-out" : "avatar";
@@ -1719,12 +1868,12 @@ function renderAvatar(playerId, allRosterIds, players, isOut, handicaps) {
   const outPill = isOut
     ? `<span class="out-pill mt-1">Out</span>`
     : "";
-  const hcp = handicaps ? formatHandicap(handicaps[playerId]) : null;
-  const tip = hcp ? `<span class="avatar-tip">HCP ${esc(hcp)}</span>` : "";
+  const hcp = combinedScores ? formatCombinedScore(combinedScores[playerId]) : null;
+  const tip = hcp ? `<span class="avatar-tip">Avg ${esc(hcp)}</span>` : "";
 
   return `
     <div class="flex flex-col items-center gap-2">
-      <span class="avatar-wrap" tabindex="0" aria-label="${esc(name)}, handicap ${esc(hcp || '—')}">
+      <span class="avatar-wrap" tabindex="0" aria-label="${esc(name)}, scoring average ${esc(hcp || '—')}">
         <span class="${cls}">${esc(initials)}</span>
         ${tip}
       </span>
@@ -1736,6 +1885,75 @@ function renderAvatar(playerId, allRosterIds, players, isOut, handicaps) {
 
 function renderNextTournament(d) {
   const u = d.upcoming;
+  const nextRoman = toRoman(d.tournaments.length + 1);
+
+  if (u.tbd) {
+    const courseName = u.courseName || "Course To Be Determined";
+    const location = u.location || "Ontario";
+    const window = u.window || "TBD";
+    const roster = u.roster || [];
+    const combinedScores = computeCombinedScores(d);
+    const rosterAvatars = roster
+      .map(id => renderAvatar(id, roster, d.players, false, combinedScores))
+      .join("");
+    return `
+      <div class="flex items-end justify-between flex-wrap gap-3 mb-6">
+        <div>
+          <div class="eyebrow" style="color: var(--ink-muted);">Section V</div>
+          <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">Next Tournament</h2>
+        </div>
+        <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">${esc(window)}. Date and course to be confirmed. Clear your calendar anyway.</p>
+      </div>
+      <div class="gold-rule mb-6"></div>
+
+      <div class="rounded-md overflow-hidden border fade-up" style="background: var(--surface); border-color: var(--divider);">
+        <div class="course-photo">
+          <img src="${esc(u.img || 'img/stock/hero-fairway.jpg')}" alt="The next fairway awaits" loading="lazy" />
+          <div class="course-overlay">
+            <div>
+              <div class="eyebrow" style="color: rgba(255,255,255,0.85);">Tournament ${esc(nextRoman)} · ${esc(location)}</div>
+              <div class="course-name mt-2">${esc(courseName)}</div>
+            </div>
+            <div class="text-[13px]" style="color: rgba(255,255,255,0.92); letter-spacing: 0.02em;">
+              ${esc(window)} · Tee TBD
+            </div>
+          </div>
+        </div>
+
+        <div class="grid lg:grid-cols-[1fr_1.2fr] gap-0">
+          <div class="p-6 lg:p-9 lg:border-r" style="border-color: var(--divider);">
+            <div class="eyebrow" style="color: var(--ink-muted);">Scheduled for</div>
+            <div class="font-display font-semibold mt-2" style="font-size: clamp(40px, 6vw, 68px); line-height: 1; color: var(--fairway-deep);">${esc(window)}</div>
+            <p class="mt-4 text-[15px] max-w-lg" style="color: var(--ink-muted); line-height: 1.5;">
+              Tournament ${esc(nextRoman)} is on the calendar for ${esc(window)}. The course, the exact date, and the
+              field all get locked in closer to the day.
+            </p>
+            <dl class="mt-7 grid grid-cols-[auto_1fr] gap-x-5 gap-y-3 text-[13px]" style="color: var(--ink); line-height: 1.5;">
+              <dt class="eyebrow" style="color: var(--ink-muted);">Window</dt>
+              <dd>${esc(window)}</dd>
+              <dt class="eyebrow" style="color: var(--ink-muted);">Course</dt>
+              <dd>${esc(courseName)}</dd>
+              <dt class="eyebrow" style="color: var(--ink-muted);">Region</dt>
+              <dd>${esc(location)}</dd>
+            </dl>
+          </div>
+
+          <div class="p-6 lg:p-9">
+            <div class="eyebrow mb-1" style="color: var(--ink-muted);">Potential Field (${roster.length})</div>
+            <p class="text-[13px] mb-5" style="color: var(--ink-muted);">The regulars on the radar. Confirmations open closer to the date.</p>
+            <div class="grid grid-cols-4 sm:grid-cols-5 gap-x-3 gap-y-5">
+              ${rosterAvatars}
+            </div>
+          </div>
+        </div>
+
+        <div class="px-6 lg:px-9 pb-6 lg:pb-9 pt-2 border-t" style="border-color: var(--divider);">
+          ${renderScoringLegend()}
+        </div>
+      </div>
+    `;
+  }
+
   const course = d.courses[u.courseId];
   const dateObj = new Date(u.date + "T08:00:00-04:00");
   const dateStr = dateObj.toLocaleDateString("en-US", {
@@ -1743,18 +1961,18 @@ function renderNextTournament(d) {
   });
   const teeTime = u.teeTime ? esc(u.teeTime) : "Tee TBD";
   const allRoster = [...u.confirmed, ...u.out];
-  const handicaps = computeHandicaps(d);
-  const confirmedAvatars = u.confirmed.map(id => renderAvatar(id, allRoster, d.players, false, handicaps)).join("");
-  const outAvatars = u.out.map(id => renderAvatar(id, allRoster, d.players, true, handicaps)).join("");
+  const combinedScores = computeCombinedScores(d);
+  const confirmedAvatars = u.confirmed.map(id => renderAvatar(id, allRoster, d.players, false, combinedScores)).join("");
+  const outAvatars = u.out.map(id => renderAvatar(id, allRoster, d.players, true, combinedScores)).join("");
   const total = u.confirmed.length + u.out.length;
 
   return `
     <div class="flex items-end justify-between flex-wrap gap-3 mb-6">
       <div>
-        <div class="eyebrow" style="color: var(--ink-muted);">Section IV</div>
+        <div class="eyebrow" style="color: var(--ink-muted);">Section V</div>
         <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">Next Tournament</h2>
       </div>
-      <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">June 13, 2026. Calendars open. Excuses now accepted.</p>
+      <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">Calendars open. Excuses now accepted.</p>
     </div>
     <div class="gold-rule mb-6"></div>
 
@@ -1763,7 +1981,7 @@ function renderNextTournament(d) {
         <img src="${esc(course.img || '')}" alt="${esc(course.name)}" loading="lazy" />
         <div class="course-overlay">
           <div>
-            <div class="eyebrow" style="color: rgba(255,255,255,0.85);">Tournament II · ${esc(course.location)}</div>
+            <div class="eyebrow" style="color: rgba(255,255,255,0.85);">Tournament ${esc(nextRoman)} · ${esc(course.location)}</div>
             <div class="course-name mt-2">${esc(course.name)}</div>
           </div>
           <div class="text-[13px]" style="color: rgba(255,255,255,0.92); letter-spacing: 0.02em;">
@@ -1776,9 +1994,26 @@ function renderNextTournament(d) {
         <div class="p-6 lg:p-9 lg:border-r" style="border-color: var(--divider);">
           <div class="eyebrow" style="color: var(--ink-muted);">Tee-off in</div>
           <div id="countdown" class="flex flex-wrap gap-3 mt-4"></div>
-          <p class="mt-6 text-[13px]" style="color: var(--ink-muted); line-height: 1.55;">
-            Eastern time, 8 a.m. default tee. Real time will lock once confirmed by the starter.
-          </p>
+          <dl class="mt-7 grid grid-cols-[auto_1fr] gap-x-5 gap-y-3 text-[13px]" style="color: var(--ink); line-height: 1.5;">
+            <dt class="eyebrow" style="color: var(--ink-muted);">Tee time</dt>
+            <dd>${teeTime} · Eastern</dd>
+            ${u.cost ? `
+              <dt class="eyebrow" style="color: var(--ink-muted);">Entry</dt>
+              <dd>${esc(u.cost)}</dd>
+            ` : ""}
+            ${u.trophyVenue ? `
+              <dt class="eyebrow" style="color: var(--ink-muted);">Trophy</dt>
+              <dd>Ceremony at <span style="font-weight: 500;">${esc(u.trophyVenue)}</span></dd>
+            ` : ""}
+            ${u.trophyActivities ? `
+              <dt class="eyebrow" style="color: var(--ink-muted);">Festivities</dt>
+              <dd>${esc(u.trophyActivities)}</dd>
+            ` : ""}
+            ${course.website ? `
+              <dt class="eyebrow" style="color: var(--ink-muted);">Course</dt>
+              <dd><a href="${esc(course.website)}" target="_blank" rel="noopener" style="color: var(--fairway-deep); text-decoration: underline; text-underline-offset: 3px;">${esc(course.name)}</a></dd>
+            ` : ""}
+          </dl>
         </div>
 
         <div class="p-6 lg:p-9">
@@ -1838,6 +2073,30 @@ function startCountdown(targetDate, mountId) {
   handle = setInterval(tick, 30000);
 }
 
+function startSlideshow(mountId, intervalMs) {
+  const root = document.getElementById(mountId);
+  if (!root) return;
+  const slides = Array.from(root.querySelectorAll(".gs-slide"));
+  const dots = Array.from(root.querySelectorAll(".gs-dot"));
+  if (slides.length < 2) return;
+
+  let idx = 0;
+  let handle = null;
+
+  function show(n) {
+    idx = (n + slides.length) % slides.length;
+    slides.forEach((s, i) => s.classList.toggle("is-active", i === idx));
+    dots.forEach((dd, i) => dd.classList.toggle("is-active", i === idx));
+  }
+  function restart() {
+    if (handle) clearInterval(handle);
+    handle = setInterval(() => show(idx + 1), intervalMs);
+  }
+
+  dots.forEach((dd, i) => dd.addEventListener("click", () => { show(i); restart(); }));
+  restart();
+}
+
 function renderLeaderboard(d) {
   const rows = computeLeaderboard(d);
   const tournaments = d.tournaments;
@@ -1879,7 +2138,8 @@ function renderLeaderboard(d) {
           </details>
         </td>
         <td class="titles tabular" style="text-align:right;">${r.championships}</td>
-        <td class="hcp tabular" style="text-align:right;">${formatHandicap(r.handicap)}</td>
+        <td class="hcp tabular" style="text-align:right;">${formatCombinedScore(r.average)}</td>
+        <td class="tabular" style="text-align:right; color: var(--ink-muted);">${r.rounds}</td>
         ${finishCells}
       </tr>
     `;
@@ -1888,10 +2148,10 @@ function renderLeaderboard(d) {
   return `
     <div class="flex items-end justify-between flex-wrap gap-3 mb-6">
       <div>
-        <div class="eyebrow" style="color: var(--ink-muted);">Section V</div>
+        <div class="eyebrow" style="color: var(--ink-muted);">Section VI</div>
         <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">All-Time Leaderboard</h2>
       </div>
-      <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">Sorted by titles, then handicap, then alphabetic. Trophies for the top three.</p>
+      <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">Sorted by titles, then scoring average, then alphabetic. Trophies for the top three.</p>
     </div>
     <div class="gold-rule mb-2"></div>
 
@@ -1904,7 +2164,8 @@ function renderLeaderboard(d) {
               <th style="width:32px;"></th>
               <th>Player</th>
               <th style="text-align:right;">Titles</th>
-              <th style="text-align:right;">HCP</th>
+              <th style="text-align:right;">AVG</th>
+              <th style="text-align:right;">Rounds</th>
               ${finishHeaderCells}
             </tr>
           </thead>
@@ -1971,7 +2232,7 @@ function renderArchiveCard(t, d, isFirst) {
   const openAttr = isFirst ? "open" : "";
 
   return `
-    <article class="rounded-md border overflow-hidden" style="background: var(--surface); border-color: var(--divider);">
+    <article id="tour-${esc(t.id)}" class="rounded-md border overflow-hidden" style="background: var(--surface); border-color: var(--divider); scroll-margin-top: 110px;">
       <details ${openAttr}>
         <summary>
           <div class="course-photo" style="height: 220px;">
@@ -2032,9 +2293,10 @@ function renderArchive(d) {
   const sorted = [...d.tournaments].sort((a,b) => b.id - a.id);
   const cards = sorted.map((t, i) => renderArchiveCard(t, d, i === 0)).join("");
   return `
+    ${renderFieldSlideshow(d)}
     <div class="flex items-end justify-between flex-wrap gap-3 mb-6">
       <div>
-        <div class="eyebrow" style="color: var(--ink-muted);">Section VI</div>
+        <div class="eyebrow" style="color: var(--ink-muted);">Section II</div>
         <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">Tournament Archive</h2>
       </div>
       <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">Every round, every hole, every blow-up.</p>
@@ -2084,7 +2346,7 @@ function renderChampionsWall(d) {
   return `
     <div class="flex items-end justify-between flex-wrap gap-3 mb-6">
       <div>
-        <div class="eyebrow" style="color: var(--ink-muted);">Section VII</div>
+        <div class="eyebrow" style="color: var(--ink-muted);">Section III</div>
         <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">Champions Wall</h2>
       </div>
       <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">Names that never come down.</p>
@@ -2100,15 +2362,33 @@ function renderChampionsWall(d) {
 
 document.getElementById("hero").innerHTML = renderHero(data);
 document.getElementById("champion").innerHTML = renderChampionSpotlight(data);
-document.getElementById("hardware").innerHTML = renderHardware(data);
-document.getElementById("players").innerHTML = renderPlayers(data);
-document.getElementById("next").innerHTML = renderNextTournament(data);
-document.getElementById("leaderboard").innerHTML = renderLeaderboard(data);
 document.getElementById("archive").innerHTML = renderArchive(data);
 document.getElementById("champions-wall").innerHTML = renderChampionsWall(data);
+document.getElementById("hardware").innerHTML = renderHardware(data);
+document.getElementById("next").innerHTML = renderNextTournament(data);
+document.getElementById("leaderboard").innerHTML = renderLeaderboard(data);
 
-const target = new Date(data.upcoming.date + "T08:00:00-04:00");
-startCountdown(target, "countdown");
+if (!data.upcoming.tbd && data.upcoming.date) {
+  const target = new Date(data.upcoming.date + "T08:00:00-04:00");
+  startCountdown(target, "countdown");
+}
+
+startSlideshow("field-slideshow", 5000);
+
+/* Open + scroll to an archive card when its hash is the URL fragment. */
+function openTournamentFromHash() {
+  const hash = window.location.hash;
+  if (!hash || !hash.startsWith("#tour-")) return;
+  const article = document.getElementById(hash.slice(1));
+  if (!article) return;
+  const details = article.querySelector("details");
+  if (details && !details.open) details.open = true;
+  requestAnimationFrame(() => {
+    article.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+}
+window.addEventListener("hashchange", openTournamentFromHash);
+openTournamentFromHash();
 
 /* =========================================================================
    MOTION — fade-up on scroll, run once.
@@ -2185,8 +2465,8 @@ startCountdown(target, "countdown");
     "Winchester par sum must equal 70"
   );
 
-  const hcs = computeHandicaps(data);
-  check(hcs.gibbs === 18, `Gibbs handicap expected 18, got ${hcs.gibbs}`);
+  const hcs = computeCombinedScores(data);
+  check(hcs.gibbs === 18, `Gibbs combined score expected 18, got ${hcs.gibbs}`);
 
   const lb = computeLeaderboard(data);
   check(lb[0] && lb[0].playerId === "gibbs", `Top of leaderboard should be Gibbs, got ${lb[0] && lb[0].playerId}`);
@@ -2200,14 +2480,38 @@ startCountdown(target, "countdown");
   check(blowPlayers.has("danny"), `Blow-up should include Danny, got ${[...blowPlayers].join(",")}`);
 
   const hs = computeHeroStats(data);
-  check(hs.tournaments === 1, `Hero stats: tournaments expected 1, got ${hs.tournaments}`);
-  check(hs.players === 8, `Hero stats: players expected 8 (T-I roster), got ${hs.players}`);
-  check(hs.totalHoles === 144, `Hero stats: totalHoles expected 144 (8x18), got ${hs.totalHoles}`);
-  check(hs.totalShots === 847, `Hero stats: totalShots expected 847 (T-I sum), got ${hs.totalShots}`);
+  check(hs.tournaments === 2, `Hero stats: tournaments expected 2, got ${hs.tournaments}`);
+  check(hs.players === 15, `Hero stats: players expected 15 (unique across T-I & T-II), got ${hs.players}`);
+  check(hs.totalHoles === 360, `Hero stats: totalHoles expected 360 (8x18 + 12x18), got ${hs.totalHoles}`);
+  check(hs.totalShots === 2123, `Hero stats: totalShots expected 2123 (847 + 1276), got ${hs.totalShots}`);
 
   // Round story bullets must produce 3 strings
   const story = computeRoundStory(t1, data.courses.winchester);
   check(story.length === 3, `Round story expected 3 bullets, got ${story.length}`);
+
+  // ---- Tournament II (Royal Ashburn) ----
+  const t2 = data.tournaments.find(t => t.id === 2);
+  check(!!t2, "Tournament II must exist");
+  check(data.courses.royalAshburn.pars.reduce((a,b)=>a+b,0) === 72, "Royal Ashburn par sum must equal 72");
+
+  const t2s = computeTournamentStandings(t2, data.courses.royalAshburn);
+  check(t2s.players[0].playerId === "traikos", `T-II winner should be Traikos, got ${t2s.players[0].playerId}`);
+  check(t2s.players[0].totalPoints === 7, `T-II Traikos expected 7 pts, got ${t2s.players[0].totalPoints}`);
+  check(t2s.players[0].totalStrokes === 100, `T-II Traikos expected 100 strokes, got ${t2s.players[0].totalStrokes}`);
+  check(t2s.players[t2s.players.length - 1].playerId === "wells",
+    `T-II last place should be Wells, got ${t2s.players[t2s.players.length - 1].playerId}`);
+
+  // Scoring average: Deluca played both rounds (+26, +39) → 32.5 over 2 rounds.
+  const agg = computePlayerAggregates(data);
+  check(agg.deluca && agg.deluca.rounds === 2, `Deluca rounds expected 2, got ${agg.deluca && agg.deluca.rounds}`);
+  check(agg.deluca && agg.deluca.avg === 32.5, `Deluca average expected 32.5, got ${agg.deluca && agg.deluca.avg}`);
+  check(agg.traikos && agg.traikos.avg === 28, `Traikos average expected 28, got ${agg.traikos && agg.traikos.avg}`);
+
+  // Leaderboard: two champions (Gibbs T-I, Traikos T-II); Gibbs leads on lower average.
+  check(lb[0] && lb[0].playerId === "gibbs", `Leaderboard top should be Gibbs, got ${lb[0] && lb[0].playerId}`);
+  const traikosRow = lb.find(r => r.playerId === "traikos");
+  check(traikosRow && traikosRow.championships === 1, `Traikos should have 1 championship, got ${traikosRow && traikosRow.championships}`);
+  check(lb.length === 15, `Leaderboard should have 15 players, got ${lb.length}`);
 
   if (failures.length > 0) {
     const banner = document.getElementById("error-banner");
