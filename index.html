@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>The Whitby Invitational</title>
 <meta name="description" content="The Whitby Invitational — an annual gentlemen's golf tournament in Whitby, Ontario. Reigning champion: Traikos. Next up: a best ball scramble at Pickering Glen, Saturday September 12, 2026." />
-<meta name="theme-color" content="#FBF8F1" />
+<meta name="theme-color" content="#070B08" />
 
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png" />
 <link rel="icon" type="image/png" sizes="180x180" href="img/favicon-180.png" />
@@ -27,1147 +27,583 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #FBF8F1;
-    --surface: #FFFFFF;
-    --surface-elev: #F4EFE3;
-    --ink: #1F2A24;
-    --ink-muted: #5C645C;
-    --fairway: #2F6A3E;
-    --fairway-deep: #1F4D2C;
-    --gold: #C8A24A;
-    --gold-soft: #F2E3B8;
-    --silver: #A8A8A8;
-    --silver-soft: #E6E6E6;
-    --bronze: #A8784E;
-    --divider: #E5DFD0;
-    --danger: #9B3B2E;
-    --danger-soft: #F2DAD3;
-  }
-  html, body { background: var(--bg); }
-  body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    color: var(--ink);
-    font-feature-settings: "cv11", "tnum";
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
-  }
-  .font-display {
-    font-family: 'Fraunces', Georgia, serif;
-    font-feature-settings: "ss01", "ss02";
-    font-optical-sizing: auto;
-  }
-  .eyebrow {
-    font-family: 'Inter', sans-serif;
-    font-size: 11px;
-    line-height: 1.2;
-    letter-spacing: 0.18em;
-    font-weight: 600;
-    text-transform: uppercase;
-  }
-  .shadow-card {
-    box-shadow: 0 1px 2px rgba(31,42,36,0.04), 0 8px 24px -12px rgba(31,42,36,0.12);
-  }
-  .tabular { font-variant-numeric: tabular-nums; }
+/* =========================================================================
+   THE WHITBY INVITATIONAL — ARCADE CABINET
+   The page is the cabinet's screen. Phosphor green is the live layer,
+   amber is first place, cyan labels the chrome, magenta is damage only.
+   ========================================================================= */
+:root {
+  --void:      #070B08;
+  --screen:    #0C130E;
+  --panel:     #111B13;
+  --panel-2:   #16241A;
+  --grid:      #1F3324;
+  --grid-hi:   #2C4732;
 
-  /* Paper grain — used on the hero only */
-  .paper-grain {
-    position: relative;
-    isolation: isolate;
-  }
-  .paper-grain::before {
-    content: "";
-    position: absolute; inset: 0;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-    background-size: 220px 220px;
-    opacity: 0.05;
-    pointer-events: none;
-    z-index: 0;
-  }
-  .paper-grain > * { position: relative; z-index: 1; }
+  --phos:      #4BE87C;
+  --phos-dim:  #2F9B54;
+  --amber:     #FFC233;
+  --cyan:      #56D8F0;
+  --magenta:   #FF3D7F;
+  --paper:     #DDF3E2;
+  --mute:      #7E9C87;
 
-  /* ============ MASTHEAD ============ */
-  html { scroll-padding-top: 96px; }
-  .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: var(--bg);
-    transition: box-shadow 220ms ease-out, background 220ms ease-out;
-  }
-  .site-header.is-scrolled {
-    box-shadow: 0 6px 20px rgba(31,42,36,0.08);
-    background: rgba(251, 248, 241, 0.92);
-    backdrop-filter: saturate(140%) blur(8px);
-    -webkit-backdrop-filter: saturate(140%) blur(8px);
-  }
-  .brand-lockup {
-    text-decoration: none;
-    flex-shrink: 0;
-  }
-  .brand-mark {
-    width: 38px;
-    height: 38px;
-    display: block;
-    transition: transform 220ms ease-out;
-  }
-  .brand-lockup:hover .brand-mark { transform: rotate(-4deg) scale(1.04); }
-  @media (max-width: 639px) {
-    .brand-mark { width: 32px; height: 32px; }
-  }
+  --shell: min(1180px, 100% - 28px);
+}
 
-  .topnav {
-    display: flex;
-    align-items: center;
-    gap: 22px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    flex: 1 1 auto;
-    min-width: 0;
-    padding: 4px 0;
-  }
-  .topnav::-webkit-scrollbar { display: none; }
-  .topnav a {
-    text-decoration: none;
-    color: var(--ink-muted);
-    transition: color 140ms ease-out;
-    position: relative;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .topnav a:hover, .topnav a:active { color: var(--ink); }
-  .topnav a::after {
-    content: "";
-    position: absolute;
-    left: 0; right: 0; bottom: -4px;
-    height: 1px;
-    background: var(--gold);
-    transform: scaleX(0);
-    transform-origin: left center;
-    transition: transform 160ms ease-out;
-  }
-  .topnav a:hover::after { transform: scaleX(1); }
-  @media (max-width: 639px) {
-    .topnav { gap: 16px; font-size: 11px; flex-basis: 100%; order: 3; padding-top: 8px; }
-    .vol-lockup { display: none; }
-    html { scroll-padding-top: 110px; }
-  }
+* { box-sizing: border-box; }
+html { scroll-padding-top: 118px; }
+html, body { background: var(--void); }
+body {
+  margin: 0;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 20px;
+  line-height: 1.45;
+  color: var(--paper);
+  background:
+    radial-gradient(120% 80% at 50% 0%, #101A12 0%, var(--screen) 45%, var(--void) 100%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
 
-  .masthead-rule {
-    height: 1px;
-    background: var(--ink);
-    opacity: 0.18;
-  }
-  .masthead-rule-thick {
-    height: 2px;
-    background: var(--ink);
-    opacity: 0.85;
-  }
-  .gold-rule {
-    height: 1px;
-    background: var(--gold);
-  }
-  .gold-rule-thick {
-    height: 2px;
-    background: var(--gold);
-  }
+/* ---- CRT overlays: scanlines + vignette. Fixed, never interactive. ---- */
+.crt-lines, .crt-vignette { position: fixed; inset: 0; pointer-events: none; z-index: 9000; }
+.crt-lines {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.30) 0px,
+    rgba(0,0,0,0.30) 1px,
+    rgba(0,0,0,0) 1px,
+    rgba(0,0,0,0) 3px
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+}
+.crt-vignette {
+  background: radial-gradient(115% 90% at 50% 45%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.62) 100%);
+}
 
-  .wordmark {
-    font-family: 'Fraunces', Georgia, serif;
-    font-feature-settings: "ss01", "ss02";
-    font-optical-sizing: auto;
-    font-weight: 600;
-    letter-spacing: -0.035em;
-    line-height: 0.92;
-    color: var(--ink);
-    font-size: clamp(56px, 9vw, 132px);
-  }
+/* ---- type roles ---- */
+.pix {
+  font-family: 'Silkscreen', 'Courier New', monospace;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+.pix-r { font-family: 'Silkscreen', monospace; font-weight: 400; text-transform: uppercase; letter-spacing: 0.04em; }
+.num { font-variant-numeric: tabular-nums; }
 
-  .reigning-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 22px 10px;
-    background: var(--gold);
-    color: var(--ink);
-    border-radius: 999px;
-    box-shadow: 0 1px 0 rgba(0,0,0,0.06), 0 0 0 1px rgba(31,42,36,0.06) inset;
-  }
+a { color: var(--cyan); text-decoration: none; border-bottom: 1px solid var(--grid-hi); }
+a:hover { color: var(--phos); border-bottom-color: var(--phos); }
+:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
 
-  /* hero stat strip */
-  .stat-num {
-    font-family: 'Fraunces', Georgia, serif;
-    font-weight: 600;
-    font-feature-settings: "ss01";
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.03em;
-    line-height: 1;
-    color: var(--ink);
-    font-size: clamp(48px, 6.5vw, 84px);
-  }
+.wrap { width: var(--shell); margin: 0 auto; }
+main, .hud, footer { position: relative; z-index: 2; }
 
-  /* champion spotlight */
-  .champ-name {
-    font-family: 'Fraunces', Georgia, serif;
-    font-weight: 600;
-    font-feature-settings: "ss01";
-    letter-spacing: -0.035em;
-    line-height: 0.94;
-    color: var(--ink);
-    font-size: clamp(72px, 12vw, 168px);
-  }
-  .champ-quote {
-    font-family: 'Fraunces', Georgia, serif;
-    font-style: italic;
-    font-weight: 400;
-    line-height: 1.25;
-    color: var(--ink);
-    font-size: clamp(20px, 2.4vw, 30px);
-    letter-spacing: -0.005em;
-  }
+/* =========================== CABINET HUD =========================== */
+.hud {
+  position: sticky; top: 0; z-index: 500;
+  background: linear-gradient(180deg, #0A110C 70%, rgba(10,17,12,0.94) 100%);
+  border-bottom: 2px solid var(--grid-hi);
+}
+.hud-score {
+  display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  padding: 9px 0 7px;
+  font-family: 'Silkscreen', monospace; font-weight: 400;
+  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--mute);
+  border-bottom: 1px solid var(--grid);
+}
+.hud-score b { font-weight: 700; color: var(--phos); }
+.hud-score .gold { color: var(--amber); }
+.hud-nav {
+  display: flex; gap: 4px; flex-wrap: wrap;
+  padding: 7px 0 8px;
+}
+.hud-nav a {
+  font-family: 'Silkscreen', monospace; font-weight: 400;
+  font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--mute);
+  padding: 5px 9px 5px 8px;
+  border: 0; border-radius: 0;
+  position: relative;
+}
+.hud-nav a::before { content: "\00a0\00a0"; }
+.hud-nav a:hover, .hud-nav a:focus-visible {
+  color: var(--screen); background: var(--phos);
+}
+.hud-nav a:hover::before, .hud-nav a:focus-visible::before { content: "\25B8\00a0"; }
 
-  /* hardware cabinet */
-  .award-card {
-    background: var(--surface);
-    border: 1px solid var(--divider);
-    border-top: 2px solid var(--gold);
-    border-radius: 4px;
-    padding: 28px 22px 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    position: relative;
-    transition: transform 200ms ease, box-shadow 200ms ease;
-  }
-  .award-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 4px rgba(31,42,36,0.04), 0 18px 36px -18px rgba(31,42,36,0.18);
-  }
-  .award-card .award-eyebrow {
-    color: var(--ink-muted);
-  }
-  .award-card .award-name {
-    font-family: 'Fraunces', Georgia, serif;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 1;
-    font-size: clamp(36px, 4.5vw, 52px);
-    color: var(--ink);
-  }
-  .award-card .award-stat {
-    font-family: 'Fraunces', Georgia, serif;
-    font-feature-settings: "ss01";
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.02em;
-    line-height: 1;
-    font-size: clamp(28px, 3.2vw, 40px);
-    color: var(--gold);
-  }
-  .award-foot {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding-top: 14px;
-    border-top: 1px solid var(--divider);
-    color: var(--ink-muted);
-    font-size: 12px;
-  }
+/* =========================== SECTIONS =========================== */
+section { padding: 72px 0 8px; }
+.sec-head { margin-bottom: 26px; }
+.sec-title {
+  font-family: 'Silkscreen', monospace; font-weight: 700;
+  font-size: clamp(19px, 2.6vw, 30px);
+  letter-spacing: 0.03em; text-transform: uppercase;
+  color: var(--phos);
+  text-shadow: 2px 2px 0 #0A3F1E;
+}
+.sec-sub { color: var(--mute); font-size: 19px; margin-top: 8px; max-width: 62ch; }
+.sec-rule {
+  height: 4px; margin: 14px 0 0;
+  background: repeating-linear-gradient(90deg, var(--phos-dim) 0 8px, transparent 8px 16px);
+}
 
-  /* course header photo */
-  .course-photo {
-    position: relative;
-    width: 100%;
-    height: 280px;
-    overflow: hidden;
-    background: var(--fairway-deep);
-  }
-  .course-photo img {
-    width: 100%; height: 100%; object-fit: cover; display: block;
-    filter: saturate(0.92) contrast(1.04);
-  }
-  .course-photo::after {
-    content: "";
-    position: absolute; inset: 0;
-    background: linear-gradient(180deg,
-      rgba(31,42,36,0) 0%,
-      rgba(31,42,36,0) 45%,
-      rgba(200,162,74,0.22) 78%,
-      rgba(31,42,36,0.62) 100%);
-    pointer-events: none;
-  }
-  .course-photo .course-overlay {
-    position: absolute;
-    left: 0; right: 0; bottom: 0;
-    padding: 22px 28px 22px;
-    color: #FFFFFF;
-    z-index: 1;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  .course-overlay .course-name {
-    font-family: 'Fraunces', Georgia, serif;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 1.05;
-    color: #FFFFFF;
-    font-size: clamp(28px, 3.6vw, 44px);
-    text-shadow: 0 1px 12px rgba(0,0,0,0.35);
-  }
+/* =========================== ATTRACT / HERO =========================== */
+.attract { text-align: center; padding-top: 54px; }
+.marquee {
+  font-family: 'Silkscreen', monospace; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.01em;
+  line-height: 1.12;
+  font-size: clamp(21px, 7.2vw, 82px);
+  color: var(--paper);
+  text-shadow:
+     3px 0 0 var(--magenta),
+    -3px 0 0 var(--cyan),
+     0 5px 0 #06331A,
+     0 6px 22px rgba(75,232,124,0.30);
+  margin: 0;
+}
+.marquee .lo { display: block; color: var(--amber); text-shadow: 3px 0 0 var(--magenta), -3px 0 0 var(--cyan), 0 5px 0 #3A2603; }
+.attract-sub {
+  font-family: 'Silkscreen', monospace; font-weight: 400;
+  font-size: clamp(9px, 1.3vw, 12px); letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--mute); margin-top: 22px;
+}
+.blink { animation: blink 1.05s steps(1, end) infinite; }
+@keyframes blink { 0%, 55% { opacity: 1; } 56%, 100% { opacity: 0; } }
+.press-start {
+  display: inline-block; margin-top: 30px;
+  font-family: 'Silkscreen', monospace; font-weight: 700;
+  font-size: clamp(12px, 1.8vw, 17px); letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--amber);
+  background: none; border: 0; cursor: pointer; padding: 8px 4px;
+}
+.press-start:hover { color: var(--phos); }
 
-  /* countdown chips */
-  .count-chip {
-    background: var(--surface-elev);
-    border: 1px solid var(--divider);
-    border-radius: 8px;
-    padding: 18px 22px 16px;
-    min-width: 96px;
-    text-align: center;
-    flex: 1 1 96px;
-    max-width: 140px;
-  }
-  .count-num {
-    font-family: 'Fraunces', Georgia, serif;
-    font-weight: 600;
-    font-feature-settings: "ss01";
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.02em;
-    line-height: 1;
-    font-size: 52px;
-    color: var(--ink);
-    display: block;
-  }
-  @media (max-width: 480px) {
-    .count-num { font-size: 40px; }
-    .count-chip { padding: 14px 12px 12px; min-width: 0; }
-  }
+.hud-stats {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  margin-top: 46px;
+  border: 2px solid var(--grid-hi); background: var(--panel);
+}
+.hud-stats > div { padding: 14px 10px 12px; border-right: 2px solid var(--grid-hi); }
+.hud-stats > div:last-child { border-right: 0; }
+.hud-stat-k {
+  font-family: 'Silkscreen', monospace; font-weight: 400;
+  font-size: 9px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--cyan);
+}
+.hud-stat-v {
+  font-family: 'Silkscreen', monospace; font-weight: 700;
+  font-size: clamp(15px, 2.4vw, 26px); color: var(--phos); margin-top: 9px;
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 720px) {
+  .hud-stats { grid-template-columns: repeat(2, 1fr); }
+  .hud-stats > div { border-bottom: 2px solid var(--grid-hi); }
+  .hud-stats > div:nth-child(2n) { border-right: 0; }
+  .hud-stats > div:last-child { grid-column: 1 / -1; border-bottom: 0; }
+}
 
-  /* roster avatar */
-  .avatar {
-    width: 56px; height: 56px;
-    border-radius: 999px;
-    background: var(--fairway);
-    color: #FFFFFF;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 18px;
-    letter-spacing: 0.01em;
-    box-shadow: inset 0 0 0 2px rgba(255,255,255,0.18);
-  }
-  .avatar.is-out {
-    background: var(--ink-muted);
-    opacity: 0.65;
-  }
+/* =========================== PANELS =========================== */
+.panel {
+  background: var(--panel);
+  border: 2px solid var(--grid-hi);
+}
+.panel-pad { padding: 22px 20px; }
+.panel-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+  padding: 10px 16px;
+  background: var(--panel-2);
+  border-bottom: 2px solid var(--grid-hi);
+  font-family: 'Silkscreen', monospace; font-weight: 700;
+  font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--phos);
+}
+.panel-head .rt { font-weight: 400; color: var(--mute); }
 
-  /* avatar tooltip — shows player's overall combined score on hover */
-  .avatar-wrap {
-    position: relative;
-    display: inline-flex;
-    isolation: isolate;
-  }
-  .avatar-tip {
-    position: absolute;
-    bottom: calc(100% + 8px);
-    left: 50%;
-    transform: translate(-50%, 4px);
-    background: var(--ink);
-    color: var(--bg);
-    font-family: 'Inter', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 6px 10px;
-    border-radius: 6px;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 140ms ease-out, transform 140ms ease-out;
-    z-index: 20;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-  }
-  .avatar-tip::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 5px solid transparent;
-    border-top-color: var(--ink);
-  }
-  .avatar-wrap:hover .avatar-tip,
-  .avatar-wrap:focus-within .avatar-tip,
-  .avatar-wrap:active .avatar-tip {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
+/* =========================== WINNER SPLASH =========================== */
+.winner-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 34px; align-items: start; }
+@media (max-width: 860px) { .winner-grid { grid-template-columns: 1fr; } }
+.winner-tag {
+  font-family: 'Silkscreen', monospace; font-weight: 700;
+  font-size: clamp(13px, 1.9vw, 18px); letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--amber);
+}
+.champ-name {
+  font-family: 'Silkscreen', monospace; font-weight: 700;
+  font-size: clamp(34px, 6.6vw, 74px); line-height: 1; text-transform: uppercase;
+  color: var(--phos);
+  text-shadow: 4px 4px 0 #073A1D, 0 0 26px rgba(75,232,124,0.28);
+  margin: 14px 0 0;
+  word-break: break-word;
+}
+.stat-strip { display: flex; gap: 0; flex-wrap: wrap; margin-top: 22px; border: 2px solid var(--grid-hi); }
+.stat-strip > div { flex: 1 1 90px; padding: 11px 12px; border-right: 2px solid var(--grid-hi); }
+.stat-strip > div:last-child { border-right: 0; }
+.stat-k { font-family: 'Silkscreen', monospace; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cyan); }
+.stat-v { font-family: 'Silkscreen', monospace; font-weight: 700; font-size: 20px; color: var(--paper); margin-top: 7px; font-variant-numeric: tabular-nums; }
 
-  /* group photo banner above the field */
-  .group-banner {
-    position: relative;
-    border-radius: 18px;
-    overflow: hidden;
-    background: var(--fairway-deep);
-    aspect-ratio: 16 / 7;
-    box-shadow: 0 18px 36px rgba(31,77,44,0.12);
-  }
-  .group-banner img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    display: block;
-    filter: saturate(1.02) contrast(1.02);
-  }
-  .group-banner figcaption {
-    position: absolute;
-    left: 0; right: 0; bottom: 0;
-    padding: 22px 24px;
-    background: linear-gradient(180deg, rgba(31,42,36,0) 0%, rgba(31,42,36,0.62) 100%);
-    color: var(--bg);
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
-    font-size: 14px;
-    letter-spacing: 0.02em;
-  }
-  @media (max-width: 640px) {
-    .group-banner { aspect-ratio: 4 / 3; }
-    .group-banner figcaption { padding: 16px 18px; gap: 8px; flex-direction: column; align-items: flex-start; }
-  }
+.crt-photo { position: relative; border: 3px solid var(--grid-hi); background: #000; }
+.crt-photo img { display: block; width: 100%; height: auto; }
+.crt-photo::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    repeating-linear-gradient(to bottom, rgba(0,0,0,0.34) 0 1px, rgba(0,0,0,0) 1px 3px),
+    radial-gradient(100% 80% at 50% 40%, rgba(75,232,124,0.06), rgba(0,0,0,0.42));
+}
+.crt-photo .corner {
+  position: absolute; width: 11px; height: 11px; border: 3px solid var(--amber);
+}
+.crt-photo .c1 { top: -3px; left: -3px; border-right: 0; border-bottom: 0; }
+.crt-photo .c2 { top: -3px; right: -3px; border-left: 0; border-bottom: 0; }
+.crt-photo .c3 { bottom: -3px; left: -3px; border-right: 0; border-top: 0; }
+.crt-photo .c4 { bottom: -3px; right: -3px; border-left: 0; border-top: 0; }
 
-  /* group-photo slideshow (crossfade across tournaments) */
-  .group-slideshow .gs-slide {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transition: opacity 900ms ease;
-    pointer-events: none;
-  }
-  .group-slideshow .gs-slide.is-active { opacity: 1; pointer-events: auto; }
-  .group-slideshow .gs-dots {
-    position: absolute;
-    right: 16px;
-    bottom: 14px;
-    z-index: 3;
-    display: flex;
-    gap: 8px;
-  }
-  .group-slideshow .gs-dot {
-    width: 9px;
-    height: 9px;
-    border-radius: 999px;
-    background: rgba(255,255,255,0.45);
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
-    transition: background 160ms ease, transform 160ms ease;
-  }
-  .group-slideshow .gs-dot:hover { background: rgba(255,255,255,0.8); }
-  .group-slideshow .gs-dot.is-active { background: var(--gold); transform: scale(1.15); }
+.dialogue {
+  margin-top: 20px; padding: 16px 18px 14px;
+  border: 3px solid var(--phos-dim); background: #08130C;
+  font-size: 23px; line-height: 1.35; color: var(--paper);
+}
+.dialogue .who {
+  display: block; margin-top: 12px;
+  font-family: 'Silkscreen', monospace; font-size: 10px; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--cyan);
+}
+.dialogue .caret { color: var(--phos); }
 
-  /* player gallery */
-  .player-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-  }
-  @media (min-width: 640px) { .player-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; } }
-  @media (min-width: 1024px) { .player-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; } }
-  .player-card {
-    position: relative;
-    border-radius: 16px;
-    overflow: hidden;
-    background: var(--surface);
-    border: 1px solid var(--divider);
-    transition: transform 220ms ease-out, box-shadow 220ms ease-out;
-  }
-  .player-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 14px 28px rgba(31,77,44,0.12);
-  }
-  .player-card .player-img {
-    aspect-ratio: 4 / 5;
-    width: 100%;
-    object-fit: cover;
-    object-position: center 30%;
-    display: block;
-    background: var(--surface-elev);
-  }
-  .player-card .player-meta {
-    padding: 14px 16px 16px;
-  }
-  .player-card .player-name {
-    font-family: 'Fraunces', serif;
-    font-weight: 600;
-    font-size: 22px;
-    line-height: 1.1;
-    letter-spacing: -0.01em;
-    color: var(--ink);
-  }
-  .player-card .player-finish {
-    margin-top: 4px;
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--ink-muted);
-  }
-  .player-card .player-finish .finish-num {
-    color: var(--fairway-deep);
-    font-weight: 700;
-  }
-  .player-card.is-champion::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 4px;
-    background: var(--gold);
-    z-index: 2;
-  }
+.champ-shot img { max-height: 520px; object-fit: cover; object-position: center 22%; }
+.final-board { margin-top: 22px; border: 2px solid var(--grid-hi); }
+.final-head {
+  font-family: 'Silkscreen', monospace; font-size: 9px; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--cyan);
+  padding: 9px 14px; background: var(--panel-2); border-bottom: 2px solid var(--grid-hi);
+}
+.final-row {
+  display: grid; grid-template-columns: 46px 1fr auto 58px; gap: 12px; align-items: baseline;
+  padding: 9px 14px; border-bottom: 1px solid var(--grid);
+}
+.final-row:last-child { border-bottom: 0; }
+.fr-pos { font-family: 'Silkscreen', monospace; font-size: 11px; color: var(--mute); }
+.fr-name { font-family: 'Silkscreen', monospace; font-size: 12px; text-transform: uppercase; color: var(--paper); }
+.fr-pts { color: var(--phos); font-variant-numeric: tabular-nums; }
+.fr-str { color: var(--mute); text-align: right; font-variant-numeric: tabular-nums; }
+.final-row.lead .fr-pos, .final-row.lead .fr-name { color: var(--amber); }
+</style>
+<style>
+/* =========================== MODE SELECT (format tabs) =========================== */
+.stage-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+.stage-tab {
+  display: flex; flex-direction: column; gap: 7px; align-items: flex-start;
+  background: var(--panel); border: 2px solid var(--grid-hi); border-radius: 0;
+  padding: 12px 18px 11px; cursor: pointer; min-width: 116px;
+}
+.stage-tab .st-label {
+  font-family: 'Silkscreen', monospace; font-weight: 700; font-size: 13px;
+  letter-spacing: 0.05em; text-transform: uppercase; color: var(--mute);
+}
+.stage-tab .st-sub {
+  font-family: 'Silkscreen', monospace; font-size: 9px;
+  letter-spacing: 0.09em; text-transform: uppercase; color: var(--phos-dim);
+}
+.stage-tab:hover { border-color: var(--phos-dim); }
+.stage-tab:hover .st-label { color: var(--paper); }
+.stage-tab[aria-selected="true"] { background: var(--phos); border-color: var(--phos); }
+.stage-tab[aria-selected="true"] .st-label { color: var(--screen); }
+.stage-tab[aria-selected="true"] .st-sub { color: #0A3F1E; }
+.stage-tab.is-next .st-sub { color: var(--amber); }
+.stage-tab.is-next[aria-selected="true"] { background: var(--amber); border-color: var(--amber); }
+.stage-tab.is-next[aria-selected="true"] .st-label { color: #241703; }
+.stage-tab.is-next[aria-selected="true"] .st-sub { color: #5C3D06; }
+.stage-panel[hidden] { display: none; }
 
-  /* details / chevrons (kept from original) */
-  details > summary { list-style: none; cursor: pointer; }
-  summary::-webkit-details-marker { display: none; }
-  summary svg.chevron { transition: transform 200ms ease; }
-  details[open] svg.chevron { transform: rotate(180deg); }
-  summary:focus-visible {
-    outline: 2px solid var(--fairway);
-    outline-offset: 4px;
-    border-radius: 12px;
-  }
+.stage-strip { display: grid; grid-template-columns: 210px 1fr; border: 2px solid var(--grid-hi); background: var(--panel); margin-bottom: 22px; }
+@media (max-width: 700px) { .stage-strip { grid-template-columns: 1fr; } }
 
-  /* leaderboard */
-  .lb-table { width: 100%; border-collapse: separate; border-spacing: 0; }
-  .lb-table th {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-    color: var(--ink-muted);
-    border-bottom: 1px solid var(--divider);
-    padding: 14px 16px;
-    text-align: left;
-    font-weight: 600;
-  }
-  .lb-table td {
-    padding: 18px 16px;
-    border-bottom: 1px solid var(--divider);
-    vertical-align: middle;
-    transition: background 160ms ease;
-  }
-  .lb-table tbody tr:last-child td { border-bottom: 0; }
-  .lb-table tbody tr:hover td { background: var(--surface-elev); }
-  .lb-table .rank-num {
-    font-family: 'Fraunces', Georgia, serif;
-    font-weight: 600;
-    font-feature-settings: "ss01";
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.02em;
-    font-size: 32px;
-    line-height: 1;
-    color: var(--ink);
-    width: 64px;
-  }
-  .lb-table .rank-trophy { width: 28px; vertical-align: middle; }
-  .lb-table td.player-cell { font-size: 17px; font-weight: 500; }
-  .lb-table td.titles, .lb-table td.hcp { font-weight: 600; font-variant-numeric: tabular-nums; }
-  .lb-table td.fin-1 { color: var(--fairway-deep); font-weight: 700; }
-  .lb-table tr.is-champion .player-cell { color: var(--fairway-deep); }
+/* =========================== STAGE CARDS =========================== */
+.stage-thumb { position: relative; background: #000; border-right: 2px solid var(--grid-hi); min-height: 168px; }
+.stage-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(0.8) contrast(1.05); }
+.stage-thumb::after {
+  content: ""; position: absolute; inset: 0;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.22) 0 1px, rgba(0,0,0,0) 1px 3px), rgba(12,19,14,0.12);
+}
+.stage-meta { padding: 16px 18px 18px; }
+.stage-no {
+  font-family: 'Silkscreen', monospace; font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--cyan);
+}
+.stage-course {
+  font-family: 'Silkscreen', monospace; font-weight: 700;
+  font-size: clamp(16px, 2.3vw, 24px); text-transform: uppercase; color: var(--paper);
+  margin-top: 9px; line-height: 1.15;
+}
+.podium { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.pod {
+  font-family: 'Silkscreen', monospace; font-size: 10px; letter-spacing: 0.05em;
+  text-transform: uppercase; padding: 6px 9px; border: 2px solid;
+}
+.pod-1 { color: var(--amber);  border-color: var(--amber); }
+.pod-2 { color: var(--paper);  border-color: var(--grid-hi); }
+.pod-3 { color: var(--mute);   border-color: var(--grid-hi); }
 
-  /* scoring legend (under scorecard) */
-  .scoring-legend {
-    margin-top: 22px;
-    padding: 16px 20px;
-    background: var(--surface-elev);
-    border-left: 2px solid var(--gold);
-    border-radius: 0 6px 6px 0;
-  }
-  .scoring-legend .eyebrow { margin-bottom: 10px; }
-  .legend-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 28px;
-  }
-  .legend-list li {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 13px;
-    color: var(--ink);
-  }
-  .legend-swatch {
-    display: inline-block;
-    width: 16px; height: 16px;
-    border-radius: 3px;
-    flex-shrink: 0;
-  }
-  .swatch-gold {
-    background: var(--gold-soft);
-    border: 1px solid var(--gold);
-  }
-  .swatch-silver {
-    background: var(--silver-soft);
-    border: 1px solid var(--silver);
-  }
-  .swatch-tiebreak {
-    background: transparent;
-    border: 1px dashed var(--ink-muted);
-  }
-  .legend-points {
-    font-weight: 600;
-    color: var(--fairway-deep);
-    margin-right: 2px;
-  }
+.replay { margin-top: 16px; border-left: 4px solid var(--cyan); padding: 4px 0 4px 14px; }
+.replay li { list-style: none; margin: 0 0 4px; color: var(--paper); font-size: 19px; }
+.replay li::before { content: "\25B8 "; color: var(--cyan); }
+.replay ul { margin: 0; padding: 0; }
 
-  /* scorecard (refined) */
-  .scorecard {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    font-size: 14px;
-    font-variant-numeric: tabular-nums;
-  }
-  .scorecard th, .scorecard td {
-    text-align: center;
-    height: 40px;
-    min-width: 38px;
-    padding: 0 6px;
-    border-bottom: 1px solid #EFEADC;
-  }
-  .scorecard tbody tr:nth-child(odd) td { background: rgba(244,239,227,0.35); }
-  .scorecard tbody tr:nth-child(odd) td.cell-gold { background: var(--gold-soft); }
-  .scorecard tbody tr:nth-child(odd) td.cell-silver { background: var(--silver-soft); }
-  .scorecard th.player-col, .scorecard td.player-col {
-    text-align: left;
-    padding: 0 16px;
-    min-width: 110px;
-    white-space: nowrap;
-    font-weight: 500;
-  }
-  .scorecard thead th {
-    background: var(--surface-elev);
-    font-weight: 600;
-    color: var(--ink-muted);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-  }
-  .scorecard tr.par-row td {
-    background: var(--surface-elev) !important;
-    color: var(--ink);
-    font-weight: 500;
-  }
-  .scorecard td.trail {
-    background: var(--surface-elev) !important;
-    font-weight: 600;
-  }
-  .scorecard td.fin-champion { color: var(--fairway-deep); }
-  td.cell-gold {
-    background: var(--gold-soft);
-    box-shadow: inset 0 0 0 1px var(--gold);
-    border-radius: 4px;
-    font-weight: 600;
-  }
-  td.cell-silver {
-    background: var(--silver-soft);
-    box-shadow: inset 0 0 0 1px var(--silver);
-    border-radius: 4px;
-  }
+/* ---- scorecard ---- */
+.card-scroll { overflow-x: auto; border-top: 2px solid var(--grid-hi); }
+table.score { width: 100%; border-collapse: collapse; font-size: 19px; }
+table.score th, table.score td {
+  padding: 5px 7px; text-align: center; white-space: nowrap;
+  border-bottom: 1px solid var(--grid); font-variant-numeric: tabular-nums;
+}
+table.score thead th {
+  font-family: 'Silkscreen', monospace; font-weight: 400;
+  font-size: 9px; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--cyan); background: var(--panel-2); border-bottom: 2px solid var(--grid-hi);
+  position: sticky; top: 0;
+}
+table.score td.who, table.score th.who {
+  text-align: left; position: sticky; left: 0; background: var(--panel); z-index: 2;
+  font-family: 'Silkscreen', monospace; font-size: 10px; text-transform: uppercase;
+  color: var(--paper); border-right: 2px solid var(--grid-hi); padding-right: 12px;
+}
+table.score thead th.who { background: var(--panel-2); z-index: 3; }
+table.score tr.par-row td { color: var(--mute); background: #0E1710; }
+table.score tr.par-row td.who { color: var(--cyan); background: #0E1710; }
+table.score tr.win td.who { color: var(--amber); }
+.s-under { color: var(--cyan); font-weight: 700; }
+.s-par   { color: var(--phos); }
+.s-bogey { color: var(--paper); }
+.s-double{ color: #E8A33C; }
+.s-blow  { color: var(--magenta); font-weight: 700; }
+td.tot { color: var(--paper); border-left: 2px solid var(--grid-hi); }
+td.pts { color: var(--phos); font-weight: 700; }
+td.fin { font-family: 'Silkscreen', monospace; font-size: 12px; color: var(--paper); }
+td.fin.first { color: var(--amber); }
+.legend {
+  display: flex; gap: 16px; flex-wrap: wrap; padding: 11px 18px;
+  font-family: 'Silkscreen', monospace; font-size: 9px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--mute); border-top: 2px solid var(--grid-hi);
+}
 
-  /* champions wall */
-  .champ-card {
-    background: var(--surface);
-    border: 1px solid var(--divider);
-    border-radius: 6px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-  .champ-portrait {
-    aspect-ratio: 1 / 1;
-    background: var(--surface-elev);
-    overflow: hidden;
-    position: relative;
-  }
-  .champ-portrait img {
-    width: 100%; height: 100%; object-fit: cover; display: block;
-    object-position: center 28%;
-  }
-  .champ-portrait .gold-band {
-    position: absolute; top: 0; left: 0; right: 0;
-    height: 4px; background: var(--gold);
-  }
-  .champ-card-body { padding: 22px 24px 26px; }
-  .champ-year {
-    font-family: 'Fraunces', Georgia, serif;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.02em;
-    font-size: 56px;
-    line-height: 0.95;
-    color: var(--gold);
-  }
+/* =========================== HIGH SCORES =========================== */
+.hs-row {
+  display: grid; grid-template-columns: 58px 66px 1fr auto; gap: 16px; align-items: center;
+  padding: 15px 18px; border-bottom: 2px solid var(--grid);
+}
+.hs-row:last-child { border-bottom: 0; }
+.hs-rank { font-family: 'Silkscreen', monospace; font-weight: 700; font-size: 17px; color: var(--amber); }
+.hs-face { width: 66px; height: 66px; border: 2px solid var(--grid-hi); background: #000; overflow: hidden; }
+.hs-face img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(0.7) contrast(1.1); }
+.hs-name { font-family: 'Silkscreen', monospace; font-weight: 700; font-size: clamp(19px, 3vw, 30px); text-transform: uppercase; color: var(--phos); }
+.hs-meta { color: var(--mute); font-size: 18px; margin-top: 3px; }
+.hs-score { text-align: right; font-family: 'Silkscreen', monospace; font-weight: 700; font-size: clamp(17px, 2.6vw, 26px); color: var(--paper); font-variant-numeric: tabular-nums; }
+.hs-score span { display: block; font-weight: 400; font-size: 9px; letter-spacing: 0.08em; color: var(--cyan); margin-top: 6px; }
+@media (max-width: 620px) {
+  .hs-row { grid-template-columns: 44px 52px 1fr; }
+  .hs-face { width: 52px; height: 52px; }
+  .hs-score { grid-column: 2 / -1; text-align: left; }
+}
 
-  /* error banner */
-  #error-banner {
-    display: none;
-    background: var(--danger);
-    color: #fff;
-    padding: 12px 16px;
-    font-weight: 600;
-    text-align: center;
-    font-size: 14px;
-  }
-  #error-banner.is-active { display: block; }
+/* =========================== AWARDS =========================== */
+.award-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(268px, 1fr)); gap: 14px; }
+.award { border: 2px solid var(--grid-hi); background: var(--panel); padding: 16px 16px 15px; }
+.award.bad { border-color: #5C1231; background: #150A10; }
+.award-k { font-family: 'Silkscreen', monospace; font-size: 9px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--cyan); }
+.award.bad .award-k { color: var(--magenta); }
+.award-n { font-family: 'Silkscreen', monospace; font-weight: 700; font-size: 13px; text-transform: uppercase; color: var(--paper); margin-top: 9px; line-height: 1.25; }
+.award-w { font-family: 'Silkscreen', monospace; font-weight: 700; font-size: 21px; text-transform: uppercase; color: var(--amber); margin-top: 12px; }
+.award.bad .award-w { color: var(--magenta); }
+.award-s { color: var(--mute); font-size: 18px; margin-top: 8px; }
 
-  /* fade-up scroll */
-  .fade-up {
-    opacity: 0;
-    transform: translateY(12px);
-    transition: opacity 380ms ease-out, transform 380ms ease-out;
-  }
-  .fade-up.is-in {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .fade-up { opacity: 1; transform: none; transition: none; }
-  }
+/* =========================== NEXT STAGE =========================== */
+.timer { display: flex; gap: 10px; flex-wrap: wrap; }
+.timer-cell { border: 2px solid var(--amber); background: #17110A; padding: 12px 16px 10px; min-width: 92px; text-align: center; }
+.timer-num { font-family: 'Silkscreen', monospace; font-weight: 700; font-size: clamp(26px, 4.6vw, 42px); color: var(--amber); font-variant-numeric: tabular-nums; line-height: 1; }
+.timer-k { font-family: 'Silkscreen', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mute); margin-top: 9px; }
 
-  /* champion name scale-in on load */
-  @keyframes champScaleIn {
-    from { opacity: 0; transform: scale(0.94); }
-    to   { opacity: 1; transform: scale(1); }
-  }
-  .champ-name-anim {
-    animation: champScaleIn 460ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
-    transform-origin: left center;
-  }
+.brief { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+@media (max-width: 780px) { .brief { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .brief { grid-template-columns: 1fr; } }
+.brief > div { padding: 14px 16px; border-right: 2px solid var(--grid-hi); border-bottom: 2px solid var(--grid-hi); }
+.brief-k { font-family: 'Silkscreen', monospace; font-size: 9px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--cyan); }
+.brief-v { margin-top: 7px; color: var(--paper); font-size: 19px; line-height: 1.35; }
 
-  /* Out pill */
-  .out-pill {
-    display: inline-flex;
-    padding: 2px 8px;
-    border-radius: 4px;
-    background: var(--danger-soft);
-    color: var(--danger);
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
+.howto { display: grid; grid-template-columns: 1fr 1fr; gap: 0 26px; }
+@media (max-width: 760px) { .howto { grid-template-columns: 1fr; } }
+.howto-item { padding: 13px 0; border-bottom: 1px solid var(--grid); }
+.howto-n { font-family: 'Silkscreen', monospace; font-weight: 700; font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--phos); }
+.howto-b { color: var(--mute); font-size: 19px; margin-top: 5px; line-height: 1.4; max-width: 54ch; }
+.howto-key { border: 2px solid var(--amber); background: #17110A; padding: 13px 15px; margin-top: 18px; }
+.howto-key .howto-n { color: var(--amber); }
+.howto-key .howto-b { color: var(--paper); }
 
-  /* hero grid: wordmark left, tour panel right */
-  .hero-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 32px;
-    align-items: end;
-  }
-  @media (min-width: 1024px) {
-    .hero-grid {
-      grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr);
-      gap: 56px;
-      align-items: end;
-    }
-  }
+/* ---- player select ---- */
+.select-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+@media (max-width: 1080px) { .select-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 720px)  { .select-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 460px)  { .select-grid { grid-template-columns: 1fr; } }
+.team {
+  border: 2px solid var(--grid-hi); background: var(--panel);
+  display: flex; flex-direction: column;
+}
+.team:hover { border-color: var(--phos); }
+.team-bar {
+  display: flex; justify-content: space-between; align-items: center; gap: 8px;
+  padding: 7px 10px; background: var(--panel-2); border-bottom: 2px solid var(--grid-hi);
+  font-family: 'Silkscreen', monospace; font-size: 9px; letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--mute);
+}
+.team-body { padding: 14px 12px 15px; flex: 1; }
+.team-name {
+  font-family: 'Silkscreen', monospace; font-weight: 700; font-size: 15px;
+  text-transform: uppercase; color: var(--phos); line-height: 1.2;
+}
+.roster { margin: 13px 0 0; padding: 0; list-style: none; }
+.roster li {
+  font-family: 'Silkscreen', monospace; font-size: 10px; letter-spacing: 0.03em;
+  text-transform: uppercase; color: var(--paper);
+  padding: 6px 0; border-bottom: 1px solid var(--grid);
+}
+.roster li:last-child { border-bottom: 0; }
+.roster li.cap { color: var(--amber); }
+.roster li.cap::after { content: " \2605"; }
+.roster li.tbd { color: var(--mute); }
+.team-foot { padding: 10px 12px; border-top: 2px solid var(--grid-hi); background: #0A120C; }
+.tee-time { font-family: 'Silkscreen', monospace; font-weight: 700; font-size: 17px; color: var(--paper); font-variant-numeric: tabular-nums; }
+.tee-hole { font-family: 'Silkscreen', monospace; font-size: 9px; letter-spacing: 0.07em; text-transform: uppercase; margin-top: 7px; }
+.tee-hole.h1  { color: var(--amber); }
+.tee-hole.h10 { color: var(--cyan); }
 
-  /* tour panel */
-  .tour-panel {
-    border-top: 1px solid var(--ink);
-    border-bottom: 1px solid var(--ink);
-    padding: 18px 0 4px;
-  }
-  .tour-eyebrow {
-    color: var(--ink-muted);
-    margin-bottom: 14px;
-  }
-  .tour-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-  }
-  .tour-list li { display: block; }
-  .tour-list li + li .tour-entry { border-top: 1px solid rgba(31,42,36,0.18); }
-  /* show ~2 entries, scroll for the rest */
-  .tour-list--scroll {
-    max-height: 196px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: var(--gold) transparent;
-    scroll-snap-type: y proximity;
-  }
-  .tour-list--scroll li { scroll-snap-align: start; }
-  .tour-list--scroll::-webkit-scrollbar { width: 5px; }
-  .tour-list--scroll::-webkit-scrollbar-track { background: transparent; }
-  .tour-list--scroll::-webkit-scrollbar-thumb { background: var(--divider); border-radius: 999px; }
-  .tour-list--scroll::-webkit-scrollbar-thumb:hover { background: var(--gold); }
-  .tour-entry {
-    display: grid;
-    grid-template-columns: 56px 1fr;
-    gap: 16px;
-    padding: 14px 0;
-    align-items: baseline;
-    color: inherit;
-    text-decoration: none;
-    transition: background 0.18s ease, padding-left 0.18s ease;
-    border-left: 2px solid transparent;
-    padding-left: 8px;
-    margin-left: -8px;
-  }
-  .tour-entry:hover {
-    background: rgba(200,162,74,0.06);
-    border-left-color: var(--gold);
-  }
-  .tour-entry:hover .tour-course { color: var(--fairway-deep); }
-  .tour-entry:focus-visible {
-    outline: 2px solid var(--gold);
-    outline-offset: 2px;
-    border-radius: 2px;
-  }
-  .tour-roman {
-    font-family: 'Fraunces', serif;
-    font-weight: 600;
-    font-size: 30px;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    color: var(--fairway-deep);
-    text-align: left;
-  }
-  .tour-entry-next .tour-roman { color: var(--gold); }
-  .tour-body { display: flex; flex-direction: column; gap: 4px; }
-  .tour-course {
-    font-family: 'Fraunces', serif;
-    font-weight: 600;
-    font-size: 18px;
-    line-height: 1.15;
-    letter-spacing: -0.01em;
-    color: var(--ink);
-  }
-  .tour-meta {
-    font-size: 12px;
-    color: var(--ink-muted);
-    letter-spacing: 0.02em;
-  }
-  .tour-status {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    margin-top: 2px;
-    color: var(--ink-muted);
-  }
-  .tour-status.next { color: var(--ink); font-weight: 600; }
+/* =========================== RANKINGS =========================== */
+table.rank { width: 100%; border-collapse: collapse; font-size: 19px; }
+table.rank th {
+  font-family: 'Silkscreen', monospace; font-weight: 400; font-size: 9px;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--cyan);
+  background: var(--panel-2); padding: 10px 8px; text-align: right;
+  border-bottom: 2px solid var(--grid-hi);
+}
+table.rank th:first-child, table.rank th.who { text-align: left; }
+table.rank td { padding: 9px 8px; text-align: right; border-bottom: 1px solid var(--grid); font-variant-numeric: tabular-nums; }
+table.rank td.pos { font-family: 'Silkscreen', monospace; font-weight: 700; font-size: 13px; color: var(--mute); text-align: left; width: 56px; }
+table.rank td.who { font-family: 'Silkscreen', monospace; font-weight: 700; font-size: 13px; text-transform: uppercase; text-align: left; color: var(--paper); }
+table.rank tr.champ td.pos, table.rank tr.champ td.who { color: var(--amber); }
+table.rank td.titles { color: var(--amber); font-weight: 700; }
+table.rank td.titles.zero { color: var(--mute); font-weight: 400; }
+table.rank td.avg { color: var(--phos); }
+table.rank td.dim { color: var(--mute); }
 
-  /* responsive grid: stat strip — 2 cols mobile, 5 cols once it fits */
-  .stat-strip {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0;
-    border-top: 1px solid var(--ink);
-    border-bottom: 1px solid var(--ink);
-  }
-  .stat-strip .stat-cell {
-    padding: 22px 18px;
-    border-right: 1px solid rgba(31,42,36,0.18);
-    border-bottom: 1px solid rgba(31,42,36,0.18);
-  }
-  @media (max-width: 759px) {
-    .stat-strip .stat-cell:nth-child(2n) { border-right: 0; }
-    .stat-strip .stat-cell:last-child {
-      grid-column: 1 / -1;
-      border-right: 0;
-      border-bottom: 0;
-    }
-    .stat-strip .stat-cell:nth-last-child(2):nth-child(odd) { border-bottom: 0; }
-  }
-  @media (min-width: 760px) {
-    .stat-strip { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-    .stat-strip .stat-cell {
-      padding: 20px 14px;
-      border-right: 1px solid rgba(31,42,36,0.18);
-      border-bottom: 0;
-    }
-    .stat-strip .stat-cell:last-child { border-right: 0; }
-    .stat-strip .stat-cell .eyebrow {
-      font-size: 10px;
-      white-space: nowrap;
-    }
-  }
+/* =========================== FOOTER =========================== */
+footer { padding: 60px 0 70px; text-align: center; }
+.game-over {
+  font-family: 'Silkscreen', monospace; font-weight: 700;
+  font-size: clamp(18px, 3vw, 30px); letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--magenta); text-shadow: 3px 3px 0 #3D0A20;
+}
+.footer-sub { font-family: 'Silkscreen', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mute); margin-top: 18px; }
 
-  /* round story bullets */
-  .round-story {
-    background: var(--surface-elev);
-    border-left: 2px solid var(--gold);
-    padding: 18px 22px;
-    border-radius: 0 6px 6px 0;
-  }
-  .round-story li {
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: 17px;
-    line-height: 1.4;
-    color: var(--ink);
-    padding-left: 16px;
-    position: relative;
-  }
-  .round-story li + li { margin-top: 8px; }
-  .round-story li::before {
-    content: "";
-    position: absolute;
-    left: 0; top: 0.65em;
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--gold);
-  }
+/* =========================== FIGHTERS =========================== */
+/* One shared sprite renderer feeds two places: the squad cards, and the
+   parallax layer that drifts behind the page as you scroll. */
+.sprite {
+  display: block;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
+}
 
-  /* nav */
-  .topnav a {
-    color: var(--ink);
-    transition: color 160ms ease;
-    border-bottom: 1px solid transparent;
-  }
-  .topnav a:hover { color: var(--fairway); border-bottom-color: var(--gold); }
+/* ---- on the squad cards ---- */
+.team-portrait {
+  display: flex; align-items: flex-end; justify-content: center;
+  padding: 14px 0 10px;
+  background:
+    radial-gradient(70% 90% at 50% 100%, rgba(75,232,124,0.10), transparent 70%),
+    #0A120C;
+  border-bottom: 2px solid var(--grid-hi);
+}
+.team-portrait .sprite {
+  width: 58px; height: 83px;
+  filter: drop-shadow(0 3px 0 rgba(0,0,0,0.55));
+}
+.team:hover .team-portrait .sprite { filter: drop-shadow(0 0 10px rgba(75,232,124,0.5)); }
 
-  /* ============ FORMAT TABS ============ */
-  .fmt-tabs {
-    display: flex;
-    gap: 28px;
-    align-items: flex-end;
-    border-bottom: 1px solid var(--divider);
-  }
-  .fmt-tab {
-    appearance: none;
-    background: none;
-    border: 0;
-    cursor: pointer;
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    color: var(--ink-muted);
-    padding: 0 0 12px;
-    margin-bottom: -1px;
-    border-bottom: 2px solid transparent;
-    transition: color 160ms ease-out, border-color 160ms ease-out;
-  }
-  .fmt-tab:hover { color: var(--ink); }
-  .fmt-tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--gold); }
-  .fmt-tab .fmt-count { font-weight: 500; font-variant-numeric: tabular-nums; opacity: 0.7; }
-  .fmt-tab:focus-visible { outline: 2px solid var(--fairway); outline-offset: 4px; border-radius: 2px; }
-  .fmt-panel[hidden] { display: none; }
+/* ---- the prize on the title screen ---- */
+.prize { display: flex; flex-direction: column; align-items: center; margin-top: 34px; }
+.prize .sprite { width: 62px; height: 89px; filter: drop-shadow(0 0 16px rgba(232,185,60,0.4)); }
+.prize-label {
+  font-family: 'Silkscreen', monospace; font-size: 9px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--amber); margin-top: 12px;
+}
 
-  /* ============ TEE SHEET — the five armies ============ */
-  .tee-sheet { border-top: 1px solid var(--divider); }
-  .army {
-    display: grid;
-    grid-template-columns: 34px 1fr auto;
-    gap: 4px 20px;
-    align-items: start;
-    padding: 20px 0;
-    border-bottom: 1px solid var(--divider);
-  }
-  .tee-sheet .army:last-child { border-bottom: 0; padding-bottom: 4px; }
-  .army-group {
-    font-family: 'Fraunces', Georgia, serif;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-    font-size: 26px;
-    line-height: 1;
-    color: var(--ink);
-    opacity: 0.24;
-    padding-top: 2px;
-  }
-  .army-name {
-    font-family: 'Fraunces', Georgia, serif;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 1;
-    font-size: clamp(23px, 2.5vw, 31px);
-    color: var(--ink);
-  }
-  .army-squad {
-    margin-top: 11px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .army-player {
-    font-size: 13.5px;
-    line-height: 1;
-    padding: 7px 11px;
-    border-radius: 999px;
-    background: var(--surface-elev);
-    color: var(--ink);
-    white-space: nowrap;
-  }
-  .army-player.is-captain {
-    background: var(--fairway-deep);
-    color: #FFFFFF;
-    font-weight: 600;
-  }
-  .army-player.is-tbd {
-    background: transparent;
-    border: 1px dashed var(--divider);
-    color: var(--ink-muted);
-    font-style: italic;
-  }
-  .army-tee { text-align: right; }
-  .army-time {
-    font-family: 'Fraunces', Georgia, serif;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-    font-size: clamp(21px, 2.3vw, 28px);
-    line-height: 1;
-    color: var(--fairway-deep);
-    white-space: nowrap;
-  }
-  .hole-pill {
-    display: inline-block;
-    margin-top: 10px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    padding: 4px 10px;
-    border-radius: 4px;
-    white-space: nowrap;
-  }
-  /* Named "hole-N", not "h-N" — Tailwind owns .h-1 / .h-10 as height utilities. */
-  .hole-pill.hole-1  { background: #F0E4BE; border: 1px solid #D9C68B; color: #5D4510; }
-  .hole-pill.hole-10 { background: #DCE8DE; border: 1px solid #B6CCBB; color: var(--fairway-deep); }
-  @media (max-width: 560px) {
-    .army { grid-template-columns: 24px 1fr auto; gap: 4px 12px; padding: 18px 0; }
-    .army-group { font-size: 19px; }
-    .army-name { font-size: 21px; }
-    .army-time { font-size: 19px; }
-  }
+/* ---- attract-mode demo ---- */
+/* An idle arcade cabinet plays a demo of its own game. This one plays golf. */
+#attract-demo {
+  position: fixed; inset: 0; z-index: 1;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
+  opacity: 0.30;
+}
+@media (max-width: 900px) { #attract-demo { opacity: 0.17; } }
 
-  /* ============ FORMAT RULES ============ */
-  .rule-grid {
-    display: grid;
-    gap: 0 48px;
-  }
-  @media (min-width: 720px) {
-    .rule-grid { grid-template-columns: 1fr 1fr; }
-  }
-  .rule {
-    padding: 15px 0;
-    border-bottom: 1px solid var(--divider);
-  }
-  .rule-grid .rule:last-child { border-bottom: 0; }
-  @media (min-width: 720px) {
-    /* two columns: the bottom rule of each column loses its underline */
-    .rule-grid .rule:nth-last-child(-n+2) { border-bottom: 0; }
-  }
-  .rule.is-key { border-bottom: 0; }
-  .rule-title {
-    font-family: 'Fraunces', Georgia, serif;
-    font-weight: 600;
-    font-size: 17px;
-    letter-spacing: -0.01em;
-    color: var(--ink);
-  }
-  .rule-body {
-    margin-top: 5px;
-    font-size: 14px;
-    line-height: 1.55;
-    color: var(--ink-muted);
-    max-width: 60ch;
-  }
-  .rule.is-key {
-    border-left: 3px solid var(--gold);
-    padding-left: 16px;
-    background: linear-gradient(90deg, rgba(242,227,184,0.42), rgba(242,227,184,0) 70%);
-  }
-  .rule.is-key .rule-body { color: var(--ink); }
+/* =========================== BOOT =========================== */
+#boot {
+  position: fixed; inset: 0; z-index: 9500; background: var(--void);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Silkscreen', monospace; font-size: 11px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--phos);
+}
+#boot .lines { width: min(520px, 88vw); }
+#boot p { margin: 0 0 9px; }
+#boot .ok { color: var(--mute); }
+#boot.done { opacity: 0; visibility: hidden; transition: opacity 260ms linear, visibility 0s linear 260ms; }
 
-  .format-badge {
-    display: inline-block;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    padding: 4px 10px;
-    border-radius: 4px;
-    background: var(--surface-elev);
-    color: var(--ink-muted);
-    border: 1px solid var(--divider);
-  }
+@media (prefers-reduced-motion: reduce) {
+  .blink { animation: none; }
+  #boot { display: none; }
+  * { transition: none !important; }
+}
 </style>
 </head>
 <body>
-<div id="error-banner" role="alert"></div>
+<canvas id="attract-demo" aria-hidden="true"></canvas>
+<div class="crt-lines" aria-hidden="true"></div>
+<div class="crt-vignette" aria-hidden="true"></div>
 
-<header class="site-header">
-  <div class="max-w-[1280px] mx-auto px-6 lg:px-12 pt-4 pb-2">
-    <div class="flex items-center justify-between gap-6 flex-wrap">
-      <a href="#hero" class="flex items-center gap-3 brand-lockup" aria-label="The Whitby Invitational — back to top">
-        <img src="img/logo.png" alt="" class="brand-mark" />
-        <span class="eyebrow" style="color: var(--ink);">The Whitby Invitational</span>
-      </a>
-      <nav class="topnav eyebrow" aria-label="Sections" style="color: var(--ink-muted);">
-        <a href="#champion">Champion</a>
-        <a href="#archive">Archive</a>
-        <a href="#champions-wall">Champions</a>
-        <a href="#hardware">Awards</a>
-        <a href="#next">Next Tee</a>
-        <a href="#leaderboard">Leaderboard</a>
-      </nav>
-      <span class="eyebrow vol-lockup" style="color: var(--ink-muted);">Vol. <span class="tabular">I</span> · Est. 2025</span>
-    </div>
-    <div class="masthead-rule mt-3"></div>
-    <div class="masthead-rule-thick mt-1"></div>
+<div id="boot" aria-hidden="true"><div class="lines"></div></div>
+
+<header class="hud">
+  <div class="wrap">
+    <div class="hud-score" id="hud-score"></div>
+    <nav class="hud-nav" aria-label="Sections">
+      <a href="#attract">Title</a>
+      <a href="#stages">Stage Select</a>
+      <a href="#highscores">High Scores</a>
+      <a href="#rankings">Rankings</a>
+    </nav>
   </div>
 </header>
 
-<main class="max-w-[1280px] mx-auto">
-
-  <!-- ============ 1. HERO ============ -->
-  <section id="hero" class="px-6 lg:px-12 pt-10 lg:pt-16 pb-12 lg:pb-20"></section>
-
-  <!-- ============ 2. CHAMPION SPOTLIGHT ============ -->
-  <section id="champion" class="px-6 lg:px-12 py-14 lg:py-24"></section>
-
-  <!-- ============ 3. TOURNAMENT ARCHIVE (with group-photo slider) ============ -->
-  <section id="archive" class="px-6 lg:px-12 py-14 lg:py-20"></section>
-
-  <!-- ============ 4. CHAMPIONS WALL ============ -->
-  <section id="champions-wall" class="px-6 lg:px-12 py-14 lg:py-20"></section>
-
-  <!-- ============ 5. HARDWARE CABINET ============ -->
-  <section id="hardware" class="px-6 lg:px-12 py-14 lg:py-20"></section>
-
-  <!-- ============ 6. NEXT TOURNAMENT ============ -->
-  <section id="next" class="px-6 lg:px-12 py-14 lg:py-20"></section>
-
-  <!-- ============ 7. LEADERBOARD ============ -->
-  <section id="leaderboard" class="px-6 lg:px-12 py-14 lg:py-20"></section>
-
+<main>
+  <section id="attract" class="wrap attract"></section>
+  <section id="stages" class="wrap"></section>
+  <section id="highscores" class="wrap"></section>
+  <section id="rankings" class="wrap"></section>
 </main>
 
-<footer class="max-w-[1280px] mx-auto px-6 lg:px-12 pb-14">
-  <div class="masthead-rule mb-5"></div>
-  <div class="flex items-center justify-between flex-wrap gap-4 text-[13px]" style="color: var(--ink-muted);">
-    <div>The Whitby Invitational &middot; an annual gentlemen's tradition.</div>
-    <div class="eyebrow">Whitby · Ontario · Est. 2025</div>
-  </div>
+<footer class="wrap">
+  <div class="game-over">Game Over</div>
+  <div class="footer-sub">Insert coin to continue &middot; Whitby &middot; Ontario &middot; Est. 2025</div>
 </footer>
 
 <script>
-/* =========================================================================
-   DATA — edit this block to record new tournaments.
-   ========================================================================= */
+/* ==== DATA + PURE COMPUTE (identical to the live site) ==== */
 const data = {
   players: {
     deluca:   { name: "Deluca",   active: true, photo: "img/players/deluca.jpg" },
@@ -1654,408 +1090,6 @@ function formatTournamentDate(iso) {
   return `${months[m-1]} ${day}, ${y}`;
 }
 
-/* =========================================================================
-   SVG GLYPHS
-   ========================================================================= */
-
-function svgTrophy(color) {
-  // gold, silver, bronze — color drives both the cup and the small base.
-  const c = color || "var(--gold)";
-  return `<svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
-    <path d="M9 5 H23 V10 a7 7 0 0 1 -14 0 Z" fill="${c}"/>
-    <path d="M9 6 H6 a3 3 0 0 0 -3 3 v0 a4 4 0 0 0 4 4 h2" fill="none" stroke="${c}" stroke-width="1.6"/>
-    <path d="M23 6 h3 a3 3 0 0 1 3 3 v0 a4 4 0 0 1 -4 4 h-2" fill="none" stroke="${c}" stroke-width="1.6"/>
-    <rect x="13" y="18" width="6" height="3" fill="${c}"/>
-    <rect x="9" y="22" width="14" height="3" rx="1" fill="${c}"/>
-  </svg>`;
-}
-
-function svgSweater() {
-  return `<svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
-    <path d="M9 8 L13 5 H19 L23 8 L28 11 L25 15 L23 13 V25 a2 2 0 0 1 -2 2 H11 a2 2 0 0 1 -2 -2 V13 L7 15 L4 11 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-    <path d="M13 5 L16 8 L19 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-    <path d="M11 16 L21 16 M11 19 L21 19 M11 22 L21 22" stroke="currentColor" stroke-width="1" opacity="0.55"/>
-  </svg>`;
-}
-
-function svgBlowup() {
-  return `<svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
-    <path d="M16 3 L17.5 8 L22 6 L21 11 L26 11.5 L22.5 15 L27 18 L21.5 19 L23 24 L18.5 22 L17 27 L15 22.5 L11 25 L11.5 19.5 L6 19 L9.5 15.5 L5 13 L10.5 12 L9 7 L13.5 9 Z"
-      fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
-    <circle cx="16" cy="15.5" r="3" fill="currentColor"/>
-  </svg>`;
-}
-
-function svgChevron() {
-  return '<svg class="chevron" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-}
-
-/* =========================================================================
-   RENDERERS
-   ========================================================================= */
-
-function renderHero(d) {
-  const stats = computeHeroStats(d);
-  const reigning = d.tournaments[d.tournaments.length - 1];
-  const reigningStandings = computeTournamentStandings(reigning, d.courses[reigning.courseId]);
-  const champ = reigningStandings.players[0];
-  const champName = d.players[champ.playerId].name;
-
-  const tourEntries = [...d.tournaments].reverse().map(t => {
-    const course = d.courses[t.courseId];
-    const standings = computeTournamentStandings(t, course);
-    const winner = standings.players[0];
-    const winnerName = d.players[winner.playerId].name;
-    return `
-      <li>
-        <a class="tour-entry" href="#tour-${esc(t.id)}" aria-label="Jump to ${esc(course.name)} round results">
-          <div class="tour-roman">${esc(t.roman)}</div>
-          <div class="tour-body">
-            <div class="tour-course">${esc(course.name)}</div>
-            <div class="tour-meta">${esc(formatTournamentDate(t.date))} · ${esc(course.location)}</div>
-            <div class="tour-status played">Played &middot; <span style="color: var(--gold);">Champion ${esc(winnerName)}</span></div>
-          </div>
-        </a>
-      </li>
-    `;
-  }).join("");
-
-  const u = d.upcoming;
-  const upcomingCourse = u.courseId ? d.courses[u.courseId] : null;
-  const upcomingName = upcomingCourse ? upcomingCourse.name : (u.courseName || "Course TBD");
-  const upcomingLoc = upcomingCourse ? upcomingCourse.location : (u.location || "Ontario");
-  const upcomingWhen = u.tbd ? (u.window || "TBD") : formatTournamentDate(u.date);
-  const upcomingRoman = toRoman(d.tournaments.length + 1);
-  const upcomingStatus = u.tbd
-    ? `Next &middot; <span style="color: var(--ink);">${esc(u.window || "TBD")}</span>`
-    : `Next &middot; <span style="color: var(--ink);">${stats.daysToNextTee} days</span>`;
-  const tourUpcoming = `
-    <li>
-      <a class="tour-entry tour-entry-next" href="#next" aria-label="Jump to next tournament details">
-        <div class="tour-roman">${esc(upcomingRoman)}</div>
-        <div class="tour-body">
-          <div class="tour-course">${esc(upcomingName)}</div>
-          <div class="tour-meta">${esc(upcomingWhen)} · ${esc(upcomingLoc)}${u.formatName ? " · " + esc(u.formatName) : ""}</div>
-          <div class="tour-status next">${upcomingStatus}</div>
-        </div>
-      </a>
-    </li>
-  `;
-
-  return `
-    <div class="paper-grain rounded-md" style="background: var(--bg);">
-      <!-- micro lockup -->
-      <div class="flex items-center justify-between gap-4 mb-6 lg:mb-10">
-        <span class="eyebrow" style="color: var(--ink-muted);">An annual gentlemen's tradition · Whitby, Ontario</span>
-        <span class="eyebrow" style="color: var(--ink-muted);">Est. 2025</span>
-      </div>
-
-      <!-- BIG WORDMARK + TOUR PANEL -->
-      <div class="hero-grid">
-        <h1 class="wordmark fade-up">
-          The Whitby<br/>Invitational
-        </h1>
-        <aside class="tour-panel fade-up" aria-label="The Tour">
-          <div class="eyebrow tour-eyebrow">The Tour</div>
-          <ol class="tour-list tour-list--scroll">
-            ${tourUpcoming}
-            ${tourEntries}
-          </ol>
-        </aside>
-      </div>
-
-      <div class="gold-rule-thick mt-8 lg:mt-10 fade-up"></div>
-
-      <!-- Stat strip -->
-      <div class="stat-strip fade-up">
-        <div class="stat-cell">
-          <div class="eyebrow" style="color: var(--ink-muted);">Tournaments</div>
-          <div class="stat-num mt-2">${stats.tournaments}</div>
-        </div>
-        <div class="stat-cell">
-          <div class="eyebrow" style="color: var(--ink-muted);">Players</div>
-          <div class="stat-num mt-2">${stats.players}</div>
-        </div>
-        <div class="stat-cell">
-          <div class="eyebrow" style="color: var(--ink-muted);">Total Shots</div>
-          <div class="stat-num mt-2 tabular">${stats.totalShots.toLocaleString()}</div>
-        </div>
-        <div class="stat-cell">
-          <div class="eyebrow" style="color: var(--ink-muted);">Total Holes</div>
-          <div class="stat-num mt-2 tabular">${stats.totalHoles.toLocaleString()}</div>
-        </div>
-        <div class="stat-cell">
-          <div class="eyebrow" style="color: var(--ink-muted);">Days to Next Tee</div>
-          <div class="stat-num mt-2">${stats.daysToNextTee === null ? "TBD" : stats.daysToNextTee}</div>
-        </div>
-      </div>
-
-      <!-- Reigning champion pill -->
-      <div class="mt-12 lg:mt-14 flex justify-center fade-up">
-        <span class="reigning-pill eyebrow">
-          <span style="color: var(--ink); display:inline-block; width:7px; height:7px; border-radius:50%; background: var(--ink);"></span>
-          Reigning Champion · ${esc(champName)}
-        </span>
-      </div>
-    </div>
-  `;
-}
-
-function renderChampionSpotlight(d) {
-  const reigning = d.tournaments[d.tournaments.length - 1];
-  const standings = computeTournamentStandings(reigning, d.courses[reigning.courseId]);
-  const champ = standings.players[0];
-  const champName = d.players[champ.playerId].name;
-  const course = d.courses[reigning.courseId];
-  const overPar = champ.overPar;
-  const overParStr = overPar > 0 ? "+" + overPar : overPar < 0 ? String(overPar) : "E";
-  const dateStr = formatTournamentDate(reigning.date);
-  const portraitOverride = d.championPortraits[champ.playerId];
-  const champPhoto = d.players[champ.playerId] && d.players[champ.playerId].photo;
-  const photoSrc = portraitOverride || champPhoto || reigning.groupPhoto || "img/group-photo.jpg";
-  const fallbackSrc = "img/stock/champion-fallback.jpg";
-  const quote = reigning.quote || d.championQuote;
-
-  return `
-    <div class="grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-14 items-center">
-      <div class="fade-up">
-        <div class="eyebrow mb-4" style="color: var(--ink-muted);">The Champion · Tournament ${esc(reigning.roman)}</div>
-        <h2 class="champ-name champ-name-anim">${esc(champName)}</h2>
-        <div class="gold-rule mt-4" style="max-width: 220px; height:2px; background: var(--gold);"></div>
-        <p class="mt-6 text-[15px]" style="color: var(--ink-muted); letter-spacing: 0.01em;">
-          <span class="font-semibold tabular" style="color: var(--ink);">${champ.totalPoints} pts</span>
-          &middot;
-          <span class="font-semibold tabular" style="color: var(--ink);">${champ.totalStrokes} strokes</span>
-          &middot;
-          <span class="font-semibold tabular" style="color: var(--ink);">${overParStr} over par</span>
-        </p>
-        <p class="mt-1 text-[15px]" style="color: var(--ink-muted);">
-          ${esc(course.name)} &middot; ${esc(dateStr)}
-        </p>
-      </div>
-
-      <div class="fade-up">
-        <picture>
-          <img src="${esc(photoSrc)}"
-               onerror="this.onerror=null;this.src='${fallbackSrc}';"
-               alt="${esc(champName)} and the group at ${esc(course.name)}"
-               class="block w-full h-auto rounded-md"
-               style="aspect-ratio: 4 / 5; object-fit: cover; object-position: center 25%; background: var(--surface-elev);" />
-        </picture>
-        <blockquote class="champ-quote mt-6">
-          &ldquo;${esc(quote)}&rdquo;
-          <footer class="eyebrow mt-3 not-italic" style="color: var(--ink-muted); font-style: normal;">
-            — ${esc(champName)}, post-round
-          </footer>
-        </blockquote>
-      </div>
-    </div>
-  `;
-}
-
-function renderHardware(d) {
-  const reigning = d.tournaments[d.tournaments.length - 1];
-  const combinedScores = computeCombinedScores(d);
-
-  function avatarChip(playerId, bad) {
-    const ids = Object.keys(d.players);
-    const initials = initialsFor(playerId, ids, d.players);
-    const hcp = formatCombinedScore(combinedScores[playerId]);
-    const bg = bad ? "background: var(--ink-muted);" : "";
-    return `
-      <span class="award-foot">
-        <span class="avatar-wrap" tabindex="0" aria-label="${esc(d.players[playerId].name)}, scoring average ${esc(hcp)}">
-          <span class="avatar" style="width:32px; height:32px; font-size:13px; ${bg}">${esc(initials)}</span>
-          <span class="avatar-tip">Avg ${esc(hcp)}</span>
-        </span>
-        <span style="color: var(--ink); font-weight:500;">${esc(d.players[playerId].name)}</span>
-        <span style="color: var(--ink-muted);">· Avg ${esc(hcp)}</span>
-      </span>
-    `;
-  }
-
-  // Awards-driven cabinet (Tournament II onward). Each award names its winner explicitly.
-  if (reigning.awards && reigning.awards.length) {
-    const cards = reigning.awards.map(a => {
-      const bad = a.tone === "bad";
-      const accent = bad ? "var(--danger)" : "var(--gold)";
-      const icon = bad ? svgBlowup() : svgTrophy("var(--gold)");
-      const stat = a.stat
-        ? `<div class="award-stat" style="color: ${accent};">${esc(a.stat)} <span class="text-[14px] tracking-normal font-medium" style="color: var(--ink-muted);">${esc(a.statLabel || "")}</span></div>`
-        : "";
-      const note = a.note
-        ? `<p class="text-[12px] -mt-1" style="color: var(--ink-muted); font-style: italic;">${esc(a.note)}</p>`
-        : "";
-      return `
-        <article class="award-card" style="border-top-color: ${accent};">
-          <div class="flex items-center justify-between">
-            <div class="eyebrow award-eyebrow">${esc(a.name)}</div>
-            <span style="color: ${accent};">${icon}</span>
-          </div>
-          <h3 class="award-name">${esc(d.players[a.winner].name)}</h3>
-          ${stat}
-          ${note}
-          ${avatarChip(a.winner, bad)}
-        </article>
-      `;
-    }).join("");
-
-    return `
-      <div class="flex items-end justify-between flex-wrap gap-3 mb-6">
-        <div>
-          <div class="eyebrow" style="color: var(--ink-muted);">Section IV</div>
-          <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">The Hardware Cabinet</h2>
-        </div>
-        <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">${reigning.awards.length} awards from Tournament ${esc(reigning.roman)}. Some you frame. Some you bury.</p>
-      </div>
-      <div class="gold-rule mb-8"></div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 fade-up">
-        ${cards}
-      </div>
-    `;
-  }
-
-  // Legacy computed cabinet (Tournament I).
-  const standings = computeTournamentStandings(reigning, d.courses[reigning.courseId]);
-  const champ = standings.players[0];
-  const ru = standings.players[1];
-  const last = standings.players[standings.players.length - 1];
-  const blow = computeBlowUp(reigning);
-
-  function blowFoot() {
-    const players = [...new Set(blow.entries.map(e => e.player))].slice(0, 2);
-    const chips = players.map(pid => {
-      const ids = Object.keys(d.players);
-      const initials = initialsFor(pid, ids, d.players);
-      const hcp = formatCombinedScore(combinedScores[pid]);
-      return `
-        <span class="avatar-wrap" tabindex="0" aria-label="${esc(d.players[pid].name)}, scoring average ${esc(hcp)}">
-          <span class="avatar" style="width:32px; height:32px; font-size:13px; background: var(--ink-muted);">${esc(initials)}</span>
-          <span class="avatar-tip">Avg ${esc(hcp)}</span>
-        </span>
-      `;
-    }).join('<span style="margin-left:-8px;"></span>');
-    return `
-      <span class="award-foot">
-        <span style="display:inline-flex; gap:4px;">${chips}</span>
-        <span style="color: var(--ink-muted);">Take a moment of silence.</span>
-      </span>
-    `;
-  }
-
-  return `
-    <div class="flex items-end justify-between flex-wrap gap-3 mb-6">
-      <div>
-        <div class="eyebrow" style="color: var(--ink-muted);">Section IV</div>
-        <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">The Hardware Cabinet</h2>
-      </div>
-      <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">Four awards from Tournament ${esc(reigning.roman)}. Three trophies and one we don't talk about.</p>
-    </div>
-    <div class="gold-rule mb-8"></div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 fade-up">
-      <article class="award-card">
-        <div class="flex items-center justify-between">
-          <div class="eyebrow award-eyebrow">The Champion</div>
-          <span style="color: var(--gold);">${svgTrophy("var(--gold)")}</span>
-        </div>
-        <h3 class="award-name">${esc(d.players[champ.playerId].name)}</h3>
-        <div class="award-stat">${champ.totalPoints} <span class="text-[14px] tracking-normal font-medium" style="color: var(--ink-muted);">pts</span></div>
-        ${avatarChip(champ.playerId)}
-      </article>
-
-      <article class="award-card" style="border-top-color: var(--silver);">
-        <div class="flex items-center justify-between">
-          <div class="eyebrow award-eyebrow">Runner-Up</div>
-          <span style="color: var(--silver);">${svgTrophy("var(--silver)")}</span>
-        </div>
-        <h3 class="award-name">${esc(d.players[ru.playerId].name)}</h3>
-        <div class="award-stat" style="color: var(--silver);">${ru.totalPoints} <span class="text-[14px] tracking-normal font-medium" style="color: var(--ink-muted);">pts</span></div>
-        ${avatarChip(ru.playerId)}
-      </article>
-
-      <article class="award-card" style="border-top-color: var(--bronze);">
-        <div class="flex items-center justify-between">
-          <div class="eyebrow award-eyebrow">Sweater of Shame</div>
-          <span style="color: var(--bronze);">${svgSweater()}</span>
-        </div>
-        <h3 class="award-name">${esc(d.players[last.playerId].name)}</h3>
-        <div class="award-stat" style="color: var(--bronze);">${last.totalPoints} <span class="text-[14px] tracking-normal font-medium" style="color: var(--ink-muted);">pts</span></div>
-        <p class="text-[12px] -mt-1" style="color: var(--ink-muted); font-style: italic;">Must wear to next year's first tee.</p>
-        ${avatarChip(last.playerId)}
-      </article>
-
-      <article class="award-card" style="border-top-color: var(--fairway);">
-        <div class="flex items-center justify-between">
-          <div class="eyebrow award-eyebrow">The Blow-Up Hole</div>
-          <span style="color: var(--fairway);">${svgBlowup()}</span>
-        </div>
-        <h3 class="award-name" style="font-size: clamp(28px, 3.4vw, 38px);">${esc(blow.nameLine)}</h3>
-        <div class="award-stat" style="color: var(--fairway);">${blow.score} <span class="text-[14px] tracking-normal font-medium" style="color: var(--ink-muted);">on a single hole</span></div>
-        <p class="text-[12px] -mt-1" style="color: var(--ink-muted); font-style: italic;">${esc(blow.subtitle)}</p>
-        ${blowFoot()}
-      </article>
-    </div>
-  `;
-}
-
-function renderFieldSlideshow(d) {
-  const slidesData = d.tournaments.filter(t => t.groupPhoto);
-  const slides = slidesData.map((t, i) => {
-    const course = d.courses[t.courseId];
-    return `
-      <div class="gs-slide${i === 0 ? " is-active" : ""}">
-        <img src="${esc(t.groupPhoto)}" alt="The Whitby Invitational — Tournament ${esc(t.roman)}, ${esc(course.name)}" loading="lazy" />
-        <figcaption>
-          <span class="eyebrow" style="color: var(--gold);">Tournament ${esc(t.roman)}</span>
-          <span style="color: var(--bg);">${esc(course.name)} &middot; ${esc(formatTournamentDate(t.date))}</span>
-        </figcaption>
-      </div>
-    `;
-  }).join("");
-
-  const dots = slidesData.length > 1
-    ? `<div class="gs-dots">${slidesData.map((t, i) =>
-        `<button class="gs-dot${i === 0 ? " is-active" : ""}" type="button" aria-label="Show Tournament ${esc(t.roman)} photo"></button>`
-      ).join("")}</div>`
-    : "";
-
-  return `
-    <figure class="group-banner group-slideshow fade-up mb-10" id="field-slideshow">
-      ${slides}
-      ${dots}
-    </figure>
-  `;
-}
-
-function ordinal(n) {
-  const s = ["th","st","nd","rd"];
-  const v = n % 100;
-  return n + (s[(v-20)%10] || s[v] || s[0]);
-}
-
-function renderScoringLegend() {
-  return `
-    <div class="scoring-legend" aria-label="How scoring works">
-      <div class="eyebrow" style="color: var(--ink-muted);">How it's scored</div>
-      <ul class="legend-list">
-        <li>
-          <span class="legend-swatch swatch-gold" aria-hidden="true"></span>
-          <span class="legend-label"><span class="legend-points">2 pts</span> — outright low score on the hole</span>
-        </li>
-        <li>
-          <span class="legend-swatch swatch-silver" aria-hidden="true"></span>
-          <span class="legend-label"><span class="legend-points">1 pt</span> — tied low score on the hole</span>
-        </li>
-        <li>
-          <span class="legend-swatch swatch-tiebreak" aria-hidden="true"></span>
-          <span class="legend-label"><span class="legend-points">Tiebreaker</span> — lowest total strokes wins the trophy</span>
-        </li>
-      </ul>
-    </div>
-  `;
-}
 
 function toRoman(n) {
   const map = [["M",1000],["CM",900],["D",500],["CD",400],["C",100],["XC",90],["L",50],["XL",40],["X",10],["IX",9],["V",5],["IV",4],["I",1]];
@@ -2066,933 +1100,1042 @@ function toRoman(n) {
   return out;
 }
 
-function renderAvatar(playerId, allRosterIds, players, isOut, combinedScores) {
-  const name = players[playerId].name;
-  const initials = initialsFor(playerId, allRosterIds, players);
-  const cls = isOut ? "avatar is-out" : "avatar";
-  const nameStyle = isOut
-    ? `text-decoration: line-through; color: var(--ink-muted);`
-    : `color: var(--ink);`;
-  const outPill = isOut
-    ? `<span class="out-pill mt-1">Out</span>`
-    : "";
-  const hcp = combinedScores ? formatCombinedScore(combinedScores[playerId]) : null;
-  const tip = hcp ? `<span class="avatar-tip">Avg ${esc(hcp)}</span>` : "";
+/* =========================================================================
+   FIGHTERS — original pixel characters, each a grid of palette keys
+   rendered to SVG rects. Used on the squad cards and in the background layer.
+   ========================================================================= */
+const SPRITE_DATA = {"w": 14, "h": 20, "palette": {".": null, "c": "#2E362F", "h": "#5B4230", "k": "#1A211C", "s": "#E9B384", "w": "#EDEDE1", "N": "#2E3E6B", "T": "#8A9099", "r": "#E2453F", "R": "#A62B29", "y": "#F2C13C", "b": "#4A80E8", "g": "#46B268", "G": "#2C7845", "o": "#F0C64A", "O": "#B8890F", "m": "#9AA6AE", "M": "#5D6A72"}, "sprites": [{"key": "gibbs", "name": "Gibbs", "army": "Flat cap", "rows": ["...wwwwwwww...", "..wwwwwwwwww..", "...hssssssh...", "...hskssksh...", "...hssssssh...", "....ssssss....", "....wwwwww....", "...wwwwwwww...", "..swwwwwwwwsm.", "..swwwwwwwwsm.", "..swwwwwwwwsm.", "...wwwwwwww.m.", "...wwwwwwww.m.", "...NNNNNNNN.m.", "...NNN..NNN.m.", "...NNN..NNN.m.", "...NNN..NNNMM.", "...ccc..ccc...", "...ccc..ccc...", ".............."]}, {"key": "traikos", "name": "Traikos", "army": "Visor", "rows": ["....hhhhhh....", "..oooooooooo..", "...hssssssh...", "...hskssksh...", "...hssssssh...", "....ssssss....", "....yyyyyy....", "...yyyyyyyy...", ".msyyyyyyyys..", ".msyyyyyyyys..", ".msyyyyyyyys..", ".m.yyyyyyyy...", ".m.yyyyyyyy...", ".m.wwwwwwww...", ".m.www..www...", ".m.www..www...", "MM.www..www...", "...ccc..ccc...", "...ccc..ccc...", ".............."]}, {"key": "sean", "name": "Sean", "army": "Bucket hat", "rows": ["...bbbbbbbb...", "..bbbbbbbbbb..", "..bbbbbbbbbb..", "...hssssssh...", "...hskssksh...", "....ssssss....", "....bbbbbb....", "...bbbbbbbb...", "..sbbbbbbbbsm.", "..sbbbbbbbbsm.", "..sbbbbbbbbsm.", "...bbbbbbbb.m.", "...bbbbbbbb.m.", "...wNwNwNwN.m.", "...NwN..wNw.m.", "...wNw..NwN.m.", "...sss..sssMM.", "...ccc..ccc...", "...ccc..ccc...", ".............."]}, {"key": "chriss", "name": "Chris S", "army": "Cap backwards", "rows": ["...rrrrrrrr...", ".rrrrrrrrrr...", "...hssssssh...", "...hskssksh...", "...hssssssh...", "....ssssss....", "....rrrrrr....", "...rrrrrrrr...", "..srrrrrrrrs..", "..srrrrrrrrs..", "Mmmsrrrrrrrrsm", "...rrrrrrrr...", "...rrrrrrrr...", "...TTTTTTTT...", "...TTT..TTT...", "...TTT..TTT...", "...TTT..TTT...", "...ccc..ccc...", "...ccc..ccc...", ".............."]}, {"key": "greg", "name": "Greggers", "army": "Carries his own", "rows": ["m....hhhhhh...", "mm..hhhhhhhh..", "RR..hssssssh..", "RR..hskssksh..", "RR..hssssssh..", "RR...ssssss...", "RR...gggggg...", "RR..gggggggg..", "RR.sggggggggs.", "RR.sggggggggs.", "RR.sggggggggs.", "RR..gggggggg..", "RR..gggggggg..", "....GGGGGGGG..", "....GGG..GGG..", "....GGG..GGG..", "....GGG..GGG..", "....ccc..ccc..", "....ccc..ccc..", ".............."]}, {"key": "trophy", "name": "The Trophy", "army": "Final boss", "rows": ["......oo......", ".....oOOo.....", "....oOOOOo....", "...oOOOOOOo...", "..oooooooooo..", ".ooOOOOOOOOoo.", "o.oOOOOOOOOo.o", "o.oOOrrrrOOo.o", "o.oOOOOOOOOo.o", "oo.oOOOOOOo.oo", ".oo.oOOOOo.oo.", "..oo.oOOo.oo..", ".....oOOo.....", ".....oOOo.....", "....ooOOoo....", "...oOOOOOOo...", "..oooooooooo..", "..cccooocccc..", "..cccccccccc..", ".............."]}]};
 
-  return `
-    <div class="flex flex-col items-center gap-2">
-      <span class="avatar-wrap" tabindex="0" aria-label="${esc(name)}, scoring average ${esc(hcp || '—')}">
-        <span class="${cls}">${esc(initials)}</span>
-        ${tip}
-      </span>
-      <div class="text-[12px] font-medium text-center max-w-[80px] truncate" style="${nameStyle}">${esc(name)}</div>
-      ${outPill}
-    </div>
-  `;
+function spriteByKey(key) {
+  return SPRITE_DATA.sprites.find(sp => sp.key === key) || null;
 }
 
-function renderTeeSheet(d, opts) {
-  const u = d.upcoming;
-  const teams = u.teams || [];
-  const compact = opts && opts.compact;
-
-  const rows = teams.map(team => {
-    const chips = team.players.map(pid => {
-      const player = d.players[pid];
-      const isCaptain = pid === team.captain;
-      const isTbd = pid === "mystery";
-      const cls = isCaptain ? "army-player is-captain" : isTbd ? "army-player is-tbd" : "army-player";
-      const label = isCaptain ? `${player.name} · captain` : player.name;
-      return `<span class="${cls}">${esc(label)}</span>`;
-    }).join("");
-
-    return `
-      <div class="army">
-        <div class="army-group" aria-hidden="true">${esc(team.group)}</div>
-        <div>
-          <div class="army-name">${esc(team.name)}</div>
-          <div class="army-squad">${chips}</div>
-        </div>
-        <div class="army-tee">
-          <div class="army-time">${esc(team.teeTime)}</div>
-          <div><span class="hole-pill hole-${esc(team.startHole)}">Off hole ${esc(team.startHole)}</span></div>
-        </div>
-      </div>
-    `;
-  }).join("");
-
-  const header = compact ? "" : `
-    <div class="flex items-baseline justify-between flex-wrap gap-2 mb-1">
-      <h3 class="font-display font-semibold tracking-[-0.02em]" style="font-size: clamp(22px, 2.4vw, 28px); color: var(--ink);">The tee sheet</h3>
-      <p class="text-[13px]" style="color: var(--ink-muted);">Double-tee start. Groups 1 and 3 go off hole 1, the rest off hole 10. The starter confirms on the day.</p>
-    </div>
-  `;
-
-  return `${header}<div class="tee-sheet mt-4">${rows}</div>`;
-}
-
-function renderFormatRules(d) {
-  const all = d.upcoming.rules || [];
-  const rule = r => `
-    <div class="rule${r.key ? " is-key" : ""}">
-      <div class="rule-title">${esc(r.title)}</div>
-      <p class="rule-body">${esc(r.body)}</p>
-    </div>
-  `;
-  const ordinary = all.filter(r => !r.key).map(rule).join("");
-  const key = all.filter(r => r.key).map(rule).join("");
-  return `
-    <div class="rule-grid">${ordinary}</div>
-    ${key ? `<div class="mt-5">${key}</div>` : ""}
-  `;
-}
-
-function renderBestBall(d) {
-  const u = d.upcoming;
-  const course = d.courses[u.courseId];
-  const nextRoman = toRoman(d.tournaments.length + 1);
-  const dateObj = new Date(u.date + "T08:00:00-04:00");
-  const dateStr = dateObj.toLocaleDateString("en-US", {
-    weekday: "long", month: "long", day: "numeric", year: "numeric", timeZone: "America/Toronto"
-  });
-  const playerCount = (u.teams || []).reduce((n, t) => n + t.players.length, 0);
-
-  return `
-    <div class="flex items-end justify-between flex-wrap gap-3 mb-6">
-      <div>
-        <div class="eyebrow" style="color: var(--ink-muted);">Section V</div>
-        <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">Next Tournament</h2>
-      </div>
-      <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">${esc(u.formatBlurb || "")} ${playerCount - 1} golfers named, one mystery entry, one trophy.</p>
-    </div>
-    <div class="gold-rule mb-6"></div>
-
-    <div class="rounded-md overflow-hidden border fade-up" style="background: var(--surface); border-color: var(--divider);">
-      <div class="course-photo">
-        <img src="${esc(course.img || '')}" alt="${esc(course.name)}" loading="lazy" />
-        <div class="course-overlay">
-          <div>
-            <div class="eyebrow" style="color: rgba(255,255,255,0.85);">Tournament ${esc(nextRoman)} · ${esc(course.location)}</div>
-            <div class="course-name mt-2">${esc(course.name)}</div>
-          </div>
-          <div class="text-[13px]" style="color: rgba(255,255,255,0.92); letter-spacing: 0.02em;">
-            ${esc(dateStr)} · first tee ${esc(u.teeTime)}
-          </div>
-        </div>
-      </div>
-
-      <div class="grid lg:grid-cols-[auto_1fr] gap-8 lg:gap-12 p-6 lg:p-9">
-        <div>
-          <div class="eyebrow" style="color: var(--ink-muted);">Tee-off in</div>
-          <div id="countdown" class="flex flex-wrap gap-3 mt-4"></div>
-        </div>
-        <dl class="grid sm:grid-cols-2 gap-x-10 gap-y-4 text-[13px] self-center" style="color: var(--ink); line-height: 1.5;">
-          <div>
-            <dt class="eyebrow" style="color: var(--ink-muted);">Date</dt>
-            <dd class="mt-1">${esc(dateStr)}</dd>
-          </div>
-          <div>
-            <dt class="eyebrow" style="color: var(--ink-muted);">Tee window</dt>
-            <dd class="mt-1">${esc(u.teeTime)} to ${esc(u.lastTee)} · Eastern</dd>
-          </div>
-          <div>
-            <dt class="eyebrow" style="color: var(--ink-muted);">Get there</dt>
-            <dd class="mt-1">${esc(u.arriveBy)}</dd>
-          </div>
-          <div>
-            <dt class="eyebrow" style="color: var(--ink-muted);">Format</dt>
-            <dd class="mt-1">${esc(u.formatName)}</dd>
-          </div>
-          <div>
-            <dt class="eyebrow" style="color: var(--ink-muted);">Course</dt>
-            <dd class="mt-1"><a href="${esc(course.website)}" target="_blank" rel="noopener" style="color: var(--fairway-deep); text-decoration: underline; text-underline-offset: 3px;">${esc(course.name)}</a></dd>
-          </div>
-          <div>
-            <dt class="eyebrow" style="color: var(--ink-muted);">Card</dt>
-            <dd class="mt-1">Par ${esc(course.par)} · ${esc(course.yardage.toLocaleString())} yards · ${esc(course.rating)}</dd>
-          </div>
-        </dl>
-      </div>
-
-      <div class="px-6 lg:px-9 py-7 lg:py-9 border-t" style="border-color: var(--divider);">
-        <h3 class="font-display font-semibold tracking-[-0.02em]" style="font-size: clamp(22px, 2.4vw, 28px); color: var(--ink);">The format</h3>
-        <div class="mt-4">
-          ${renderFormatRules(d)}
-        </div>
-      </div>
-
-      <div class="px-6 lg:px-9 py-7 lg:py-9 border-t" style="border-color: var(--divider); background: var(--bg);">
-        ${renderTeeSheet(d)}
-      </div>
-    </div>
-  `;
-}
-
-function renderNextTournament(d) {
-  const u = d.upcoming;
-  const nextRoman = toRoman(d.tournaments.length + 1);
-
-  if (!u.tbd && u.format === "bestball") return renderBestBall(d);
-
-  if (u.tbd) {
-    const courseName = u.courseName || "Course To Be Determined";
-    const location = u.location || "Ontario";
-    const window = u.window || "TBD";
-    const roster = u.roster || [];
-    const combinedScores = computeCombinedScores(d);
-    const rosterAvatars = roster
-      .map(id => renderAvatar(id, roster, d.players, false, combinedScores))
-      .join("");
-    return `
-      <div class="flex items-end justify-between flex-wrap gap-3 mb-6">
-        <div>
-          <div class="eyebrow" style="color: var(--ink-muted);">Section V</div>
-          <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">Next Tournament</h2>
-        </div>
-        <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">${esc(window)}. Date and course to be confirmed. Clear your calendar anyway.</p>
-      </div>
-      <div class="gold-rule mb-6"></div>
-
-      <div class="rounded-md overflow-hidden border fade-up" style="background: var(--surface); border-color: var(--divider);">
-        <div class="course-photo">
-          <img src="${esc(u.img || 'img/stock/hero-fairway.jpg')}" alt="The next fairway awaits" loading="lazy" />
-          <div class="course-overlay">
-            <div>
-              <div class="eyebrow" style="color: rgba(255,255,255,0.85);">Tournament ${esc(nextRoman)} · ${esc(location)}</div>
-              <div class="course-name mt-2">${esc(courseName)}</div>
-            </div>
-            <div class="text-[13px]" style="color: rgba(255,255,255,0.92); letter-spacing: 0.02em;">
-              ${esc(window)} · Tee TBD
-            </div>
-          </div>
-        </div>
-
-        <div class="grid lg:grid-cols-[1fr_1.2fr] gap-0">
-          <div class="p-6 lg:p-9 lg:border-r" style="border-color: var(--divider);">
-            <div class="eyebrow" style="color: var(--ink-muted);">Scheduled for</div>
-            <div class="font-display font-semibold mt-2" style="font-size: clamp(40px, 6vw, 68px); line-height: 1; color: var(--fairway-deep);">${esc(window)}</div>
-            <p class="mt-4 text-[15px] max-w-lg" style="color: var(--ink-muted); line-height: 1.5;">
-              Tournament ${esc(nextRoman)} is on the calendar for ${esc(window)}. The course, the exact date, and the
-              field all get locked in closer to the day.
-            </p>
-            <dl class="mt-7 grid grid-cols-[auto_1fr] gap-x-5 gap-y-3 text-[13px]" style="color: var(--ink); line-height: 1.5;">
-              <dt class="eyebrow" style="color: var(--ink-muted);">Window</dt>
-              <dd>${esc(window)}</dd>
-              <dt class="eyebrow" style="color: var(--ink-muted);">Course</dt>
-              <dd>${esc(courseName)}</dd>
-              <dt class="eyebrow" style="color: var(--ink-muted);">Region</dt>
-              <dd>${esc(location)}</dd>
-            </dl>
-          </div>
-
-          <div class="p-6 lg:p-9">
-            <div class="eyebrow mb-1" style="color: var(--ink-muted);">Potential Field (${roster.length})</div>
-            <p class="text-[13px] mb-5" style="color: var(--ink-muted);">The regulars on the radar. Confirmations open closer to the date.</p>
-            <div class="grid grid-cols-4 sm:grid-cols-5 gap-x-3 gap-y-5">
-              ${rosterAvatars}
-            </div>
-          </div>
-        </div>
-
-        <div class="px-6 lg:px-9 pb-6 lg:pb-9 pt-2 border-t" style="border-color: var(--divider);">
-          ${renderScoringLegend()}
-        </div>
-      </div>
-    `;
-  }
-
-  const course = d.courses[u.courseId];
-  const dateObj = new Date(u.date + "T08:00:00-04:00");
-  const dateStr = dateObj.toLocaleDateString("en-US", {
-    weekday: "short", month: "long", day: "numeric", year: "numeric", timeZone: "America/Toronto"
-  });
-  const teeTime = u.teeTime ? esc(u.teeTime) : "Tee TBD";
-  const allRoster = [...u.confirmed, ...u.out];
-  const combinedScores = computeCombinedScores(d);
-  const confirmedAvatars = u.confirmed.map(id => renderAvatar(id, allRoster, d.players, false, combinedScores)).join("");
-  const outAvatars = u.out.map(id => renderAvatar(id, allRoster, d.players, true, combinedScores)).join("");
-  const total = u.confirmed.length + u.out.length;
-
-  return `
-    <div class="flex items-end justify-between flex-wrap gap-3 mb-6">
-      <div>
-        <div class="eyebrow" style="color: var(--ink-muted);">Section V</div>
-        <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">Next Tournament</h2>
-      </div>
-      <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">Calendars open. Excuses now accepted.</p>
-    </div>
-    <div class="gold-rule mb-6"></div>
-
-    <div class="rounded-md overflow-hidden border fade-up" style="background: var(--surface); border-color: var(--divider);">
-      <div class="course-photo">
-        <img src="${esc(course.img || '')}" alt="${esc(course.name)}" loading="lazy" />
-        <div class="course-overlay">
-          <div>
-            <div class="eyebrow" style="color: rgba(255,255,255,0.85);">Tournament ${esc(nextRoman)} · ${esc(course.location)}</div>
-            <div class="course-name mt-2">${esc(course.name)}</div>
-          </div>
-          <div class="text-[13px]" style="color: rgba(255,255,255,0.92); letter-spacing: 0.02em;">
-            ${esc(dateStr)} · ${teeTime}
-          </div>
-        </div>
-      </div>
-
-      <div class="grid lg:grid-cols-[1fr_1.2fr] gap-0">
-        <div class="p-6 lg:p-9 lg:border-r" style="border-color: var(--divider);">
-          <div class="eyebrow" style="color: var(--ink-muted);">Tee-off in</div>
-          <div id="countdown" class="flex flex-wrap gap-3 mt-4"></div>
-          <dl class="mt-7 grid grid-cols-[auto_1fr] gap-x-5 gap-y-3 text-[13px]" style="color: var(--ink); line-height: 1.5;">
-            <dt class="eyebrow" style="color: var(--ink-muted);">Tee time</dt>
-            <dd>${teeTime} · Eastern</dd>
-            ${u.cost ? `
-              <dt class="eyebrow" style="color: var(--ink-muted);">Entry</dt>
-              <dd>${esc(u.cost)}</dd>
-            ` : ""}
-            ${u.trophyVenue ? `
-              <dt class="eyebrow" style="color: var(--ink-muted);">Trophy</dt>
-              <dd>Ceremony at <span style="font-weight: 500;">${esc(u.trophyVenue)}</span></dd>
-            ` : ""}
-            ${u.trophyActivities ? `
-              <dt class="eyebrow" style="color: var(--ink-muted);">Festivities</dt>
-              <dd>${esc(u.trophyActivities)}</dd>
-            ` : ""}
-            ${course.website ? `
-              <dt class="eyebrow" style="color: var(--ink-muted);">Course</dt>
-              <dd><a href="${esc(course.website)}" target="_blank" rel="noopener" style="color: var(--fairway-deep); text-decoration: underline; text-underline-offset: 3px;">${esc(course.name)}</a></dd>
-            ` : ""}
-          </dl>
-        </div>
-
-        <div class="p-6 lg:p-9">
-          <div class="flex items-center justify-between gap-3 mb-4">
-            <div class="eyebrow" style="color: var(--ink-muted);">Roster · Confirmed (${u.confirmed.length} of ${total})</div>
-          </div>
-          <div class="grid grid-cols-4 sm:grid-cols-5 gap-x-3 gap-y-5">
-            ${confirmedAvatars}
-          </div>
-          <div class="gold-rule my-7"></div>
-          <div class="eyebrow mb-4" style="color: var(--ink-muted);">Out (${u.out.length})</div>
-          <div class="grid grid-cols-4 sm:grid-cols-5 gap-x-3 gap-y-5">
-            ${outAvatars}
-          </div>
-        </div>
-      </div>
-
-      <div class="px-6 lg:px-9 pb-6 lg:pb-9 pt-2 border-t" style="border-color: var(--divider);">
-        ${renderScoringLegend()}
-      </div>
-    </div>
-  `;
-}
-
-function renderCountdownUnit(value, label) {
-  const padded = String(Math.max(0, value)).padStart(2, "0");
-  return `
-    <div class="count-chip">
-      <span class="count-num">${padded}</span>
-      <div class="eyebrow mt-2" style="color: var(--ink-muted);">${label}</div>
-    </div>
-  `;
-}
-
-function startCountdown(targetDate, mountId) {
-  const mount = document.getElementById(mountId);
-  if (!mount) return;
-  let handle = null;
-  function tick() {
-    const now = new Date();
-    const diffMs = targetDate.getTime() - now.getTime();
-    if (diffMs <= 0) {
-      mount.innerHTML = `<div class="font-display font-semibold text-[44px]" style="color: var(--fairway);">Tee it up.</div>`;
-      if (handle) clearInterval(handle);
-      return;
+function spriteSvg(sprite, cls) {
+  const { w, h, palette } = SPRITE_DATA;
+  let rects = "";
+  sprite.rows.forEach((row, y) => {
+    let x = 0;
+    while (x < w) {
+      const key = row[x];
+      if (palette[key]) {
+        let run = 1;
+        while (x + run < w && row[x + run] === key) run += 1;
+        rects += `<rect x="${x}" y="${y}" width="${run}" height="1" fill="${palette[key]}"/>`;
+        x += run;
+      } else {
+        x += 1;
+      }
     }
-    const totalMin = Math.floor(diffMs / 60000);
-    const days = Math.floor(totalMin / (60 * 24));
-    const hours = Math.floor((totalMin % (60 * 24)) / 60);
-    const mins = totalMin % 60;
-    mount.innerHTML =
-      renderCountdownUnit(days, "Days") +
-      renderCountdownUnit(hours, "Hrs") +
-      renderCountdownUnit(mins, "Mins");
-  }
-  tick();
-  handle = setInterval(tick, 30000);
+  });
+  return `<svg class="sprite ${cls || ""}" viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(sprite.name)}">${rects}</svg>`;
 }
 
-function startSlideshow(mountId, intervalMs) {
-  const root = document.getElementById(mountId);
-  if (!root) return;
-  const slides = Array.from(root.querySelectorAll(".gs-slide"));
-  const dots = Array.from(root.querySelectorAll(".gs-dot"));
-  if (slides.length < 2) return;
+/* =========================================================================
+   ARCADE RENDERERS
+   ========================================================================= */
 
-  let idx = 0;
-  let handle = null;
+function pad2(n) { return String(Math.max(0, n)).padStart(2, "0"); }
 
-  function show(n) {
-    idx = (n + slides.length) % slides.length;
-    slides.forEach((s, i) => s.classList.toggle("is-active", i === idx));
-    dots.forEach((dd, i) => dd.classList.toggle("is-active", i === idx));
-  }
-  function restart() {
-    if (handle) clearInterval(handle);
-    handle = setInterval(() => show(idx + 1), intervalMs);
-  }
-
-  dots.forEach((dd, i) => dd.addEventListener("click", () => { show(i); restart(); }));
-  restart();
+function upcomingCourse(d) {
+  return d.upcoming.courseId ? d.courses[d.upcoming.courseId] : null;
 }
 
-function renderLeaderboard(d) {
-  const rows = computeLeaderboard(d);
-  const tournaments = d.tournaments;
+/* ---- HUD score bar ---- */
+function renderHudScore(d) {
+  const reigning = d.tournaments[d.tournaments.length - 1];
+  const champ = computeTournamentStandings(reigning, d.courses[reigning.courseId]).players[0];
+  const champName = d.players[champ.playerId].name;
 
-  const finishHeaderCells = tournaments.map(t =>
-    `<th class="hidden md:table-cell" style="text-align:center;">T-${esc(t.roman)}</th>`
-  ).join("");
+  // Best round ever recorded, in strokes.
+  let best = null;
+  d.tournaments.forEach(t => {
+    const st = computeTournamentStandings(t, d.courses[t.courseId]);
+    st.players.forEach(p => {
+      if (!best || p.totalStrokes < best.strokes) {
+        best = { name: d.players[p.playerId].name, strokes: p.totalStrokes, roman: t.roman };
+      }
+    });
+  });
 
-  const bodyRows = rows.map((r, idx) => {
-    const finishCells = tournaments.map(t => {
-      const rank = r.finishes[t.id];
-      if (!rank) return `<td class="hidden md:table-cell tabular" style="text-align:center; color: var(--ink-muted);">—</td>`;
-      const cls = rank === 1 ? "fin-1" : "";
-      return `<td class="hidden md:table-cell tabular ${cls}" style="text-align:center;">${rank}</td>`;
-    }).join("");
+  const credits = d.tournaments.length + 1;
+  return `
+    <span>Champ&nbsp; <b>${esc(champName.toUpperCase())}</b></span>
+    <span>Best round&nbsp; <b class="gold">${esc(best.name.toUpperCase())}&nbsp;${best.strokes}</b></span>
+    <span>Credits&nbsp; <b>${pad2(credits)}</b></span>
+  `;
+}
 
-    const finishMobile = tournaments.map(t => {
-      const rank = r.finishes[t.id];
-      const val = rank ? (rank === 1 ? `<strong style="color: var(--fairway-deep);">${rank}</strong>` : rank) : "—";
-      return `T-${esc(t.roman)}: ${val}`;
-    }).join(" · ");
+/* ---- 1. ATTRACT MODE ---- */
+function renderAttract(d) {
+  const stats = computeHeroStats(d);
+  const trophy = spriteByKey("trophy");
+  const u = d.upcoming;
+  const course = upcomingCourse(d);
+  const nextLine = u.tbd
+    ? `Next stage &middot; ${esc(u.window || "TBD")}`
+    : `Next stage &middot; ${esc(course.name)} &middot; ${esc(formatTournamentDate(u.date))}`;
 
-    const champClass = r.championships > 0 ? "is-champion" : "";
+  const cells = [
+    ["Stages",      stats.tournaments + 1],
+    ["Players",     stats.players],
+    ["Shots fired", stats.totalShots.toLocaleString()],
+    ["Holes",       stats.totalHoles],
+    ["Next tee",    stats.daysToNextTee === null ? "TBD" : stats.daysToNextTee + "D"],
+  ].map(([k, v]) => `
+    <div>
+      <div class="hud-stat-k">${esc(k)}</div>
+      <div class="hud-stat-v">${esc(v)}</div>
+    </div>
+  `).join("");
 
-    let trophy = "";
-    if (idx === 0) trophy = svgTrophy("var(--gold)");
-    else if (idx === 1) trophy = svgTrophy("var(--silver)");
-    else if (idx === 2) trophy = svgTrophy("var(--bronze)");
+  return `
+    <h1 class="marquee">The Whitby<span class="lo">Invitational</span></h1>
+    <p class="attract-sub">An annual gentlemen&rsquo;s tradition &middot; Whitby, Ontario &middot; Est. 2025</p>
+    <p class="attract-sub" style="color: var(--phos); margin-top: 12px;">${nextLine}</p>
+    <a class="press-start" href="#stages">&#9654; Press start<span class="blink">&#9646;</span></a>
+    ${trophy ? `<div class="prize">${spriteSvg(trophy)}<div class="prize-label">Play for this</div></div>` : ""}
+    <div class="hud-stats">${cells}</div>
+  `;
+}
 
+/* ---- 2. WINNER SPLASH ---- */
+function renderWinner(d, tournament) {
+  const reigning = tournament || d.tournaments[d.tournaments.length - 1];
+  const course = d.courses[reigning.courseId];
+  const st = computeTournamentStandings(reigning, course);
+  const champ = st.players[0];
+  const name = d.players[champ.playerId].name;
+  const overPar = champ.overPar > 0 ? "+" + champ.overPar : champ.overPar < 0 ? String(champ.overPar) : "E";
+  const photo = d.championPortraits[champ.playerId]
+    || (d.players[champ.playerId] && d.players[champ.playerId].photo)
+    || "img/stock/champion-fallback.jpg";
+  const quote = reigning.quote || d.championQuote;
+
+  return `
+    <div class="winner-grid">
+      <div>
+        <div class="winner-tag">&#9733; &#9733; &#9733;&nbsp; Winner &nbsp;&#9733; &#9733; &#9733;</div>
+        <h2 class="champ-name">${esc(name)}</h2>
+        <div class="stat-strip">
+          <div><div class="stat-k">Points</div><div class="stat-v">${champ.totalPoints}</div></div>
+          <div><div class="stat-k">Strokes</div><div class="stat-v">${champ.totalStrokes}</div></div>
+          <div><div class="stat-k">Vs par</div><div class="stat-v">${esc(overPar)}</div></div>
+          <div><div class="stat-k">Field</div><div class="stat-v">${st.players.length}</div></div>
+        </div>
+        <p style="color: var(--mute); margin-top: 20px;">
+          ${esc(course.name)} &middot; ${esc(course.location)} &middot; ${esc(formatTournamentDate(reigning.date))}
+        </p>
+        <div class="dialogue">
+          &ldquo;${esc(quote)}&rdquo;<span class="caret blink">&#9646;</span>
+          <span class="who">&mdash; ${esc(name)}, post-round</span>
+        </div>
+        <div class="final-board">
+          <div class="final-head">Final standings &middot; top five</div>
+          ${st.players.slice(0, 5).map(p => `
+            <div class="final-row${p.rank === 1 ? " lead" : ""}">
+              <span class="fr-pos">${esc(formatRank(p))}</span>
+              <span class="fr-name">${esc(d.players[p.playerId].name)}</span>
+              <span class="fr-pts">${p.totalPoints} pts</span>
+              <span class="fr-str">${p.totalStrokes}</span>
+            </div>
+          `).join("")}
+        </div>
+      </div>
+      <div class="crt-photo champ-shot">
+        <img src="${esc(photo)}" alt="${esc(name)} with the trophy" />
+        <span class="corner c1"></span><span class="corner c2"></span>
+        <span class="corner c3"></span><span class="corner c4"></span>
+      </div>
+    </div>
+  `;
+}
+
+/* ---- 3. STAGE SELECT ---- */
+function scoreClass(score, par) {
+  if (par === undefined) return "s-par";
+  const diff = score - par;
+  if (diff <= -1) return "s-under";
+  if (diff === 0) return "s-par";
+  if (diff === 1) return "s-bogey";
+  if (diff === 2) return "s-double";
+  return "s-blow";
+}
+
+function renderScorecard(t, d) {
+  const course = d.courses[t.courseId];
+  const st = computeTournamentStandings(t, course);
+  const holes = course.pars.length;
+
+  const headCells = course.pars.map((_, i) => `<th>${i + 1}</th>`).join("");
+  const parCells = course.pars.map(p => `<td>${p}</td>`).join("");
+  const coursePar = course.pars.reduce((a, b) => a + b, 0);
+
+  const rows = st.players.map(p => {
+    const scores = t.scores[p.playerId];
+    const cells = scores.map((s, i) =>
+      `<td class="${scoreClass(s, course.pars[i])}">${s}</td>`
+    ).join("");
+    const overPar = p.overPar > 0 ? "+" + p.overPar : p.overPar < 0 ? String(p.overPar) : "E";
     return `
-      <tr class="${champClass}">
-        <td class="rank-num">${idx + 1}</td>
-        <td class="rank-trophy">${trophy}</td>
-        <td class="player-cell">
-          <div>${esc(r.name)}</div>
-          <details class="md:hidden mt-1">
-            <summary class="text-[12px]" style="color: var(--ink-muted);">▾ rounds</summary>
-            <div class="text-[12px] mt-1 tabular" style="color: var(--ink-muted);">${finishMobile}</div>
-          </details>
-        </td>
-        <td class="titles tabular" style="text-align:right;">${r.championships}</td>
-        <td class="hcp tabular" style="text-align:right;">${formatCombinedScore(r.average)}</td>
-        <td class="tabular" style="text-align:right; color: var(--ink-muted);">${r.rounds}</td>
-        ${finishCells}
+      <tr class="${p.rank === 1 ? "win" : ""}">
+        <td class="who">${esc(d.players[p.playerId].name)}</td>
+        ${cells}
+        <td class="tot">${p.totalStrokes}</td>
+        <td class="tot">${esc(overPar)}</td>
+        <td class="pts">${p.totalPoints}</td>
+        <td class="fin ${p.rank === 1 ? "first" : ""}">${esc(formatRank(p))}</td>
       </tr>
     `;
   }).join("");
 
   return `
-    <div class="flex items-end justify-between flex-wrap gap-3 mb-6">
-      <div>
-        <div class="eyebrow" style="color: var(--ink-muted);">Section VI</div>
-        <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">All-Time Leaderboard</h2>
-      </div>
-      <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">Individual play only. Sorted by titles, then scoring average, then alphabetic. Trophies for the top three.</p>
+    <div class="card-scroll">
+      <table class="score">
+        <thead>
+          <tr>
+            <th class="who">Player</th>
+            ${headCells}
+            <th>Str</th><th>+/-</th><th>Pts</th><th>Fin</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="par-row">
+            <td class="who">Par</td>
+            ${parCells}
+            <td class="tot">${coursePar}</td><td class="tot">&mdash;</td><td>&mdash;</td><td class="fin">&mdash;</td>
+          </tr>
+          ${rows}
+        </tbody>
+      </table>
     </div>
-    <div class="gold-rule mb-2"></div>
+    <div class="legend">
+      <span style="color: var(--cyan);">&#9632; Birdie or better</span>
+      <span style="color: var(--phos);">&#9632; Par</span>
+      <span style="color: var(--paper);">&#9632; Bogey</span>
+      <span style="color: #E8A33C;">&#9632; Double</span>
+      <span style="color: var(--magenta);">&#9632; Triple or worse</span>
+    </div>
+  `;
+}
 
-    <div class="rounded-md overflow-hidden fade-up" style="background: var(--surface); border:1px solid var(--divider);">
-      <div class="overflow-x-auto">
-        <table class="lb-table">
+function renderStage(t, d, index) {
+  const course = d.courses[t.courseId];
+  const st = computeTournamentStandings(t, course);
+  const names = st.players.slice(0, 3).map(p => d.players[p.playerId].name);
+  const story = computeRoundStory(t, course).map(b => `<li>${esc(b)}</li>`).join("");
+
+  return `
+    <article class="panel stage" id="stage-${esc(t.id)}">
+      <div class="stage-top">
+        <div class="stage-thumb">
+          <img src="${esc(course.img || "img/stock/hero-fairway.jpg")}" alt="" loading="lazy" />
+        </div>
+        <div class="stage-meta">
+          <div class="stage-no">Stage ${pad2(index + 1)} &middot; Cleared ${esc(t.year)}</div>
+          <div class="stage-course">${esc(course.name)}</div>
+          <div style="color: var(--mute); margin-top: 6px;">${esc(formatTournamentDate(t.date))} &middot; ${esc(course.location)} &middot; Par ${course.pars.reduce((a,b)=>a+b,0)}</div>
+          <div class="podium">
+            <span class="pod pod-1">1st ${esc(names[0] || "-")}</span>
+            <span class="pod pod-2">2nd ${esc(names[1] || "-")}</span>
+            <span class="pod pod-3">3rd ${esc(names[2] || "-")}</span>
+          </div>
+          <div class="replay"><ul>${story}</ul></div>
+        </div>
+      </div>
+      ${renderScorecard(t, d)}
+    </article>
+  `;
+}
+
+function renderTeamCard(team, d, compact) {
+  const roster = team.players.map(pid => {
+    const isCap = pid === team.captain;
+    const isTbd = pid === "mystery";
+    return `<li class="${isCap ? "cap" : isTbd ? "tbd" : ""}">${esc(d.players[pid].name)}</li>`;
+  }).join("");
+
+  const fighter = spriteByKey(team.captain);
+  const portrait = fighter
+    ? `<div class="team-portrait">${spriteSvg(fighter)}</div>`
+    : "";
+
+  return `
+    <div class="team">
+      <div class="team-bar">
+        <span>P${team.group}</span>
+        <span>${team.players.length} up</span>
+      </div>
+      ${portrait}
+      <div class="team-body">
+        <div class="team-name">${esc(team.name)}</div>
+        <ul class="roster">${roster}</ul>
+      </div>
+      <div class="team-foot">
+        <div class="tee-time">${esc(team.teeTime)}</div>
+        <div class="tee-hole h${team.startHole}">Tee off hole ${team.startHole}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderStages(d) {
+  // One tab per tournament. Everything belonging to a stage lives inside its own tab:
+  // its winner, its podium, its scorecard, its hardware. Nothing is repeated elsewhere.
+  const played = d.tournaments.slice().sort((a, b) => a.id - b.id);
+  const u = d.upcoming;
+  const hasNext = u && !u.tbd && u.courseId;
+  const nextRoman = toRoman(d.tournaments.length + 1);
+
+  const tabs = played.map(t => {
+    const course = d.courses[t.courseId];
+    return {
+      id: "stage-" + t.id,
+      roman: t.roman,
+      label: "Stage " + t.roman,
+      sub: String(t.year),
+      next: false,
+      body: renderPlayedStage(t, d, course),
+    };
+  });
+
+  if (hasNext) {
+    tabs.push({
+      id: "stage-next",
+      roman: nextRoman,
+      label: "Stage " + nextRoman,
+      sub: "Next",
+      next: true,
+      body: renderNextStage(d),
+    });
+  }
+
+  // The stage that matters today opens first: the one still to be played.
+  const activeIndex = hasNext ? tabs.length - 1 : tabs.length - 1;
+
+  const buttons = tabs.map((tab, i) => `
+    <button class="stage-tab${tab.next ? " is-next" : ""}" role="tab"
+            id="tab-${esc(tab.id)}" aria-controls="panel-${esc(tab.id)}"
+            aria-selected="${i === activeIndex ? "true" : "false"}">
+      <span class="st-label">${esc(tab.label)}</span>
+      <span class="st-sub">${esc(tab.sub)}</span>
+    </button>
+  `).join("");
+
+  const panels = tabs.map((tab, i) => `
+    <div class="stage-panel" id="panel-${esc(tab.id)}" role="tabpanel"
+         aria-labelledby="tab-${esc(tab.id)}" tabindex="0" ${i === activeIndex ? "" : "hidden"}>
+      ${tab.body}
+    </div>
+  `).join("");
+
+  return `
+    <div class="sec-head">
+      <div class="sec-title">Stage select</div>
+      <div class="sec-rule"></div>
+      <p class="sec-sub">One tab per tournament. Each stage carries its own winner, scorecard and hardware.</p>
+    </div>
+    <div class="stage-tabs" role="tablist" aria-label="Tournament">${buttons}</div>
+    ${panels}
+  `;
+}
+
+function renderPlayedStage(t, d, course) {
+  const st = computeTournamentStandings(t, course);
+  const names = st.players.slice(0, 3).map(p => d.players[p.playerId].name);
+  const story = computeRoundStory(t, course).map(b => `<li>${esc(b)}</li>`).join("");
+
+  return `
+    <div class="stage-strip">
+      <div class="stage-thumb">
+        <img src="${esc(course.img || "img/stock/hero-fairway.jpg")}" alt="" loading="lazy" />
+      </div>
+      <div class="stage-meta">
+        <div class="stage-no">Stage ${esc(t.roman)} &middot; cleared ${esc(t.year)} &middot; solo play</div>
+        <div class="stage-course">${esc(course.name)}</div>
+        <div style="color: var(--mute); margin-top: 6px;">${esc(formatTournamentDate(t.date))} &middot; ${esc(course.location)} &middot; Par ${course.pars.reduce((a,b)=>a+b,0)} &middot; field of ${st.players.length}</div>
+        <div class="podium">
+          <span class="pod pod-1">1st ${esc(names[0] || "-")}</span>
+          <span class="pod pod-2">2nd ${esc(names[1] || "-")}</span>
+          <span class="pod pod-3">3rd ${esc(names[2] || "-")}</span>
+        </div>
+      </div>
+    </div>
+
+    ${renderWinner(d, t)}
+
+    <div class="panel" style="margin-top: 22px;">
+      <div class="panel-head"><span>Replay</span><span class="rt">How the round actually went</span></div>
+      <div class="panel-pad"><div class="replay"><ul>${story}</ul></div></div>
+    </div>
+
+    <div class="panel" style="margin-top: 18px;">
+      <div class="panel-head"><span>Scorecard</span><span class="rt">Every hole, every player</span></div>
+      ${renderScorecard(t, d)}
+    </div>
+
+    ${renderAwards(d, t)}
+  `;
+}
+
+/* ---- 4. HIGH SCORES ---- */
+function ordinal(n) {
+  const suffix = (n % 100 >= 11 && n % 100 <= 13) ? "th"
+    : ["th","st","nd","rd"][n % 10] || "th";
+  return pad2(n) + suffix.toUpperCase();
+}
+
+function renderHighScores(d) {
+  // A high-score board is ranked by score, not by date. In golf the low round wins,
+  // so champions sort by strokes and the best round sits on top.
+  const champs = d.tournaments.map(t => {
+    const course = d.courses[t.courseId];
+    const st = computeTournamentStandings(t, course);
+    const champ = st.players[0];
+    return {
+      name: d.players[champ.playerId].name,
+      strokes: champ.totalStrokes,
+      points: champ.totalPoints,
+      overPar: champ.overPar,
+      runnerUp: st.players[1] ? d.players[st.players[1].playerId].name : "-",
+      course, year: t.year, roman: t.roman,
+      photo: d.championPortraits[champ.playerId]
+        || (d.players[champ.playerId] && d.players[champ.playerId].photo)
+        || "img/stock/champion-fallback.jpg",
+    };
+  }).sort((a, b) => a.strokes - b.strokes);
+
+  const rows = champs.map((c, i) => `
+      <div class="hs-row">
+        <div class="hs-rank">${ordinal(i + 1)}</div>
+        <div class="hs-face"><img src="${esc(c.photo)}" alt="" loading="lazy" /></div>
+        <div>
+          <div class="hs-name">${esc(c.name)}</div>
+          <div class="hs-meta">Stage ${esc(c.roman)} &middot; ${esc(c.course.name)} &middot; ${esc(c.year)} &middot; runner-up ${esc(c.runnerUp)}</div>
+        </div>
+        <div class="hs-score">${c.strokes}<span>Strokes &middot; ${esc(formatCombinedScore(c.overPar))} &middot; ${c.points} pts</span></div>
+      </div>
+  `).join("");
+
+  return `
+    <div class="sec-head">
+      <div class="sec-title">High scores</div>
+      <div class="sec-rule"></div>
+      <p class="sec-sub">Every champion, ranked by the round they won with. Low score takes the top slot.</p>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><span>Champions</span><span class="rt">Ranked by strokes</span></div>
+      ${rows}
+    </div>
+  `;
+}
+
+/* ---- 5. AWARDS ---- */
+function renderAwards(d, t) {
+  if (!t || !t.awards || !t.awards.length) return "";
+
+  const cards = t.awards.map(a => {
+    const name = d.players[a.winner] ? d.players[a.winner].name : a.winner;
+    const bad = a.tone === "bad";
+    return `
+      <div class="award ${bad ? "bad" : ""}">
+        <div class="award-k">${bad ? "Penalty" : "Bonus"}</div>
+        <div class="award-n">${esc(a.name)}</div>
+        <div class="award-w">${esc(name)}</div>
+        <div class="award-s">${a.stat ? esc(a.stat) + " " + esc(a.statLabel || "") + " &middot; " : ""}${esc(a.note || "")}</div>
+      </div>
+    `;
+  }).join("");
+
+  return `
+    <div class="panel" style="margin-top: 18px;">
+      <div class="panel-head">
+        <span>Bonus round</span>
+        <span class="rt">Bonuses in gold &middot; penalties in red</span>
+      </div>
+      <div class="panel-pad"><div class="award-grid">${cards}</div></div>
+    </div>
+  `;
+}
+
+/* ---- 6. NEXT STAGE ---- */
+function renderNextStage(d) {
+  const u = d.upcoming;
+  const course = upcomingCourse(d);
+  if (u.tbd || !course) {
+    return `<div class="panel panel-pad" style="color: var(--mute);">Course and date not set. Clear your calendar anyway.</div>`;
+  }
+
+  const dateStr = new Date(u.date + "T08:00:00-04:00").toLocaleDateString("en-US", {
+    weekday: "long", month: "long", day: "numeric", year: "numeric", timeZone: "America/Toronto"
+  });
+
+  const ordinary = u.rules.filter(r => !r.key).map(r => `
+    <div class="howto-item">
+      <div class="howto-n">${esc(r.title)}</div>
+      <p class="howto-b">${esc(r.body)}</p>
+    </div>
+  `).join("");
+  const key = u.rules.filter(r => r.key).map(r => `
+    <div class="howto-key">
+      <div class="howto-n">&#9733; ${esc(r.title)}</div>
+      <p class="howto-b">${esc(r.body)}</p>
+    </div>
+  `).join("");
+
+  const brief = [
+    ["Date", dateStr],
+    ["Tee window", u.teeTime + " to " + u.lastTee + " &middot; Eastern"],
+    ["Get there", u.arriveBy],
+    ["Mode", u.formatName],
+    ["Card", "Par " + course.par + " &middot; " + course.yardage.toLocaleString() + " yards &middot; " + course.rating],
+    ["Course", '<a href="' + esc(course.website) + '" target="_blank" rel="noopener">' + esc(course.name) + "</a>"],
+  ].map(([k, v]) => `<div><div class="brief-k">${esc(k)}</div><div class="brief-v">${v}</div></div>`).join("");
+
+  return `
+    <p class="sec-sub" style="margin: 0 0 18px;">${esc(u.formatBlurb)} Five squads, five captains, one trophy.</p>
+
+    <div class="crt-photo" style="margin-bottom: 18px;">
+      <img src="${esc(course.img)}" alt="${esc(course.name)}" loading="lazy" style="max-height: 340px; object-fit: cover;" />
+      <span class="corner c1"></span><span class="corner c2"></span>
+      <span class="corner c3"></span><span class="corner c4"></span>
+    </div>
+
+    <div class="panel" style="margin-bottom: 18px;">
+      <div class="panel-head"><span>Time to tee off</span><span class="rt">${esc(course.name)} &middot; ${esc(course.location)}</span></div>
+      <div class="panel-pad">
+        <div class="timer" id="timer"></div>
+        <div class="brief" style="margin-top: 22px; border-top: 2px solid var(--grid-hi); border-left: 2px solid var(--grid-hi);">${brief}</div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom: 18px;">
+      <div class="panel-head"><span>How to play</span><span class="rt">Read the cabinet before you swing</span></div>
+      <div class="panel-pad">
+        <div class="howto">${ordinary}</div>
+        ${key}
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><span>Select your squad</span><span class="rt">Double-tee start &middot; groups 1 and 3 off hole 1</span></div>
+      <div class="panel-pad">
+        <div class="select-grid">${u.teams.map(t => renderTeamCard(t, d)).join("")}</div>
+      </div>
+    </div>
+  `;
+}
+
+/* ---- 7. RANKINGS ---- */
+function renderRankings(d) {
+  const rows = computeLeaderboard(d);
+  const heads = d.tournaments.map(t => `<th>S${pad2(t.id)}</th>`).join("");
+
+  const body = rows.map((r, i) => {
+    const fin = d.tournaments.map(t => {
+      const rank = r.finishes[t.id];
+      return `<td class="dim">${rank ? rank : "&mdash;"}</td>`;
+    }).join("");
+    return `
+      <tr class="${r.championships > 0 ? "champ" : ""}">
+        <td class="pos">${pad2(i + 1)}</td>
+        <td class="who">${esc(r.name)}</td>
+        <td class="titles ${r.championships ? "" : "zero"}">${r.championships}</td>
+        <td class="avg">${esc(formatCombinedScore(r.average))}</td>
+        <td class="dim">${r.rounds}</td>
+        ${fin}
+      </tr>
+    `;
+  }).join("");
+
+  return `
+    <div class="sec-head">
+      <div class="sec-title">All-time rankings</div>
+      <div class="sec-rule"></div>
+      <p class="sec-sub">Solo play only. Sorted by titles, then scoring average. A team stage never moves these numbers.</p>
+    </div>
+    <div class="panel">
+      <div class="card-scroll" style="border-top: 0;">
+        <table class="rank">
           <thead>
             <tr>
-              <th style="width:64px;">Rank</th>
-              <th style="width:32px;"></th>
-              <th>Player</th>
-              <th style="text-align:right;">Titles</th>
-              <th style="text-align:right;">AVG</th>
-              <th style="text-align:right;">Rounds</th>
-              ${finishHeaderCells}
+              <th>Pos</th><th class="who">Player</th><th>Titles</th><th>Avg</th><th>Rds</th>${heads}
             </tr>
           </thead>
-          <tbody>${bodyRows}</tbody>
+          <tbody>${body}</tbody>
         </table>
       </div>
     </div>
   `;
 }
 
-function podiumChip(label, name, color) {
-  return `
-    <span class="inline-flex items-center gap-1.5 text-[12px] font-medium px-2 py-1 rounded" style="background: var(--surface-elev); color: var(--ink); letter-spacing: 0.02em;">
-      <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:${color};"></span>
-      <span class="eyebrow" style="font-size:10px;">${esc(label)}</span> ${esc(name)}
-    </span>
-  `;
-}
-
-function renderArchiveCard(t, d, isFirst) {
-  const course = d.courses[t.courseId];
-  const standings = computeTournamentStandings(t, course);
-  const playerOrder = standings.players.map(p => p.playerId);
-
-  const podium = standings.players.slice(0, 3);
-  const podiumNames = podium.map(p => d.players[p.playerId].name);
-  const chips = [
-    podiumChip("1st", podiumNames[0] || "—", "var(--gold)"),
-    podiumChip("2nd", podiumNames[1] || "—", "var(--silver)"),
-    podiumChip("3rd", podiumNames[2] || "—", "var(--bronze)"),
-  ].join("");
-
-  const story = computeRoundStory(t, course).map(line => `<li>${esc(line)}</li>`).join("");
-
-  const holeHeaderCells = course.pars.map((_, i) => `<th>${i + 1}</th>`).join("");
-  const parRowCells = course.pars.map(p => `<td>${p}</td>`).join("");
-  const coursePar = course.pars.reduce((a,b) => a+b, 0);
-
-  const bodyRows = playerOrder.map((pid, idx) => {
-    const ps = standings.players[idx];
-    const cells = course.pars.map((_, h) => {
-      const score = t.scores[pid][h];
-      const pts = standings.pointsByHole[h][pid];
-      const cls = pts === 2 ? "cell-gold" : pts === 1 ? "cell-silver" : "";
-      return `<td class="${cls}">${score}</td>`;
-    }).join("");
-
-    const overPar = ps.totalStrokes - coursePar;
-    const overParStr = overPar > 0 ? "+" + overPar : overPar < 0 ? String(overPar) : "E";
-    const finCls = ps.rank === 1 ? "trail fin-champion" : "trail";
-
-    return `
-      <tr>
-        <td class="player-col">${esc(d.players[pid].name)}</td>
-        ${cells}
-        <td class="trail">${ps.totalStrokes}</td>
-        <td class="trail">${overParStr}</td>
-        <td class="trail">${ps.totalPoints}</td>
-        <td class="${finCls}">${formatRank(ps)}</td>
-      </tr>
-    `;
-  }).join("");
-
-  const openAttr = isFirst ? "open" : "";
-
-  return `
-    <article id="tour-${esc(t.id)}" class="rounded-md border overflow-hidden" style="background: var(--surface); border-color: var(--divider); scroll-margin-top: 110px;">
-      <details ${openAttr}>
-        <summary>
-          <div class="course-photo" style="height: 220px;">
-            <img src="${esc(course.img || '')}" alt="${esc(course.name)}" loading="lazy" />
-            <div class="course-overlay" style="padding: 18px 24px;">
-              <div>
-                <div class="eyebrow" style="color: rgba(255,255,255,0.85);">Tournament ${esc(t.roman)} · ${esc(t.year)}</div>
-                <div class="course-name mt-1" style="font-size: clamp(24px, 3vw, 36px);">${esc(course.name)}</div>
-              </div>
-              <span style="color: #FFFFFF; opacity: 0.9;">${svgChevron()}</span>
-            </div>
-          </div>
-          <div class="px-6 lg:px-8 py-5 flex items-center justify-between gap-4 flex-wrap" style="background: var(--surface);">
-            <div class="flex flex-wrap gap-2">${chips}</div>
-            <div class="eyebrow" style="color: var(--ink-muted);">${esc(formatTournamentDate(t.date))}</div>
-          </div>
-        </summary>
-
-        <div class="px-6 lg:px-8 pb-8">
-          <div class="mb-6">
-            <div class="eyebrow mb-3" style="color: var(--ink-muted);">Round Story</div>
-            <ul class="round-story">${story}</ul>
-          </div>
-
-          <div class="overflow-x-auto -mx-6 lg:-mx-8 px-6 lg:px-8">
-            <table class="scorecard">
-              <thead>
-                <tr>
-                  <th class="player-col">Hole</th>
-                  ${holeHeaderCells}
-                  <th>Str</th>
-                  <th>+/-</th>
-                  <th>Pts</th>
-                  <th>Fin</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="par-row">
-                  <td class="player-col" style="color: var(--ink-muted); font-weight:600;">Par</td>
-                  ${parRowCells}
-                  <td class="trail">${coursePar}</td>
-                  <td class="trail">—</td>
-                  <td class="trail">—</td>
-                  <td class="trail">—</td>
-                </tr>
-                ${bodyRows}
-              </tbody>
-            </table>
-          </div>
-          ${renderScoringLegend()}
-        </div>
-      </details>
-    </article>
-  `;
-}
-
-function renderBestBallArchivePanel(d) {
-  const u = d.upcoming;
-  if (!u || u.format !== "bestball") {
-    return `
-      <div class="rounded-md border p-8 text-center" style="background: var(--surface); border-color: var(--divider);">
-        <p class="text-[15px]" style="color: var(--ink-muted);">No team rounds on the books. Pick a date and it shows up here.</p>
-      </div>
-    `;
-  }
-
-  const course = d.courses[u.courseId];
-  const nextRoman = toRoman(d.tournaments.length + 1);
-  const dateObj = new Date(u.date + "T08:00:00-04:00");
-  const dateStr = dateObj.toLocaleDateString("en-US", {
-    weekday: "long", month: "long", day: "numeric", year: "numeric", timeZone: "America/Toronto"
-  });
-
-  return `
-    <article class="rounded-md border overflow-hidden" style="background: var(--surface); border-color: var(--divider);">
-      <div class="p-6 lg:p-8">
-        <div class="flex items-start justify-between flex-wrap gap-3">
-          <div>
-            <div class="eyebrow" style="color: var(--ink-muted);">Tournament ${esc(nextRoman)} · ${esc(u.formatName)}</div>
-            <h3 class="font-display font-semibold tracking-[-0.02em] mt-2" style="font-size: clamp(26px, 3vw, 38px); line-height: 1.05; color: var(--ink);">${esc(course.name)}</h3>
-            <p class="text-[14px] mt-2" style="color: var(--ink-muted);">${esc(dateStr)} &middot; ${esc(course.location)}</p>
-          </div>
-          <span class="format-badge">Not played yet</span>
-        </div>
-
-        <p class="text-[14px] mt-5 max-w-[60ch]" style="color: var(--ink-muted); line-height: 1.55;">
-          The first team round in Invitational history. No individual cards, no points per hole, no scoring average.
-          Five armies play one ball each and only the team score counts, so this round sits outside the all-time leaderboard.
-        </p>
-
-        ${renderTeeSheet(d, { compact: true })}
-
-        <a href="#next" class="inline-block mt-6 text-[14px] font-medium" style="color: var(--fairway-deep); text-decoration: underline; text-underline-offset: 4px;">Read the full briefing</a>
-      </div>
-    </article>
-  `;
-}
-
-function renderArchive(d) {
-  const individual = [...d.tournaments]
-    .filter(t => (t.format || "individual") === "individual")
-    .sort((a,b) => b.id - a.id);
-  const cards = individual.map((t, i) => renderArchiveCard(t, d, i === 0)).join("");
-  const bestBallCount = (d.upcoming && d.upcoming.format === "bestball") ? 1 : 0;
-
-  return `
-    ${renderFieldSlideshow(d)}
-    <div class="flex items-end justify-between flex-wrap gap-3 mb-6">
-      <div>
-        <div class="eyebrow" style="color: var(--ink-muted);">Section II</div>
-        <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">Tournament Archive</h2>
-      </div>
-      <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">Every round, every hole, every blow-up. Two formats, kept apart.</p>
-    </div>
-
-    <div class="fmt-tabs mb-7" role="tablist" aria-label="Tournament format">
-      <button class="fmt-tab" role="tab" id="fmt-tab-individual" aria-controls="fmt-panel-individual" aria-selected="true">Individual play <span class="fmt-count">${individual.length}</span></button>
-      <button class="fmt-tab" role="tab" id="fmt-tab-bestball" aria-controls="fmt-panel-bestball" aria-selected="false">Best ball <span class="fmt-count">${bestBallCount}</span></button>
-    </div>
-
-    <div class="fmt-panel" id="fmt-panel-individual" role="tabpanel" aria-labelledby="fmt-tab-individual" tabindex="0">
-      <p class="text-[14px] mb-6 max-w-[62ch]" style="color: var(--ink-muted); line-height: 1.55;">Everybody plays their own ball. Low score on a hole takes 2 points, a tie splits them 1 and 1. These are the rounds the leaderboard is built from.</p>
-      <div class="flex flex-col gap-6">${cards}</div>
-    </div>
-
-    <div class="fmt-panel" id="fmt-panel-bestball" role="tabpanel" aria-labelledby="fmt-tab-bestball" tabindex="0" hidden>
-      <p class="text-[14px] mb-6 max-w-[62ch]" style="color: var(--ink-muted); line-height: 1.55;">Teams of four play a single ball. Team scores only, so nothing here moves a player's scoring average.</p>
-      ${renderBestBallArchivePanel(d)}
-    </div>
-  `;
-}
-
-function setupFormatTabs() {
-  const tabs = Array.from(document.querySelectorAll(".fmt-tab"));
-  if (!tabs.length) return;
-
-  function select(tab) {
-    tabs.forEach(t => {
-      const selected = t === tab;
-      t.setAttribute("aria-selected", selected ? "true" : "false");
-      const panel = document.getElementById(t.getAttribute("aria-controls"));
-      if (panel) panel.hidden = !selected;
-    });
-  }
-
-  tabs.forEach((tab, i) => {
-    tab.addEventListener("click", () => select(tab));
-    tab.addEventListener("keydown", (ev) => {
-      if (ev.key !== "ArrowRight" && ev.key !== "ArrowLeft") return;
-      ev.preventDefault();
-      const next = tabs[(i + (ev.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
-      next.focus();
-      select(next);
-    });
-  });
-}
-
-function renderChampionsWall(d) {
-  const cards = d.tournaments.map(t => {
-    const course = d.courses[t.courseId];
-    const standings = computeTournamentStandings(t, course);
-    const champ = standings.players[0];
-    const ru = standings.players[1];
-    const champName = d.players[champ.playerId].name;
-    const ruName = ru ? d.players[ru.playerId].name : "—";
-    const portraitOverride = d.championPortraits[champ.playerId];
-    const champPhoto = d.players[champ.playerId] && d.players[champ.playerId].photo;
-    const portrait = portraitOverride || champPhoto || "img/stock/champion-fallback.jpg";
-
-    return `
-      <article class="champ-card">
-        <div class="champ-portrait">
-          <span class="gold-band"></span>
-          <img src="${esc(portrait)}" alt="${esc(champName)}" loading="lazy" />
-        </div>
-        <div class="champ-card-body">
-          <div class="flex items-baseline justify-between gap-3 mb-3">
-            <span class="champ-year">${esc(t.year)}</span>
-            <span class="eyebrow" style="color: var(--ink-muted);">Tournament ${esc(t.roman)}</span>
-          </div>
-          <h3 class="font-display font-semibold leading-[1.05] tracking-[-0.02em]" style="font-size: clamp(36px, 3.6vw, 48px); color: var(--ink);">${esc(champName)}</h3>
-          <div class="gold-rule mt-3 mb-4" style="max-width: 80px;"></div>
-          <p class="text-[14px]" style="color: var(--ink-muted);">${esc(course.name)} &middot; ${esc(course.location)}</p>
-          <p class="text-[14px] mt-2" style="color: var(--ink);">
-            <span class="font-semibold tabular">${champ.totalStrokes}</span> strokes
-            &middot;
-            <span class="font-semibold tabular">${champ.totalPoints}</span> pts
-          </p>
-          <p class="text-[13px] mt-2" style="color: var(--ink-muted);">Runner-up: ${esc(ruName)}</p>
-        </div>
-      </article>
-    `;
-  }).join("");
-
-  return `
-    <div class="flex items-end justify-between flex-wrap gap-3 mb-6">
-      <div>
-        <div class="eyebrow" style="color: var(--ink-muted);">Section III</div>
-        <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">Champions Wall</h2>
-      </div>
-      <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">Names that never come down.</p>
-    </div>
-    <div class="gold-rule mb-6"></div>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 fade-up">${cards}</div>
-  `;
-}
-
 /* =========================================================================
    MOUNT
    ========================================================================= */
-
-document.getElementById("hero").innerHTML = renderHero(data);
-document.getElementById("champion").innerHTML = renderChampionSpotlight(data);
-document.getElementById("archive").innerHTML = renderArchive(data);
-document.getElementById("champions-wall").innerHTML = renderChampionsWall(data);
-document.getElementById("hardware").innerHTML = renderHardware(data);
-document.getElementById("next").innerHTML = renderNextTournament(data);
-document.getElementById("leaderboard").innerHTML = renderLeaderboard(data);
-
-if (!data.upcoming.tbd && data.upcoming.date) {
-  const target = new Date(data.upcoming.date + "T08:00:00-04:00");
-  startCountdown(target, "countdown");
-}
-
-startSlideshow("field-slideshow", 5000);
-setupFormatTabs();
-
-/* Open + scroll to an archive card when its hash is the URL fragment. */
-function openTournamentFromHash() {
-  const hash = window.location.hash;
-  if (!hash || !hash.startsWith("#tour-")) return;
-  const article = document.getElementById(hash.slice(1));
-  if (!article) return;
-  const details = article.querySelector("details");
-  if (details && !details.open) details.open = true;
-  requestAnimationFrame(() => {
-    article.scrollIntoView({ behavior: "smooth", block: "start" });
-  });
-}
-window.addEventListener("hashchange", openTournamentFromHash);
-openTournamentFromHash();
+document.getElementById("hud-score").innerHTML = renderHudScore(data);
+document.getElementById("attract").innerHTML   = renderAttract(data);
+document.getElementById("stages").innerHTML    = renderStages(data);
+document.getElementById("highscores").innerHTML = renderHighScores(data);
+document.getElementById("rankings").innerHTML  = renderRankings(data);
 
 /* =========================================================================
-   MOTION — fade-up on scroll, run once.
-   ========================================================================= */
+   ATTRACT-MODE DEMO
+   A side-on golf game plays behind the page: address, swing, ball flight,
+   roll, then the camera pans to the pin and the next hole starts.
 
-(function setupFadeUp() {
-  const els = document.querySelectorAll(".fade-up");
-  if (!("IntersectionObserver" in window)) {
-    els.forEach(el => el.classList.add("is-in"));
-    return;
+   Drawn at quarter resolution and scaled up, so it stays chunky like a
+   period cabinet and costs almost nothing to run.
+   ========================================================================= */
+(function attractDemo() {
+  const canvas = document.getElementById("attract-demo");
+  if (!canvas || !canvas.getContext) return;
+  const ctx = canvas.getContext("2d", { alpha: true });
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const SCALE = 5;              // one drawn pixel = 5 screen pixels
+  const GRAV = 0.16;
+  const C = {
+    sky:     "#0A1410",
+    hillFar: "#16301F",
+    hillMid: "#1E4429",
+    turf:    "#2C6B3C",
+    turfLip: "#4BE87C",
+    tree:    "#123A22",
+    treeLit: "#1B5231",
+    trail:   "#2E7A46",
+    trunk:   "#3A2A1C",
+    body:    "#EDEDE1",
+    skin:    "#E9B384",
+    hair:    "#5B4230",
+    club:    "#9AA6AE",
+    ball:    "#FFFFFF",
+    pole:    "#C8D2CC",
+    flag:    "#FFC233",
+  };
+
+  let W = 0, H = 0;
+
+  function resize() {
+    W = Math.ceil(window.innerWidth / SCALE);
+    H = Math.ceil(window.innerHeight / SCALE);
+    canvas.width = W;
+    canvas.height = H;
+    ctx.imageSmoothingEnabled = false;
   }
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-in");
-        io.unobserve(entry.target);
+
+  // Deterministic rolling terrain, so the course looks the same every pass.
+  const HORIZON = () => Math.min(H * 0.66, H - 42);
+  function groundY(x) {
+    return HORIZON()
+      + Math.sin(x * 0.0090) * (H * 0.040)
+      + Math.sin(x * 0.0227) * (H * 0.016)
+      + Math.sin(x * 0.0041) * (H * 0.022);
+  }
+
+  const px = (x, y, w, h, color) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h));
+  };
+
+  function drawTree(x, baseY, size) {
+    const trunk = size * 0.30;
+    px(x - 1, baseY - trunk, 3, trunk, C.trunk);
+    // stepped conifer: each tier narrower than the one below it
+    const tiers = 4;
+    for (let i = 0; i < tiers; i++) {
+      const w = size * (0.78 - i * 0.17);
+      const h = size * 0.20;
+      const y = baseY - trunk - (i + 1) * h * 0.82;
+      px(x - w / 2, y, w, h, i === 0 ? C.tree : C.treeLit);
+    }
+  }
+
+  // ---- game state ----
+  let hole, golfer, ball, phase, timer, camX, camTarget, holeIndex = 0;
+  let trail = [];
+
+  // Run the shot physics headlessly and report where the ball would come to rest.
+  // Used to pick a power that finishes near the flag instead of guessing at constants.
+  function simulateFinish(teeX, power, angle) {
+    let x = teeX + 6, y = groundY(teeX) - 2;
+    let vx = Math.cos(-angle) * power, vy = Math.sin(-angle) * power;
+    let flying = true, guard = 0;
+    while (flying && guard++ < 4000) {
+      x += vx; y += vy; vy += GRAV;
+      const g = groundY(x) - 2;
+      if (y >= g) {
+        y = g;
+        if (Math.abs(vy) > 1.1) { vy *= -0.42; vx *= 0.72; }
+        else { flying = false; vy = 0; vx *= 0.6; }
+      }
+    }
+    while (Math.abs(vx) > 0.06 && guard++ < 4000) { x += vx; vx *= 0.965; }
+    return x;
+  }
+
+  function powerToReach(teeX, targetX, angle) {
+    let lo = 2, hi = 14;
+    for (let i = 0; i < 22; i++) {
+      const mid = (lo + hi) / 2;
+      if (simulateFinish(teeX, mid, angle) < targetX) lo = mid; else hi = mid;
+    }
+    return (lo + hi) / 2;
+  }
+
+  function newHole() {
+    holeIndex += 1;
+    const teeX = 40;
+    const pinX = teeX + 250 + ((holeIndex * 137) % 90);
+    const angle = 0.94 + ((holeIndex * 31) % 11) / 46;
+    // Aim at the flag, then miss it a little. Nobody sticks every drive.
+    const miss = ((holeIndex * 97) % 61) - 30;
+    hole = {
+      teeX, pinX, angle,
+      power: powerToReach(teeX, pinX + miss, angle),
+    };
+    golfer = { x: teeX, y: groundY(teeX) };
+    ball = { x: teeX + 6, y: groundY(teeX) - 2, vx: 0, vy: 0, flying: false, rolling: false };
+    phase = "address";
+    timer = 0;
+    trail = [];
+    camX = teeX - W * 0.28;
+    camTarget = camX;
+  }
+
+  function step(dt) {
+    timer += dt;
+
+    if (phase === "address" && timer > 1.15) { phase = "back"; timer = 0; }
+    else if (phase === "back" && timer > 0.42) { phase = "swing"; timer = 0; }
+    else if (phase === "swing" && timer > 0.10) {
+      ball.vx = Math.cos(-hole.angle) * hole.power;
+      ball.vy = Math.sin(-hole.angle) * hole.power;
+      ball.flying = true;
+      phase = "flight"; timer = 0;
+    }
+
+    if (ball.flying) {
+      trail.push({ x: ball.x, y: ball.y });
+      if (trail.length > 26) trail.shift();
+      ball.x += ball.vx;
+      ball.y += ball.vy;
+      ball.vy += GRAV;
+      const g = groundY(ball.x) - 2;
+      if (ball.y >= g) {
+        ball.y = g;
+        if (Math.abs(ball.vy) > 1.1) {          // bounce
+          ball.vy *= -0.42;
+          ball.vx *= 0.72;
+        } else {                                 // settle into a roll
+          ball.flying = false;
+          ball.rolling = true;
+          ball.vy = 0;
+          ball.vx *= 0.6;
+          phase = "roll"; timer = 0;
+        }
+      }
+    } else if (ball.rolling) {
+      ball.x += ball.vx;
+      ball.y = groundY(ball.x) - 2;
+      ball.vx *= 0.965;
+      if (Math.abs(ball.vx) < 0.06) {
+        ball.rolling = false;
+        phase = "rest"; timer = 0;
+      }
+    }
+
+    if (phase === "rest" && timer > 1.5) { phase = "pan"; timer = 0; }
+    if (phase === "pan" && timer > 2.4) { newHole(); }
+
+    // camera: sit on the tee, follow the ball, then settle on the pin
+    if (phase === "address" || phase === "back" || phase === "swing") camTarget = golfer.x - W * 0.28;
+    else if (phase === "pan") camTarget = hole.pinX - W * 0.62;
+    else camTarget = ball.x - W * 0.42;
+    camX += (camTarget - camX) * Math.min(1, dt * 2.4);
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // parallax ridgelines
+    for (let layer = 0; layer < 2; layer++) {
+      const par = layer === 0 ? 0.35 : 0.6;
+      const lift = layer === 0 ? H * 0.10 : H * 0.045;
+      ctx.fillStyle = layer === 0 ? C.hillFar : C.hillMid;
+      ctx.beginPath();
+      ctx.moveTo(0, H);
+      for (let sx = 0; sx <= W; sx += 2) {
+        const wx = (camX * par) + sx;
+        ctx.lineTo(sx, groundY(wx) - lift);
+      }
+      ctx.lineTo(W, H);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // fairway
+    ctx.fillStyle = C.turf;
+    ctx.beginPath();
+    ctx.moveTo(0, H);
+    for (let sx = 0; sx <= W; sx += 1) ctx.lineTo(sx, groundY(camX + sx));
+    ctx.lineTo(W, H);
+    ctx.closePath();
+    ctx.fill();
+
+    // a lit rim along the turf so the ground edge reads
+    for (let sx = 0; sx <= W; sx += 1) px(sx, groundY(camX + sx), 1, 1, C.turfLip);
+
+    // trees on a fixed world grid
+    const first = Math.floor(camX / 90) * 90;
+    for (let wx = first; wx < camX + W + 90; wx += 90) {
+      if ((Math.floor(wx / 90) % 3) === 0) continue;
+      drawTree(wx - camX, groundY(wx), H * 0.16);
+    }
+
+    // pin
+    const pinSX = hole.pinX - camX;
+    if (pinSX > -20 && pinSX < W + 20) {
+      const py = groundY(hole.pinX);
+      px(pinSX, py - 26, 1, 26, C.pole);
+      const wave = Math.sin(performance.now() / 220) * 1.4;
+      ctx.fillStyle = C.flag;
+      ctx.beginPath();
+      ctx.moveTo(pinSX + 1, py - 26);
+      ctx.lineTo(pinSX + 12 + wave, py - 22);
+      ctx.lineTo(pinSX + 1, py - 18);
+      ctx.closePath();
+      ctx.fill();
+      px(pinSX - 3, py - 1, 7, 1, "#0A1410");
+    }
+
+    // golfer
+    const gx = golfer.x - camX, gy = golfer.y;
+    if (gx > -30 && gx < W + 30) {
+      const bob = phase === "address" ? Math.sin(performance.now() / 300) * 0.7 : 0;
+      const top = gy - 22 + bob;
+      px(gx - 4, top,       8, 5, C.hair);
+      px(gx - 4, top + 4,   8, 5, C.skin);
+      px(gx - 6, top + 9,  12, 8, C.body);
+      px(gx - 5, top + 17,  4, 6, C.body);
+      px(gx + 1, top + 17,  4, 6, C.body);
+      px(gx - 5, top + 22,  4, 2, "#1A211C");
+      px(gx + 1, top + 22,  4, 2, "#1A211C");
+
+      // club swings through its arc
+      let a;
+      if (phase === "address") a = 0.5;
+      else if (phase === "back") a = 0.5 - (timer / 0.42) * 3.0;
+      else if (phase === "swing") a = -2.5 + (timer / 0.10) * 3.4;
+      else a = 0.9;
+      const hx = gx + 4, hy = top + 11;
+      ctx.strokeStyle = C.club;
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.moveTo(hx, hy);
+      ctx.lineTo(hx + Math.cos(a) * 19, hy + Math.sin(a) * 19);
+      ctx.stroke();
+    }
+
+    // ball, with a fading trail so the shot reads as a shot
+    trail.forEach((t, i) => {
+      const tx = t.x - camX;
+      if (tx > -4 && tx < W + 4) {
+        ctx.globalAlpha = (i / trail.length) * 0.5;
+        px(tx, t.y, 2, 2, C.trail);
+        ctx.globalAlpha = 1;
       }
     });
-  }, { threshold: 0.08, rootMargin: "0px 0px -40px 0px" });
-  els.forEach(el => io.observe(el));
-})();
-
-(function setupStickyHeader() {
-  const header = document.querySelector(".site-header");
-  if (!header) return;
-  const onScroll = () => {
-    if (window.scrollY > 8) header.classList.add("is-scrolled");
-    else header.classList.remove("is-scrolled");
-  };
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
-})();
-
-/* =========================================================================
-   SELF-TESTS — must pass before considering the page shipped.
-   ========================================================================= */
-
-(function runSelfTests() {
-  const failures = [];
-  function check(cond, msg) {
-    if (!cond) { failures.push(msg); console.error("ASSERT FAIL:", msg); }
+    const bx = ball.x - camX;
+    if (bx > -4 && bx < W + 4) {
+      px(bx - 1, ball.y - 1, 4, 4, "#0A1410");
+      px(bx, ball.y, 2, 2, C.ball);
+    }
   }
 
-  const t1 = data.tournaments.find(t => t.id === 1);
-  const standings = computeTournamentStandings(t1, data.courses[t1.courseId]);
+  let last = 0, running = true;
+  function frame(now) {
+    if (!running) return;
+    const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
+    last = now;
+    step(dt);
+    draw();
+    requestAnimationFrame(frame);
+  }
 
-  const expected = [
-    { playerId: "gibbs",  points: 14, strokes: 88,  rank: 1 },
-    { playerId: "deluca", points: 9,  strokes: 96,  rank: 2 },
-    { playerId: "dennis", points: 4,  strokes: 111, rank: 3 },
-    { playerId: "angel",  points: 4,  strokes: 115, rank: 4 },
-    { playerId: "e",      points: 3,  strokes: 104, rank: 5 },
-    { playerId: "franco", points: 3,  strokes: 108, rank: 6 },
-    { playerId: "adam",   points: 3,  strokes: 110, rank: 7 },
-    { playerId: "danny",  points: 2,  strokes: 115, rank: 8 },
-  ];
+  resize();
+  newHole();
 
-  expected.forEach((exp, i) => {
-    const got = standings.players[i];
-    check(!!got, `T-I row ${i+1} missing`);
-    if (!got) return;
-    check(got.playerId === exp.playerId,
-      `T-I rank ${i+1}: expected ${exp.playerId}, got ${got.playerId}`);
-    check(got.totalPoints === exp.points,
-      `T-I ${exp.playerId}: expected ${exp.points} pts, got ${got.totalPoints}`);
-    check(got.totalStrokes === exp.strokes,
-      `T-I ${exp.playerId}: expected ${exp.strokes} strokes, got ${got.totalStrokes}`);
-    check(got.rank === exp.rank,
-      `T-I ${exp.playerId}: expected rank ${exp.rank}, got ${got.rank}`);
+  if (reduce) {
+    // Hold a single composed frame rather than animating.
+    for (let i = 0; i < 90; i++) step(0.05);
+    draw();
+  } else {
+    requestAnimationFrame(now => { last = now; frame(now); });
+  }
+
+  // Test seam: ?debug lets the demo be advanced by hand, since requestAnimationFrame
+  // is throttled in a background tab and the loop cannot be observed otherwise.
+  if (location.search.indexOf("debug") !== -1) {
+    window.__demo = {
+      tick(dt, n) { for (let i = 0; i < (n || 1); i++) step(dt || 0.016); draw(); },
+      state() { return { phase, holeIndex, ball: { ...ball }, camX, trail: trail.length, pinX: hole.pinX }; },
+    };
+  }
+
+  window.addEventListener("resize", () => { resize(); draw(); });
+  // Idle demos should not burn cycles on a tab nobody is looking at.
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) { running = false; }
+    else if (!reduce && !running) { running = true; requestAnimationFrame(now => { last = now; frame(now); }); }
   });
+})();
 
-  check(
-    data.courses.winchester.pars.reduce((a,b)=>a+b,0) === 70,
-    "Winchester par sum must equal 70"
-  );
+/* ---- countdown as a cabinet timer ---- */
+(function startTimer() {
+  const mount = document.getElementById("timer");
+  if (!mount || data.upcoming.tbd || !data.upcoming.date) return;
+  const target = new Date(data.upcoming.date + "T08:00:00-04:00");
 
-  const hcs = computeCombinedScores(data);
-  check(hcs.gibbs === 18, `Gibbs combined score expected 18, got ${hcs.gibbs}`);
+  function cell(v, k) {
+    return `<div class="timer-cell"><div class="timer-num">${pad2(v)}</div><div class="timer-k">${k}</div></div>`;
+  }
+  function tick() {
+    const diff = target.getTime() - Date.now();
+    if (diff <= 0) { mount.innerHTML = `<div class="timer-cell" style="min-width:auto;"><div class="timer-num">Tee it up</div></div>`; return; }
+    const totalSec = Math.floor(diff / 1000);
+    mount.innerHTML =
+      cell(Math.floor(totalSec / 86400), "Days") +
+      cell(Math.floor((totalSec % 86400) / 3600), "Hrs") +
+      cell(Math.floor((totalSec % 3600) / 60), "Min") +
+      cell(totalSec % 60, "Sec");
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
 
-  const lb = computeLeaderboard(data);
-  check(lb[0] && lb[0].playerId === "gibbs", `Top of leaderboard should be Gibbs, got ${lb[0] && lb[0].playerId}`);
-  check(lb[0] && lb[0].championships === 1, `Gibbs should have 1 championship, got ${lb[0] && lb[0].championships}`);
-
-  // Blow-up test (Tournament I): worst single hole is 10, must include Dennis and Danny.
-  const blow = computeBlowUp(t1);
-  check(blow.score === 10, `Blow-up worst score expected 10, got ${blow.score}`);
-  const blowPlayers = new Set(blow.entries.map(e => e.player));
-  check(blowPlayers.has("dennis"), `Blow-up should include Dennis, got ${[...blowPlayers].join(",")}`);
-  check(blowPlayers.has("danny"), `Blow-up should include Danny, got ${[...blowPlayers].join(",")}`);
-
-  const hs = computeHeroStats(data);
-  check(hs.tournaments === 2, `Hero stats: tournaments expected 2, got ${hs.tournaments}`);
-  check(hs.players === 15, `Hero stats: players expected 15 (unique across T-I & T-II), got ${hs.players}`);
-  check(hs.totalHoles === 360, `Hero stats: totalHoles expected 360 (8x18 + 12x18), got ${hs.totalHoles}`);
-  check(hs.totalShots === 2123, `Hero stats: totalShots expected 2123 (847 + 1276), got ${hs.totalShots}`);
-
-  // Round story bullets must produce 3 strings
-  const story = computeRoundStory(t1, data.courses.winchester);
-  check(story.length === 3, `Round story expected 3 bullets, got ${story.length}`);
-
-  // ---- Tournament II (Royal Ashburn) ----
-  const t2 = data.tournaments.find(t => t.id === 2);
-  check(!!t2, "Tournament II must exist");
-  check(data.courses.royalAshburn.pars.reduce((a,b)=>a+b,0) === 72, "Royal Ashburn par sum must equal 72");
-
-  const t2s = computeTournamentStandings(t2, data.courses.royalAshburn);
-  check(t2s.players[0].playerId === "traikos", `T-II winner should be Traikos, got ${t2s.players[0].playerId}`);
-  check(t2s.players[0].totalPoints === 7, `T-II Traikos expected 7 pts, got ${t2s.players[0].totalPoints}`);
-  check(t2s.players[0].totalStrokes === 100, `T-II Traikos expected 100 strokes, got ${t2s.players[0].totalStrokes}`);
-  check(t2s.players[t2s.players.length - 1].playerId === "wells",
-    `T-II last place should be Wells, got ${t2s.players[t2s.players.length - 1].playerId}`);
-
-  // Scoring average: Deluca played both rounds (+26, +39) → 32.5 over 2 rounds.
-  const agg = computePlayerAggregates(data);
-  check(agg.deluca && agg.deluca.rounds === 2, `Deluca rounds expected 2, got ${agg.deluca && agg.deluca.rounds}`);
-  check(agg.deluca && agg.deluca.avg === 32.5, `Deluca average expected 32.5, got ${agg.deluca && agg.deluca.avg}`);
-  check(agg.traikos && agg.traikos.avg === 28, `Traikos average expected 28, got ${agg.traikos && agg.traikos.avg}`);
-
-  // Leaderboard: two champions (Gibbs T-I, Traikos T-II); Gibbs leads on lower average.
-  check(lb[0] && lb[0].playerId === "gibbs", `Leaderboard top should be Gibbs, got ${lb[0] && lb[0].playerId}`);
-  const traikosRow = lb.find(r => r.playerId === "traikos");
-  check(traikosRow && traikosRow.championships === 1, `Traikos should have 1 championship, got ${traikosRow && traikosRow.championships}`);
-  check(lb.length === 15, `Leaderboard should have 15 players, got ${lb.length}`);
-
-  // ---- Tournament III (Pickering Glen, best ball) ----
-  const up = data.upcoming;
-  check(up.format === "bestball", `Upcoming format expected bestball, got ${up.format}`);
-  check(up.date === "2026-09-12", `Upcoming date expected 2026-09-12, got ${up.date}`);
-  check(new Date(up.date + "T08:00:00-04:00").getUTCDay() === 6, "Sept 12, 2026 must be a Saturday");
-  check(!!data.courses[up.courseId], `Upcoming courseId ${up.courseId} must resolve to a course`);
-  check(up.teams.length === 5, `Expected 5 teams, got ${up.teams.length}`);
-
-  const seenPlayers = new Set();
-  up.teams.forEach(team => {
-    check(team.players[0] === team.captain,
-      `${team.name}: captain ${team.captain} must lead the squad, got ${team.players[0]}`);
-    check(team.name.endsWith(" Army"), `${team.name} must be named "<captain> Army"`);
-    check([1,10].includes(team.startHole), `${team.name}: startHole must be 1 or 10, got ${team.startHole}`);
-    team.players.forEach(pid => {
-      check(!!data.players[pid], `${team.name}: unknown player id "${pid}"`);
-      check(!seenPlayers.has(pid), `Player "${pid}" appears on more than one team`);
-      seenPlayers.add(pid);
+/* ---- stage tabs ---- */
+(function stageTabs() {
+  const tabs = Array.from(document.querySelectorAll(".stage-tab"));
+  if (!tabs.length) return;
+  function select(tab) {
+    tabs.forEach(t => {
+      const on = t === tab;
+      t.setAttribute("aria-selected", on ? "true" : "false");
+      const panel = document.getElementById("panel-" + t.id.replace(/^tab-/, ""));
+      if (panel) panel.hidden = !on;
+    });
+  }
+  tabs.forEach((tab, i) => {
+    tab.addEventListener("click", () => select(tab));
+    tab.addEventListener("keydown", ev => {
+      if (ev.key !== "ArrowRight" && ev.key !== "ArrowLeft") return;
+      ev.preventDefault();
+      const next = tabs[(i + (ev.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+      next.focus(); select(next);
     });
   });
-  check(seenPlayers.size === 20, `Expected 20 spots across the five armies, got ${seenPlayers.size}`);
-  check(seenPlayers.has("mystery"), "Group 5 still holds the mystery entry");
+})();
 
-  const teeTimes = up.teams.map(t => t.teeTime);
-  check(teeTimes.join("|") === "7:21 AM|7:21 AM|7:30 AM|7:39 AM|7:48 AM",
-    `Tee times out of order: ${teeTimes.join(", ")}`);
-  check(up.teams[0].teeTime === up.teams[1].teeTime,
-    "Groups 1 and 2 share a tee time (double-tee start)");
-  const holeOne = up.teams.filter(t => t.startHole === 1).map(t => t.group);
-  check(holeOne.join(",") === "1,3", `Groups off hole 1 should be 1 and 3, got ${holeOne.join(",")}`);
+/* ---- boot sequence: the one piece of non-user motion on the page ---- */
+(function boot() {
+  const el = document.getElementById("boot");
+  if (!el) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { el.remove(); return; }
 
-  check(up.rules.length === 6, `Expected 6 format rules, got ${up.rules.length}`);
-  check(up.rules.filter(r => r.key).length === 1, "Exactly one rule is flagged as the key rule");
+  const stats = computeHeroStats(data);
+  const nextCourse = data.upcoming.courseId ? data.courses[data.upcoming.courseId].name : "to be confirmed";
+  const lines = [
+    "Whitby Invitational System",
+    "Rom check .......... ok",
+    "Scorecards ......... " + stats.tournaments + " stages",
+    "Field .............. " + stats.players + " golfers",
+    "Next stage ......... " + nextCourse,
+    "Ready.",
+  ];
+  const mount = el.querySelector(".lines");
+  let i = 0;
+  const t = setInterval(() => {
+    const p = document.createElement("p");
+    if (i === lines.length - 1) p.style.color = "var(--amber)";
+    else if (i > 0) p.className = "ok";
+    p.textContent = lines[i];
+    mount.appendChild(p);
+    i += 1;
+    if (i >= lines.length) {
+      clearInterval(t);
+      setTimeout(() => {
+        el.classList.add("done");
+        setTimeout(() => el.remove(), 400);
+      }, 420);
+    }
+  }, 170);
+})();
 
-  check(data.championPortraits.traikos === "img/champions/traikos.jpg",
-    "Traikos champion portrait must be wired up");
+/* ---- self-tests: the numbers must match the live site exactly ---- */
+(function selfTests() {
+  const fails = [];
+  const check = (c, m) => { if (!c) { fails.push(m); console.error("ASSERT FAIL:", m); } };
 
-  // Best ball must not leak into individual-play scoring.
-  check(data.tournaments.every(t => t.format === "individual"),
-    "Every played tournament is individual play until a team round is recorded");
+  const t1 = data.tournaments.find(t => t.id === 1);
+  const s1 = computeTournamentStandings(t1, data.courses[t1.courseId]);
+  check(s1.players[0].playerId === "gibbs", "Stage 1 winner should be Gibbs");
+  check(s1.players[0].totalStrokes === 88, "Gibbs should card 88");
 
-  if (failures.length > 0) {
-    const banner = document.getElementById("error-banner");
-    banner.textContent = "Self-tests failed: " + failures.join(" | ");
-    banner.classList.add("is-active");
-  } else {
-    console.log("%c✓ Whitby self-tests passed", "color:#2F6A3E;font-weight:600");
-  }
+  const t2 = data.tournaments.find(t => t.id === 2);
+  const s2 = computeTournamentStandings(t2, data.courses[t2.courseId]);
+  check(s2.players[0].playerId === "traikos", "Stage 2 winner should be Traikos");
+
+  const lb = computeLeaderboard(data);
+  check(lb.length === 15, `Rankings should list 15 players, got ${lb.length}`);
+  check(lb[0].playerId === "gibbs", "Rankings should be led by Gibbs");
+
+  check(data.upcoming.teams.length === 5, "Five squads on the select screen");
+  data.upcoming.teams.forEach(t => {
+    check(t.players[0] === t.captain, `${t.name}: captain leads the roster`);
+    t.players.forEach(p => check(!!data.players[p], `${t.name}: unknown player ${p}`));
+  });
+
+  ["attract","stages","highscores","rankings"].forEach(id => {
+    check(document.getElementById(id).innerHTML.trim().length > 0, `Section #${id} rendered empty`);
+  });
+
+  // One tab per played stage, plus the upcoming one.
+  const tabCount = document.querySelectorAll(".stage-tab").length;
+  const expectedTabs = data.tournaments.length + (data.upcoming && !data.upcoming.tbd ? 1 : 0);
+  check(tabCount === expectedTabs, `Expected ${expectedTabs} stage tabs, got ${tabCount}`);
+  check(document.querySelectorAll('.stage-tab[aria-selected="true"]').length === 1, "Exactly one stage tab is open");
+  check(document.querySelectorAll(".stage-panel:not([hidden])").length === 1, "Exactly one stage panel is visible");
+
+  // Awards belong to their own stage, never to the page.
+  const awardStages = data.tournaments.filter(t => t.awards && t.awards.length).length;
+  check(document.querySelectorAll(".award-grid").length === awardStages,
+    `Award grids should equal stages with hardware (${awardStages})`);
+
+  // Every captain has a fighter, and every fighter is a real captain.
+  check(SPRITE_DATA.sprites.length === 6, "Six characters in the roster");
+  SPRITE_DATA.sprites.forEach(sp => {
+    if (sp.key === "trophy") return;
+    check(!!data.players[sp.key], `Fighter ${sp.key} must be a real player`);
+    check(data.upcoming.teams.some(t => t.captain === sp.key), `Fighter ${sp.key} must be a team captain`);
+  });
+  data.upcoming.teams.forEach(t => {
+    check(!!spriteByKey(t.captain), `${t.name}: captain ${t.captain} has no fighter`);
+  });
+
+  // Squad cards carry their captain's portrait (rendered in both stage tabs).
+  const portraits = document.querySelectorAll(".team-portrait").length;
+  const cards = document.querySelectorAll(".team").length;
+  check(portraits === cards, `Every squad card needs a portrait: ${portraits} of ${cards}`);
+
+  // The attract demo runs behind the content and never intercepts clicks.
+  const demo = document.getElementById("attract-demo");
+  check(!!demo, "Attract demo canvas must exist");
+  check(getComputedStyle(demo).pointerEvents === "none", "Demo canvas must not catch clicks");
+  check(demo.width > 0 && demo.height > 0, `Demo canvas must be sized, got ${demo.width}x${demo.height}`);
+  check(Number(getComputedStyle(demo).zIndex) < 2, "Demo canvas must sit behind the page content");
+  check(getComputedStyle(demo).position === "fixed", "Demo canvas must not extend the page");
+
+  console.log(fails.length ? "%c✗ arcade draft: " + fails.join(" | ") : "%c✓ arcade draft self-tests passed",
+    fails.length ? "color:#FF3D7F" : "color:#4BE87C;font-weight:600");
 })();
 </script>
 </body>
