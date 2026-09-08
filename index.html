@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>The Whitby Invitational</title>
-<meta name="description" content="The Whitby Invitational — an annual gentlemen's golf tournament in Whitby, Ontario. Reigning champion: Traikos. Next tee: TBD, September 2026." />
+<meta name="description" content="The Whitby Invitational — an annual gentlemen's golf tournament in Whitby, Ontario. Reigning champion: Traikos. Next up: a best ball scramble at Pickering Glen, Saturday September 12, 2026." />
 <meta name="theme-color" content="#FBF8F1" />
 
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png" />
@@ -13,7 +13,7 @@
 
 <meta property="og:type" content="website" />
 <meta property="og:title" content="The Whitby Invitational" />
-<meta property="og:description" content="An annual gentlemen's golf tournament in Whitby, Ontario. Reigning champion: Traikos." />
+<meta property="og:description" content="An annual gentlemen's golf tournament in Whitby, Ontario. Reigning champion: Traikos. Next up: best ball at Pickering Glen, September 12, 2026." />
 <meta property="og:image" content="https://whitby-invitational.vercel.app/img/og-image.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
@@ -22,7 +22,7 @@
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="The Whitby Invitational" />
-<meta name="twitter:description" content="An annual gentlemen's golf tournament in Whitby, Ontario. Reigning champion: Traikos." />
+<meta name="twitter:description" content="An annual gentlemen's golf tournament in Whitby, Ontario. Reigning champion: Traikos. Next up: best ball at Pickering Glen, September 12, 2026." />
 <meta name="twitter:image" content="https://whitby-invitational.vercel.app/img/og-image.png" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -940,6 +940,170 @@
     border-bottom: 1px solid transparent;
   }
   .topnav a:hover { color: var(--fairway); border-bottom-color: var(--gold); }
+
+  /* ============ FORMAT TABS ============ */
+  .fmt-tabs {
+    display: flex;
+    gap: 28px;
+    align-items: flex-end;
+    border-bottom: 1px solid var(--divider);
+  }
+  .fmt-tab {
+    appearance: none;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--ink-muted);
+    padding: 0 0 12px;
+    margin-bottom: -1px;
+    border-bottom: 2px solid transparent;
+    transition: color 160ms ease-out, border-color 160ms ease-out;
+  }
+  .fmt-tab:hover { color: var(--ink); }
+  .fmt-tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--gold); }
+  .fmt-tab .fmt-count { font-weight: 500; font-variant-numeric: tabular-nums; opacity: 0.7; }
+  .fmt-tab:focus-visible { outline: 2px solid var(--fairway); outline-offset: 4px; border-radius: 2px; }
+  .fmt-panel[hidden] { display: none; }
+
+  /* ============ TEE SHEET — the five armies ============ */
+  .tee-sheet { border-top: 1px solid var(--divider); }
+  .army {
+    display: grid;
+    grid-template-columns: 34px 1fr auto;
+    gap: 4px 20px;
+    align-items: start;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--divider);
+  }
+  .tee-sheet .army:last-child { border-bottom: 0; padding-bottom: 4px; }
+  .army-group {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--ink);
+    opacity: 0.24;
+    padding-top: 2px;
+  }
+  .army-name {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    font-size: clamp(23px, 2.5vw, 31px);
+    color: var(--ink);
+  }
+  .army-squad {
+    margin-top: 11px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .army-player {
+    font-size: 13.5px;
+    line-height: 1;
+    padding: 7px 11px;
+    border-radius: 999px;
+    background: var(--surface-elev);
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .army-player.is-captain {
+    background: var(--fairway-deep);
+    color: #FFFFFF;
+    font-weight: 600;
+  }
+  .army-player.is-tbd {
+    background: transparent;
+    border: 1px dashed var(--divider);
+    color: var(--ink-muted);
+    font-style: italic;
+  }
+  .army-tee { text-align: right; }
+  .army-time {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(21px, 2.3vw, 28px);
+    line-height: 1;
+    color: var(--fairway-deep);
+    white-space: nowrap;
+  }
+  .hole-pill {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    padding: 4px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  /* Named "hole-N", not "h-N" — Tailwind owns .h-1 / .h-10 as height utilities. */
+  .hole-pill.hole-1  { background: #F0E4BE; border: 1px solid #D9C68B; color: #5D4510; }
+  .hole-pill.hole-10 { background: #DCE8DE; border: 1px solid #B6CCBB; color: var(--fairway-deep); }
+  @media (max-width: 560px) {
+    .army { grid-template-columns: 24px 1fr auto; gap: 4px 12px; padding: 18px 0; }
+    .army-group { font-size: 19px; }
+    .army-name { font-size: 21px; }
+    .army-time { font-size: 19px; }
+  }
+
+  /* ============ FORMAT RULES ============ */
+  .rule-grid {
+    display: grid;
+    gap: 0 48px;
+  }
+  @media (min-width: 720px) {
+    .rule-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .rule {
+    padding: 15px 0;
+    border-bottom: 1px solid var(--divider);
+  }
+  .rule-grid .rule:last-child { border-bottom: 0; }
+  @media (min-width: 720px) {
+    /* two columns: the bottom rule of each column loses its underline */
+    .rule-grid .rule:nth-last-child(-n+2) { border-bottom: 0; }
+  }
+  .rule.is-key { border-bottom: 0; }
+  .rule-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: 17px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .rule-body {
+    margin-top: 5px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-muted);
+    max-width: 60ch;
+  }
+  .rule.is-key {
+    border-left: 3px solid var(--gold);
+    padding-left: 16px;
+    background: linear-gradient(90deg, rgba(242,227,184,0.42), rgba(242,227,184,0) 70%);
+  }
+  .rule.is-key .rule-body { color: var(--ink); }
+
+  .format-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: var(--surface-elev);
+    color: var(--ink-muted);
+    border: 1px solid var(--divider);
+  }
 </style>
 </head>
 <body>
@@ -1018,11 +1182,16 @@ const data = {
     traikos:  { name: "Traikos",  active: true },
     wells:    { name: "Wells",    active: true },
     sean:     { name: "Sean",     active: true },
-    greg:     { name: "Greg",     active: true },
+    greg:     { name: "Greggers", active: true },
     patsy:          { name: "Patsy",           active: true },
     biggs:          { name: "Biggs",           active: true },
     mike:           { name: "Mike",            active: true },
     trevor:         { name: "Trevor",          active: true },
+    miket:          { name: "Mike T",          active: true },
+    drew:           { name: "Drew",            active: true },
+    chriss:         { name: "Chris S",         active: true },
+    leo:            { name: "Leo",             active: true },
+    mystery:        { name: "Mystery Golfer",  active: true },
   },
 
   courses: {
@@ -1044,12 +1213,22 @@ const data = {
       pars: [5,4,5,3,4,4,3,4,4,4,4,4,3,5,4,3,5,4],
       img: "img/stock/royal-ashburn.jpg",
     },
+    pickeringGlen: {
+      name: "Pickering Glen Golf Club",
+      location: "Pickering, ON",
+      website: "https://pickeringglen.com",
+      par: 72,
+      yardage: 6204,
+      rating: "70.5 rating · 130 slope",
+      img: "img/stock/pickering-glen.jpg",
+    },
   },
 
   tournaments: [
     {
       id: 1,
       roman: "I",
+      format: "individual",
       year: 2025,
       courseId: "winchester",
       date: "2025-09-01",
@@ -1068,6 +1247,7 @@ const data = {
     {
       id: 2,
       roman: "II",
+      format: "individual",
       year: 2026,
       courseId: "royalAshburn",
       date: "2026-06-13",
@@ -1101,13 +1281,40 @@ const data = {
   ],
 
   upcoming: {
-    tbd: true,
-    courseName: "Course To Be Determined",
-    location: "Ontario",
-    window: "September 2026",
-    img: "img/stock/hero-fairway.jpg",
-    // Potential field for the next outing — keeps the regulars on the radar.
-    roster: ["traikos","morsillo","e","deluca","franco","angel","danny","mike","trevor","wells","biggs","patsy","gibbs","adam","dennis","greg","sean"],
+    tbd: false,
+    courseId: "pickeringGlen",
+    date: "2026-09-12",
+    teeTime: "7:21 AM",
+    lastTee: "7:48 AM",
+    arriveBy: "25-30 minutes before your tee time",
+    // "individual" = the usual points-per-hole singles round. "bestball" = team scramble.
+    format: "bestball",
+    formatName: "Best ball scramble",
+    formatBlurb: "Five teams, one ball each, double-tee start off 1 and 10.",
+
+    // Teams are named for their captain. Captain leads their own list.
+    teams: [
+      { group: 1, name: "Gibbs Army",    captain: "gibbs",   players: ["gibbs","angel","patsy","trevor"],       teeTime: "7:21 AM", startHole: 1  },
+      { group: 2, name: "Traikos Army",  captain: "traikos", players: ["traikos","miket","e","adam"],           teeTime: "7:21 AM", startHole: 10 },
+      { group: 3, name: "Sean Army",     captain: "sean",    players: ["sean","franco","drew","mike"],          teeTime: "7:30 AM", startHole: 1  },
+      { group: 4, name: "Chris S Army",  captain: "chriss",  players: ["chriss","danny","morsillo","dennis"],   teeTime: "7:39 AM", startHole: 10 },
+      { group: 5, name: "Greggers Army", captain: "greg",    players: ["greg","leo","deluca","mystery"],        teeTime: "7:48 AM", startHole: 10 },
+    ],
+
+    rules: [
+      { title: "How a hole gets played",
+        body: "Everybody tees off. Pick the best shot. Everybody plays their next shot from there. Repeat until it is in the hole." },
+      { title: "Three drives from every player",
+        body: "Each player's tee shot has to be used at least three times over the round. Nobody rides along." },
+      { title: "Two mulligans per team",
+        body: "Two for the entire round. Use them whenever you want. Once they are gone, they are gone." },
+      { title: "Gimmes",
+        body: "Nothing is good on a putt for par or better. Otherwise anything clearly inside about two feet is good." },
+      { title: "Lost or out of bounds",
+        body: "Quick search. If it is gone, drop near where it disappeared and take one penalty stroke. No forensic investigations." },
+      { title: "The captain rule", key: true,
+        body: "A captain's drive cannot be used more than three holes in a row. On the fourth, somebody else has to supply the tee shot." },
+    ],
   },
 
   // Editable copy
@@ -1116,6 +1323,7 @@ const data = {
   // Champion portraits — fill in as you collect them. Falls back to a stock walk-up shot.
   championPortraits: {
     gibbs: "img/champions/gibbs.jpg",
+    traikos: "img/champions/traikos.jpg",
   },
 
 };
@@ -1527,7 +1735,7 @@ function renderHero(d) {
         <div class="tour-roman">${esc(upcomingRoman)}</div>
         <div class="tour-body">
           <div class="tour-course">${esc(upcomingName)}</div>
-          <div class="tour-meta">${esc(upcomingWhen)} · ${esc(upcomingLoc)}</div>
+          <div class="tour-meta">${esc(upcomingWhen)} · ${esc(upcomingLoc)}${u.formatName ? " · " + esc(u.formatName) : ""}</div>
           <div class="tour-status next">${upcomingStatus}</div>
         </div>
       </a>
@@ -1883,9 +2091,148 @@ function renderAvatar(playerId, allRosterIds, players, isOut, combinedScores) {
   `;
 }
 
+function renderTeeSheet(d, opts) {
+  const u = d.upcoming;
+  const teams = u.teams || [];
+  const compact = opts && opts.compact;
+
+  const rows = teams.map(team => {
+    const chips = team.players.map(pid => {
+      const player = d.players[pid];
+      const isCaptain = pid === team.captain;
+      const isTbd = pid === "mystery";
+      const cls = isCaptain ? "army-player is-captain" : isTbd ? "army-player is-tbd" : "army-player";
+      const label = isCaptain ? `${player.name} · captain` : player.name;
+      return `<span class="${cls}">${esc(label)}</span>`;
+    }).join("");
+
+    return `
+      <div class="army">
+        <div class="army-group" aria-hidden="true">${esc(team.group)}</div>
+        <div>
+          <div class="army-name">${esc(team.name)}</div>
+          <div class="army-squad">${chips}</div>
+        </div>
+        <div class="army-tee">
+          <div class="army-time">${esc(team.teeTime)}</div>
+          <div><span class="hole-pill hole-${esc(team.startHole)}">Off hole ${esc(team.startHole)}</span></div>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  const header = compact ? "" : `
+    <div class="flex items-baseline justify-between flex-wrap gap-2 mb-1">
+      <h3 class="font-display font-semibold tracking-[-0.02em]" style="font-size: clamp(22px, 2.4vw, 28px); color: var(--ink);">The tee sheet</h3>
+      <p class="text-[13px]" style="color: var(--ink-muted);">Double-tee start. Groups 1 and 3 go off hole 1, the rest off hole 10. The starter confirms on the day.</p>
+    </div>
+  `;
+
+  return `${header}<div class="tee-sheet mt-4">${rows}</div>`;
+}
+
+function renderFormatRules(d) {
+  const all = d.upcoming.rules || [];
+  const rule = r => `
+    <div class="rule${r.key ? " is-key" : ""}">
+      <div class="rule-title">${esc(r.title)}</div>
+      <p class="rule-body">${esc(r.body)}</p>
+    </div>
+  `;
+  const ordinary = all.filter(r => !r.key).map(rule).join("");
+  const key = all.filter(r => r.key).map(rule).join("");
+  return `
+    <div class="rule-grid">${ordinary}</div>
+    ${key ? `<div class="mt-5">${key}</div>` : ""}
+  `;
+}
+
+function renderBestBall(d) {
+  const u = d.upcoming;
+  const course = d.courses[u.courseId];
+  const nextRoman = toRoman(d.tournaments.length + 1);
+  const dateObj = new Date(u.date + "T08:00:00-04:00");
+  const dateStr = dateObj.toLocaleDateString("en-US", {
+    weekday: "long", month: "long", day: "numeric", year: "numeric", timeZone: "America/Toronto"
+  });
+  const playerCount = (u.teams || []).reduce((n, t) => n + t.players.length, 0);
+
+  return `
+    <div class="flex items-end justify-between flex-wrap gap-3 mb-6">
+      <div>
+        <div class="eyebrow" style="color: var(--ink-muted);">Section V</div>
+        <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">Next Tournament</h2>
+      </div>
+      <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">${esc(u.formatBlurb || "")} ${playerCount - 1} golfers named, one mystery entry, one trophy.</p>
+    </div>
+    <div class="gold-rule mb-6"></div>
+
+    <div class="rounded-md overflow-hidden border fade-up" style="background: var(--surface); border-color: var(--divider);">
+      <div class="course-photo">
+        <img src="${esc(course.img || '')}" alt="${esc(course.name)}" loading="lazy" />
+        <div class="course-overlay">
+          <div>
+            <div class="eyebrow" style="color: rgba(255,255,255,0.85);">Tournament ${esc(nextRoman)} · ${esc(course.location)}</div>
+            <div class="course-name mt-2">${esc(course.name)}</div>
+          </div>
+          <div class="text-[13px]" style="color: rgba(255,255,255,0.92); letter-spacing: 0.02em;">
+            ${esc(dateStr)} · first tee ${esc(u.teeTime)}
+          </div>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-[auto_1fr] gap-8 lg:gap-12 p-6 lg:p-9">
+        <div>
+          <div class="eyebrow" style="color: var(--ink-muted);">Tee-off in</div>
+          <div id="countdown" class="flex flex-wrap gap-3 mt-4"></div>
+        </div>
+        <dl class="grid sm:grid-cols-2 gap-x-10 gap-y-4 text-[13px] self-center" style="color: var(--ink); line-height: 1.5;">
+          <div>
+            <dt class="eyebrow" style="color: var(--ink-muted);">Date</dt>
+            <dd class="mt-1">${esc(dateStr)}</dd>
+          </div>
+          <div>
+            <dt class="eyebrow" style="color: var(--ink-muted);">Tee window</dt>
+            <dd class="mt-1">${esc(u.teeTime)} to ${esc(u.lastTee)} · Eastern</dd>
+          </div>
+          <div>
+            <dt class="eyebrow" style="color: var(--ink-muted);">Get there</dt>
+            <dd class="mt-1">${esc(u.arriveBy)}</dd>
+          </div>
+          <div>
+            <dt class="eyebrow" style="color: var(--ink-muted);">Format</dt>
+            <dd class="mt-1">${esc(u.formatName)}</dd>
+          </div>
+          <div>
+            <dt class="eyebrow" style="color: var(--ink-muted);">Course</dt>
+            <dd class="mt-1"><a href="${esc(course.website)}" target="_blank" rel="noopener" style="color: var(--fairway-deep); text-decoration: underline; text-underline-offset: 3px;">${esc(course.name)}</a></dd>
+          </div>
+          <div>
+            <dt class="eyebrow" style="color: var(--ink-muted);">Card</dt>
+            <dd class="mt-1">Par ${esc(course.par)} · ${esc(course.yardage.toLocaleString())} yards · ${esc(course.rating)}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="px-6 lg:px-9 py-7 lg:py-9 border-t" style="border-color: var(--divider);">
+        <h3 class="font-display font-semibold tracking-[-0.02em]" style="font-size: clamp(22px, 2.4vw, 28px); color: var(--ink);">The format</h3>
+        <div class="mt-4">
+          ${renderFormatRules(d)}
+        </div>
+      </div>
+
+      <div class="px-6 lg:px-9 py-7 lg:py-9 border-t" style="border-color: var(--divider); background: var(--bg);">
+        ${renderTeeSheet(d)}
+      </div>
+    </div>
+  `;
+}
+
 function renderNextTournament(d) {
   const u = d.upcoming;
   const nextRoman = toRoman(d.tournaments.length + 1);
+
+  if (!u.tbd && u.format === "bestball") return renderBestBall(d);
 
   if (u.tbd) {
     const courseName = u.courseName || "Course To Be Determined";
@@ -2151,7 +2498,7 @@ function renderLeaderboard(d) {
         <div class="eyebrow" style="color: var(--ink-muted);">Section VI</div>
         <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">All-Time Leaderboard</h2>
       </div>
-      <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">Sorted by titles, then scoring average, then alphabetic. Trophies for the top three.</p>
+      <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">Individual play only. Sorted by titles, then scoring average, then alphabetic. Trophies for the top three.</p>
     </div>
     <div class="gold-rule mb-2"></div>
 
@@ -2289,9 +2636,55 @@ function renderArchiveCard(t, d, isFirst) {
   `;
 }
 
+function renderBestBallArchivePanel(d) {
+  const u = d.upcoming;
+  if (!u || u.format !== "bestball") {
+    return `
+      <div class="rounded-md border p-8 text-center" style="background: var(--surface); border-color: var(--divider);">
+        <p class="text-[15px]" style="color: var(--ink-muted);">No team rounds on the books. Pick a date and it shows up here.</p>
+      </div>
+    `;
+  }
+
+  const course = d.courses[u.courseId];
+  const nextRoman = toRoman(d.tournaments.length + 1);
+  const dateObj = new Date(u.date + "T08:00:00-04:00");
+  const dateStr = dateObj.toLocaleDateString("en-US", {
+    weekday: "long", month: "long", day: "numeric", year: "numeric", timeZone: "America/Toronto"
+  });
+
+  return `
+    <article class="rounded-md border overflow-hidden" style="background: var(--surface); border-color: var(--divider);">
+      <div class="p-6 lg:p-8">
+        <div class="flex items-start justify-between flex-wrap gap-3">
+          <div>
+            <div class="eyebrow" style="color: var(--ink-muted);">Tournament ${esc(nextRoman)} · ${esc(u.formatName)}</div>
+            <h3 class="font-display font-semibold tracking-[-0.02em] mt-2" style="font-size: clamp(26px, 3vw, 38px); line-height: 1.05; color: var(--ink);">${esc(course.name)}</h3>
+            <p class="text-[14px] mt-2" style="color: var(--ink-muted);">${esc(dateStr)} &middot; ${esc(course.location)}</p>
+          </div>
+          <span class="format-badge">Not played yet</span>
+        </div>
+
+        <p class="text-[14px] mt-5 max-w-[60ch]" style="color: var(--ink-muted); line-height: 1.55;">
+          The first team round in Invitational history. No individual cards, no points per hole, no scoring average.
+          Five armies play one ball each and only the team score counts, so this round sits outside the all-time leaderboard.
+        </p>
+
+        ${renderTeeSheet(d, { compact: true })}
+
+        <a href="#next" class="inline-block mt-6 text-[14px] font-medium" style="color: var(--fairway-deep); text-decoration: underline; text-underline-offset: 4px;">Read the full briefing</a>
+      </div>
+    </article>
+  `;
+}
+
 function renderArchive(d) {
-  const sorted = [...d.tournaments].sort((a,b) => b.id - a.id);
-  const cards = sorted.map((t, i) => renderArchiveCard(t, d, i === 0)).join("");
+  const individual = [...d.tournaments]
+    .filter(t => (t.format || "individual") === "individual")
+    .sort((a,b) => b.id - a.id);
+  const cards = individual.map((t, i) => renderArchiveCard(t, d, i === 0)).join("");
+  const bestBallCount = (d.upcoming && d.upcoming.format === "bestball") ? 1 : 0;
+
   return `
     ${renderFieldSlideshow(d)}
     <div class="flex items-end justify-between flex-wrap gap-3 mb-6">
@@ -2299,11 +2692,49 @@ function renderArchive(d) {
         <div class="eyebrow" style="color: var(--ink-muted);">Section II</div>
         <h2 class="font-display font-semibold tracking-[-0.02em] mt-1" style="font-size: clamp(34px, 4.4vw, 56px); line-height: 1; color: var(--ink);">Tournament Archive</h2>
       </div>
-      <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">Every round, every hole, every blow-up.</p>
+      <p class="text-[14px] max-w-md" style="color: var(--ink-muted);">Every round, every hole, every blow-up. Two formats, kept apart.</p>
     </div>
-    <div class="gold-rule mb-6"></div>
-    <div class="flex flex-col gap-6 fade-up">${cards}</div>
+
+    <div class="fmt-tabs mb-7" role="tablist" aria-label="Tournament format">
+      <button class="fmt-tab" role="tab" id="fmt-tab-individual" aria-controls="fmt-panel-individual" aria-selected="true">Individual play <span class="fmt-count">${individual.length}</span></button>
+      <button class="fmt-tab" role="tab" id="fmt-tab-bestball" aria-controls="fmt-panel-bestball" aria-selected="false">Best ball <span class="fmt-count">${bestBallCount}</span></button>
+    </div>
+
+    <div class="fmt-panel" id="fmt-panel-individual" role="tabpanel" aria-labelledby="fmt-tab-individual" tabindex="0">
+      <p class="text-[14px] mb-6 max-w-[62ch]" style="color: var(--ink-muted); line-height: 1.55;">Everybody plays their own ball. Low score on a hole takes 2 points, a tie splits them 1 and 1. These are the rounds the leaderboard is built from.</p>
+      <div class="flex flex-col gap-6">${cards}</div>
+    </div>
+
+    <div class="fmt-panel" id="fmt-panel-bestball" role="tabpanel" aria-labelledby="fmt-tab-bestball" tabindex="0" hidden>
+      <p class="text-[14px] mb-6 max-w-[62ch]" style="color: var(--ink-muted); line-height: 1.55;">Teams of four play a single ball. Team scores only, so nothing here moves a player's scoring average.</p>
+      ${renderBestBallArchivePanel(d)}
+    </div>
   `;
+}
+
+function setupFormatTabs() {
+  const tabs = Array.from(document.querySelectorAll(".fmt-tab"));
+  if (!tabs.length) return;
+
+  function select(tab) {
+    tabs.forEach(t => {
+      const selected = t === tab;
+      t.setAttribute("aria-selected", selected ? "true" : "false");
+      const panel = document.getElementById(t.getAttribute("aria-controls"));
+      if (panel) panel.hidden = !selected;
+    });
+  }
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener("click", () => select(tab));
+    tab.addEventListener("keydown", (ev) => {
+      if (ev.key !== "ArrowRight" && ev.key !== "ArrowLeft") return;
+      ev.preventDefault();
+      const next = tabs[(i + (ev.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+      next.focus();
+      select(next);
+    });
+  });
 }
 
 function renderChampionsWall(d) {
@@ -2374,6 +2805,7 @@ if (!data.upcoming.tbd && data.upcoming.date) {
 }
 
 startSlideshow("field-slideshow", 5000);
+setupFormatTabs();
 
 /* Open + scroll to an archive card when its hash is the URL fragment. */
 function openTournamentFromHash() {
@@ -2512,6 +2944,47 @@ openTournamentFromHash();
   const traikosRow = lb.find(r => r.playerId === "traikos");
   check(traikosRow && traikosRow.championships === 1, `Traikos should have 1 championship, got ${traikosRow && traikosRow.championships}`);
   check(lb.length === 15, `Leaderboard should have 15 players, got ${lb.length}`);
+
+  // ---- Tournament III (Pickering Glen, best ball) ----
+  const up = data.upcoming;
+  check(up.format === "bestball", `Upcoming format expected bestball, got ${up.format}`);
+  check(up.date === "2026-09-12", `Upcoming date expected 2026-09-12, got ${up.date}`);
+  check(new Date(up.date + "T08:00:00-04:00").getUTCDay() === 6, "Sept 12, 2026 must be a Saturday");
+  check(!!data.courses[up.courseId], `Upcoming courseId ${up.courseId} must resolve to a course`);
+  check(up.teams.length === 5, `Expected 5 teams, got ${up.teams.length}`);
+
+  const seenPlayers = new Set();
+  up.teams.forEach(team => {
+    check(team.players[0] === team.captain,
+      `${team.name}: captain ${team.captain} must lead the squad, got ${team.players[0]}`);
+    check(team.name.endsWith(" Army"), `${team.name} must be named "<captain> Army"`);
+    check([1,10].includes(team.startHole), `${team.name}: startHole must be 1 or 10, got ${team.startHole}`);
+    team.players.forEach(pid => {
+      check(!!data.players[pid], `${team.name}: unknown player id "${pid}"`);
+      check(!seenPlayers.has(pid), `Player "${pid}" appears on more than one team`);
+      seenPlayers.add(pid);
+    });
+  });
+  check(seenPlayers.size === 20, `Expected 20 spots across the five armies, got ${seenPlayers.size}`);
+  check(seenPlayers.has("mystery"), "Group 5 still holds the mystery entry");
+
+  const teeTimes = up.teams.map(t => t.teeTime);
+  check(teeTimes.join("|") === "7:21 AM|7:21 AM|7:30 AM|7:39 AM|7:48 AM",
+    `Tee times out of order: ${teeTimes.join(", ")}`);
+  check(up.teams[0].teeTime === up.teams[1].teeTime,
+    "Groups 1 and 2 share a tee time (double-tee start)");
+  const holeOne = up.teams.filter(t => t.startHole === 1).map(t => t.group);
+  check(holeOne.join(",") === "1,3", `Groups off hole 1 should be 1 and 3, got ${holeOne.join(",")}`);
+
+  check(up.rules.length === 6, `Expected 6 format rules, got ${up.rules.length}`);
+  check(up.rules.filter(r => r.key).length === 1, "Exactly one rule is flagged as the key rule");
+
+  check(data.championPortraits.traikos === "img/champions/traikos.jpg",
+    "Traikos champion portrait must be wired up");
+
+  // Best ball must not leak into individual-play scoring.
+  check(data.tournaments.every(t => t.format === "individual"),
+    "Every played tournament is individual play until a team round is recorded");
 
   if (failures.length > 0) {
     const banner = document.getElementById("error-banner");
